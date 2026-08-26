@@ -8,6 +8,11 @@
 	<string>com.github.franton.pkg.Yubikey-Authenticator</string>
 	<key>ParentRecipe</key>
 	<string>com.github.franton.download.Yubikey-Authenticator</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>YubiKeyAuthenticator</string>
+    </dict>
     <key>Process</key>
     <array>
         <dict>
