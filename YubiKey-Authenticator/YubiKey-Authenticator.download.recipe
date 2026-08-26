@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Download recipe for YubiKey Authenticator</string>
 	<key>Identifier</key>
-	<string>com.github.franton.download.Yubikey-Authenticator.download</string>
+	<string>com.github.franton.download.Yubikey-Authenticator</string>
 	<key>MinimumVersion</key>
 	<string>0.3.1</string>
 	<key>Input</key>
