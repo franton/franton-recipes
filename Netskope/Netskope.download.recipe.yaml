@@ -5,14 +5,14 @@ Comment: Specify HOSTNAME for your NS Tenant
 
 Input:
   NAME: NSClient
-  HOSTNAME: download-company.goskope.com
-  DOWNLOAD_URL: https://%HOSTNAME%/dlr/mac/get
+  HOSTNAME: "download-company.goskope.com"
+  DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
 
 Process:
   - Processor: URLDownloader
     Arguments:
       prefetch_filename: true
-      url: %DOWNLOAD_URL%
+      url: "%DOWNLOAD_URL%"
 
   - Processor: EndOfCheckPhase
 
@@ -22,4 +22,4 @@ Process:
         'Developer ID Installer: netSkope, Inc. (24W52P9M7W)'
         'Developer ID Certification Authority'
         'Apple Root CA'
-      input_path: %pathname%
+      input_path: "%pathname%"
