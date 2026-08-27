@@ -14,12 +14,12 @@ Process:
 
   - Processor: URLDownloader
     Arguments: 
-      url: 'https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-%version%-mac.dmg'
-      filename: '%NAME%-%version%.dmg'
+      url: "https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-%version%-mac.dmg"
+      filename: "%NAME%-%version%.dmg"
 
   - Processor: EndOfCheckPhase
 
   - Processor: CodeSignatureVerifier
     Arguments:
-      input_path: '%pathname%/Yubico Authenticator.app'
+      input_path: "%pathname%/Yubico Authenticator.app"
       requirement: 'identifier "com.yubico.yubioath" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = LQA3CS5MM7'
