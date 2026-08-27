@@ -8,7 +8,7 @@ Input:
 Process:
   - Processor: AppDmgVersioner
     Arguments:
-      dmg_path: "%pathname%/*.pkg"
+      dmg_path: "%RECIPE_CACHE_DIR%"
 
   - Processor: PkgRootCreator
     Arguments:
