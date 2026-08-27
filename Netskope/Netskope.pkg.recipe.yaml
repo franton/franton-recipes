@@ -1,0 +1,37 @@
+Description: Packages current release version of Netskope Client.
+Identifier: com.github.franton.pkg.Netskope
+ParentRecipe: com.github.franton.download.Netskope
+MinimumVersion: '2.9'
+Comment: Specify HOSTNAME for your NS Tenant
+
+Input:
+  NAME: NSClient
+  HOSTNAME: download-company.goskope.com
+  DOWNLOAD_URL: https://%HOSTNAME%/dlr/mac/get
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: %pathname%
+      destination_path: %RECIPE_CACHE_DIR%/outerunpack
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: %RECIPE_CACHE_DIR%/outerunpack/epdlp.pkg/Payload
+      destination_path: %RECIPE_CACHE_DIR%/unpack
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: %RECIPE_CACHE_DIR%/unpack/Netskope Endpoint DLP.app/Contents/Info.plist
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: %pathname%
+      pkg_path: %RECIPE_CACHE_DIR%/NSClient-%version%.pkg
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        '%RECIPE_CACHE_DIR%/unpack'
+        '%RECIPE_CACHE_DIR%/outerunpack'
+        '%RECIPE_CACHE_DIR%/downloads'
