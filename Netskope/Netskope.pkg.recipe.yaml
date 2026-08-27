@@ -6,7 +6,7 @@ Comment: Specify HOSTNAME for your NS Tenant
 
 Input:
   NAME: NSClient
-  HOSTNAME: "companyname.goskope.com"
+  HOSTNAME: "download-companyname.goskope.com"
   DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
 
 Process:
@@ -31,7 +31,7 @@ Process:
 
   - Processor: CodeSignatureVerifier
     Arguments:
-      input_path: "$pathname%"
+      input_path: "%pathname%"
       expected_authority_names:
         - "Developer ID Installer: netSkope, Inc. (24W52P9M7W)"
         - "Developer ID Certification Authority"
@@ -40,6 +40,6 @@ Process:
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - "%RECIPE_CACHE_DIR%/unpack"
-        - "%RECIPE_CACHE_DIR%/outerunpack"
-        - "%RECIPE_CACHE_DIR%/downloads"
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/downloads'
