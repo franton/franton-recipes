@@ -7,6 +7,28 @@ Input:
   NAME: YubiKeyAuthenticator
 
 Process:
-  - Processor: AppPkgCreator 
+  - Processor: AppDmgVersioner 
     Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%app_name%-%version%.pkg"
+      dmg_path: "%pathname%"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        Applications: 0775
+      pkgroot: "%RECIPE_CACHE_DIR%/payload"
+
+  - Processor: Copier
+    Arguments:
+      destination_path: "%pkgroot%/Applications/Yubico Authenticator.app"
+      source_path: "%pathname%/Yubico Authenticator.app"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        chown:
+          group: admin
+          path: Applications
+          user: root
+      options: purge_ds_store
+      pkgdir: "%RECIPE_CACHE_DIR%"
+      pkgname: "%NAME-%version%"
