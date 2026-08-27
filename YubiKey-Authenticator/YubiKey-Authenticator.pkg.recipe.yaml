@@ -8,7 +8,7 @@ Input:
 Process:
   - Processor: AppDmgVersioner
     Arguments:
-      dmg_path: "%pathname%"
+      dmg_path: %pathname%
 
   - Processor: PkgRootCreator
     Arguments:
