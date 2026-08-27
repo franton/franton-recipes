@@ -1,5 +1,6 @@
 Description: Installer pkg creation recipe for YubiKey Authenticator
 Identifier: com.github.franton.pkg.Yubikey-Authenticator
+ParentRecipe: com.github.franton.download.Yubikey-Authenticator
 MinimumVersion: '2.9'
 
 Input:
@@ -8,7 +9,7 @@ Input:
 Process:
   - Processor: AppDmgVersioner
     Arguments:
-      dmg_path: "%RECIPE_CACHE_DIR%"
+      dmg_path: "%pathname%"
 
   - Processor: PkgRootCreator
     Arguments:
