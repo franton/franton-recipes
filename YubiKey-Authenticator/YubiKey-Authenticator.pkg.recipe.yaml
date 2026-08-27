@@ -29,6 +29,7 @@ Process:
           group: admin
           path: Applications
           user: root
-      options: purge_ds_store
+      id: "com.yubico.yubioath"
+      options: "purge_ds_store"
       pkgdir: "%RECIPE_CACHE_DIR%"
       pkgname: "%NAME-%version%"
