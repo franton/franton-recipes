@@ -8,25 +8,25 @@ Input:
 Process:
   - Processor: AppDmgVersioner
     Arguments:
-      dmg_path: %pathname%
+      dmg_path: '%pathname%'
 
   - Processor: PkgRootCreator
     Arguments:
-      pkgroot: %RECIPE_CACHE_DIR%/%NAME%
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
       pkgdirs:
         Applications: 0775 
 
   - Processor: Copier
     Arguments:
-     source_path: %pathname%/%app_name%
-     destination_path: %pkgroot%/Applications/%app_name%
+     source_path: '%pathname%/%app_name%'
+     destination_path: '%pkgroot%/Applications/%app_name%'
 
   - Processor: PkgCreator
     Arguments:
       pkg_request:
-        pkgname: %NAME%-%version%
-        version: %version%
-        id: %bundleid%
+        pkgname: '%NAME%-%version%'
+        version: '%version%'
+        id: '%bundleid%'
         chown:
           path: Applications 
           user: root
