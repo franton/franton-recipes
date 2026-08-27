@@ -1,0 +1,25 @@
+Description: Downloads current release version of Netskope Client.
+Identifier: com.github.franton.download.Netskope
+MinimumVersion: '2.9'
+Comment: Specify HOSTNAME for your NS Tenant
+
+Input:
+  NAME: NSClient
+  HOSTNAME: download-company.goskope.com
+  DOWNLOAD_URL: https://%HOSTNAME%/dlr/mac/get
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: true
+      url: %DOWNLOAD_URL%
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        'Developer ID Installer: netSkope, Inc. (24W52P9M7W)'
+        'Developer ID Certification Authority'
+        'Apple Root CA'
+      input_path: %pathname%
