@@ -6,6 +6,7 @@ MinimumVersion: '2.9'
 Input:
   NAME: YubiKeyAuthenticator
 
+Process:
   - Processor: AppPkgCreator 
     Arguments:
       app_path: "%pathname%"
