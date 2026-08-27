@@ -14,8 +14,8 @@ Process:
 
   - Processor: URLDownloader
     Arguments: 
-      url: https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-%version%-mac.dmg
-      filename: %NAME%-%version%.dmg
+      url: 'https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-%version%-mac.dmg'
+      filename: '%NAME%-%version%.dmg'
 
   - Processor: EndOfCheckPhase
 
