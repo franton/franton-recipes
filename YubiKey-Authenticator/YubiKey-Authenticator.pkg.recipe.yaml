@@ -8,7 +8,7 @@ Input:
 Process:
   - Processor: AppDmgVersioner
     Arguments:
-      dmg_path: %pathname%
+      dmg_path: "%pathname%"
 
   - Processor: PkgRootCreator
     Arguments:
@@ -24,9 +24,9 @@ Process:
   - Processor: PkgCreator
     Arguments:
       pkg_request:
-        pkgname: '%NAME%-%version%'
-        version: '%version%'
-        id: '%bundleid%'
+        pkgname: "%NAME%-%version%"
+        version: "%version%"
+        id: "%bundleid%"
         chown:
           path: Applications 
           user: root
