@@ -29,6 +29,14 @@ Process:
       source_pkg: %pathname%
       pkg_path: %RECIPE_CACHE_DIR%/NSClient-%version%.pkg
 
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: $pathname%
+      expected_authority_names:
+			  'Developer ID Installer: netSkope, Inc. (24W52P9M7W)'
+				'Developer ID Certification Authority'
+				'Apple Root CA'
+
   - Processor: PathDeleter
     Arguments:
       path_list:
