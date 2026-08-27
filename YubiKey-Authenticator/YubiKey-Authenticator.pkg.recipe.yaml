@@ -34,3 +34,9 @@ Process:
       options: "purge_ds_store"
       pkgdir: "%RECIPE_CACHE_DIR%"
       pkgname: "%NAME%-%version%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/payload'
