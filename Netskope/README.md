@@ -1,4 +1,6 @@
-Pkg recipe for Netskope. Used to be based on com.github.patgmac.download.Netskope but that's been removed.
+Netskope Client.
+
+Used to be based on com.github.patgmac.download.Netskope but that's been removed.
 
 Replace the hostname in the HOSTNAME field with download-*hostnamehere*.goskope.com
 
