@@ -1,1 +1,5 @@
-Experimental recipe based on my recent pain with packaging Box Tools into something semi deployable
+Box Tools.
+
+Download recipe just to get the latest admin deployable pkg from Box.
+
+PKG recipe to properly version and wrap with a more admin friendly postinstall script.
