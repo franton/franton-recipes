@@ -18,10 +18,10 @@ Process:
     Arguments:
       predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
 
-#  - Processor: CodeSignatureVerifier
-#    Arguments: 
-#      expected_authority_names:
-#        - "Developer ID Installer: Box, Inc. (M683GB7CPW)"
-#        - "Developer ID Certification Authority"
-#        - "Apple Root CA"
-#      input_path: "%pathname%/BoxToolsInstaller.pkg"
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      expected_authority_names:
+        - "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: "%pathname%"
