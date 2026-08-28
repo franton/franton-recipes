@@ -76,7 +76,7 @@ Process:
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%"
-      pkg_path: "%RECIPE_CACHE_DIR%/pkg/pkgroot/tmp/%SOFTWARE_TITLE%"
+      pkg_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%SOFTWARE_TITLE%"
 
   - Processor: PkgCreator
     Arguments:
