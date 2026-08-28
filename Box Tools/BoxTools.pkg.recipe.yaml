@@ -88,7 +88,7 @@ Process:
             user: root
             group: wheel
             mode: "0777"
-        scripts: "%RECIPE_CACHE_DIR%/pkg/Scripts"
+        scripts: "pkg/Scripts"
 
 #  - Processor: PathDeleter
 #    Arguments:
