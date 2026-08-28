@@ -24,11 +24,11 @@ Process:
     Arguments:
       input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Box Edit.app/Contents/Info.plist"
 
-  - Processor: PkgRootCreator
-    Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-      pkgdirs:
-        tmp: "0777"
+#  - Processor: PkgRootCreator
+#    Arguments:
+#      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+#      pkgdirs:
+#        tmp: "0777"
 
   - Processor: PkgRootCreator
     Arguments:
