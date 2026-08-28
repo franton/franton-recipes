@@ -3,5 +3,22 @@ Identifier: com.github.franton.download.BoxTools
 MinimumVersion: '2.9'
 
 Input:
-  NAME: BoxTools
+  NAME: Box Tools
+  SOFTWARE_TITLE: BoxTools
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
+Process:
+  - Processor: URLDownloader
+    Arguments: 
+      url: https://e3.boxcdn.net/box-installers/boxedit/mac/currentrelease/BoxToolsInstaller.dmg
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%pathname%/Install Box Tools.app "
+      requirements: 'identifier "com.box.Box-Edit-Installer" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = M683GB7CPW'
