@@ -33,7 +33,7 @@ Process:
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/Scripts/postinstall"
       file_mode: "0755"
       file_content: '#!/bin/zsh --no-rcs
 
