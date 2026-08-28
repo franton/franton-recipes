@@ -1,0 +1,7 @@
+Description: Download recipe for Box Tools
+Identifier: com.github.franton.download.BoxTools
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BoxTools
+
