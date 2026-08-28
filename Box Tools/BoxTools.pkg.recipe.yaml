@@ -29,6 +29,11 @@ Process:
       pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
       pkgdirs:
         tmp: "0777"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%"
+      pkgdirs:
         Scripts: "0755"
 
   - Processor: FileCreator
