@@ -1,0 +1,11 @@
+Description: Pkg recipe for Box Tools
+Identifier: com.github.franton.pkg.BoxTools
+ParentRecipe: com.github.franton.download.BoxTools
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Box Tools
+  SOFTWARE_TITLE: BoxTools
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
