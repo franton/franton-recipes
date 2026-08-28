@@ -20,5 +20,8 @@ Process:
 
   - Processor: CodeSignatureVerifier
     Arguments: 
-      input_path: "%pathname%/Install Box Tools.app "
-      requirements: 'identifier "com.box.Box-Edit-Installer" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = M683GB7CPW'
+      expected_authority_names:
+        - "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: "%pathname%/BoxToolsInstaller.pkg"
