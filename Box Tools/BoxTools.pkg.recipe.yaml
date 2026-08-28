@@ -37,7 +37,7 @@ Process:
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall.sh"
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
       file_mode: "0777"
       file_content: |
          #!/bin/zsh --no-rcs
