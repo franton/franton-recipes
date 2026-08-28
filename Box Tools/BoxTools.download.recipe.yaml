@@ -10,7 +10,7 @@ Input:
 Process:
   - Processor: URLDownloader
     Arguments: 
-      url: https://e3.boxcdn.net/box-installers/boxedit/mac/currentrelease/BoxToolsInstaller.dmg
+      url: https://box-installers.s3.amazonaws.com/boxedit/mac/currentrelease/BoxToolsInstaller.pkg
 
   - Processor: EndOfCheckPhase
 
