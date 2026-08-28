@@ -33,7 +33,7 @@ Process:
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/pkgroot/Scripts/postinstall"
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/Scripts/postinstall.sh"
       file_mode: "0755"
       file_content: 'test'
 
@@ -56,7 +56,7 @@ Process:
             user: root
             group: wheel
             mode: "0777"
-        scripts: "%RECIPE_CACHE_DIR%/Scripts"
+        scripts: "%RECIPE_CACHE_DIR%/pkgroot/Scripts"
 
   - Processor: PathDeleter
     Arguments:
