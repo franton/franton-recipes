@@ -26,15 +26,20 @@ Process:
 
   - Processor: PkgRootCreator
     Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/pkg"
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
       pkgdirs:
-        pkgroot/tmp: "0777"
-        Scripts: "0755"
+        tmp: "0777"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%"
+      pkgdirs:
+        Scripts: "0777"
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/pkg/Scripts/postinstall.sh"
-      file_mode: "0755"
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall.sh"
+      file_mode: "0777"
       file_content: |
          #!/bin/zsh --no-rcs
 
@@ -77,7 +82,7 @@ Process:
   - Processor: PkgCreator
     Arguments:
       pkg_request: 
-        pkgroot: "%RECIPE_CACHE_DIR%/pkg/pkgroot"
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
         pkgdir: "%RECIPE_CACHE_DIR%"
         pkgname: "%NAME%-%version%"
         pkgtype: flat
@@ -88,7 +93,7 @@ Process:
             user: root
             group: wheel
             mode: "0777"
-        scripts: "pkg/Scripts"
+        scripts: "Scripts"
 
 #  - Processor: PathDeleter
 #    Arguments:
