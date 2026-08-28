@@ -27,8 +27,7 @@ Process:
   - Processor: PkgRootCreator
     Arguments:
       pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
-      pkgdirs:
-        Scripts: "0777"
+      pkgdirs: ''
 
   - Processor: PkgRootCreator
     Arguments:
