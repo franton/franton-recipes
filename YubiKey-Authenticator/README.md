@@ -16,4 +16,4 @@ Tech notes:
 - Clean up files.
 - Done.
 
-COMING SOON: Signing recipe!
+- OPTIONAL: Signing recipe. Make an override for this and replace the certificate name inside.
