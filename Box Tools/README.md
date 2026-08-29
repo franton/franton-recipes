@@ -15,6 +15,7 @@ Tech notes:
 - Write a postinstall script from the pkg recipe into the Scripts folder.
 - In pkgroot, write out a tmp folder then copy the downloaded pkg into it.
 - Finally with all the env variables, make a deployable pkg containing the original plus the postinstall script.
+- Clean up files and folders.
 - Done.
 
 COMING SOON: Signing recipe!
