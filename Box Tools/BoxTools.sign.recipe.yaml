@@ -1,0 +1,15 @@
+Description: Signing recipe for Box Tools
+Identifier: com.github.franton.sign.BoxTools
+ParentRecipe: com.github.franton.pkg.BoxTools
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BoxTools
+  SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
+      signing_cert: "%SIGNINGCERTIFICATE%"
