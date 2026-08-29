@@ -18,4 +18,4 @@ Tech notes:
 - Clean up files and folders.
 - Done.
 
-COMING SOON: Signing recipe!
+- OPTIONAL: Signing recipe. Make an override and replace the cert name!
