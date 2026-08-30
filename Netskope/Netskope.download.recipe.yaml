@@ -9,11 +9,11 @@ Input:
   DOWNLOAD_URL: https://%HOSTNAME%/dlr/mac/get
 
 Process:
-
   - Processor: URLDownloader
     Arguments:
       prefetch_filename: true
       url: "%DOWNLOAD_URL%"
+  
   - Processor: EndOfCheckPhase
   
   - Processor: CodeSignatureVerifier
