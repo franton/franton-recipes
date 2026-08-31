@@ -1,0 +1,111 @@
+Description: |
+  Takes an existing DMG and then created a deployable pkg for BeyondTrust PRA.
+  
+  Requires you to place a downloaded DMG from your PRA console in the Cache folder.
+  Also change the CORP_ID so your pkg has a personalised receipt.
+  
+  You really should be using https://richard-purves.com/2022/05/15/downloading-beyondtrust-remote-support-via-api-for-fun-and-profit/
+  instead of this.
+
+Identifier: com.github.franton.pkg.BeyondTrustPRA
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BeyondTrustPRA
+  CORP_ID: CHANGE-THIS
+  APP_NAME: "Open To Deploy Jump Client.app"
+
+Process:
+  - Processor: FileFinder
+    Arguments:
+      pattern: "%RECIPE_CACHE_DIR%/*.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%RECIPE_CACHE_DIR%/%found_filename%/%APP_NAME%"
+      requirement: 'identifier "com.bomgar.bomgar-pec" and anchor apple generic and certificate 1[field.1.2.840.113635.1000.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = B65TM49E24'
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: '%RECIPE_CACHE_DIR%/%found_filename%/%APP_NAME%/Contents/Info.plist'
+      plist_version_key: CFBundleShortVersionString
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Where we placed the installer dmg
+         dmgpath="/tmp"
+
+         # Remove existing PRA installations via uninstall then a general clean up
+         /usr/bin/find /Users/Shared /Applications -iname "sdcust" -type f -maxdepth 5 -exec {} -uninstall silent \;
+         sleep 3
+         /usr/bin/pkill -f bomgar
+         /bin/launchctl unload /Library/LaunchAgents/com.bomgar.bomgar-scc*
+         /usr/bin/find /Users/Shared /Applications -iname ".com.beyondtrust.scc*" -type d -maxdepth 1 -exec /bin/rm -rf {} +
+         /bin/rm -rf /Library/LaunchAgents/com.bomgar.bomgar-scc*
+         /bin/rm -rf /Library/LaunchDaemons/com.bomgar.bomgar-ps*
+
+         # Find the installer DMG. Name can change as new installers are generated.
+         dmgfullpathandname=$( /usr/bin/find $dmgpath -iname "*.dmg" -type f -maxdepth 1 )
+         dmgname=$( /usr/bin/basename $dmgfullpathandname )
+         dmg=$( echo "${dmgname%.*}" )
+
+         # Create temp mount point. Silently mount dmg.
+         # We have to run installer app direct from it because BeyondTrust.
+         /usr/bin/mktemp -d "$dmgpath/$dmg"
+         /usr/sbin/diskutil image attach --nobrowse -mountmount "$dmgpath/$dmg" "$dmgfullpathandname"
+
+         # Find and run the installer.
+         sdc=$( /usr/bin/find "$dmgpath/$dmg" -iname "sdcust" -type f )
+         "$sdc" --silent
+         sleep 10
+
+         # All done, so dismount and clean up.
+         /usr/sbin/diskutil eject force "$dmgpath/$dmg"
+         /bin/rm -rf "$dmgpath/$dmg"
+
+         exit
+
+  - Processor: FileMover
+    Arguments:
+      source: "%RECIPE_CACHE_DIR%/%found_filename%"
+      target: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%found_filename%"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        chown:
+          - path: tmp
+            user: root
+            group: wheel
+            mode: "0777"
+        scripts: "Scripts"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
