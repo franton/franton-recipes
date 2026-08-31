@@ -29,7 +29,7 @@ Process:
   - Processor: com.github.jazzace.processors/TextSearcher
     Arguments:
       text_in: "%version%"
-      re_pattern: "^(\d+\.\d+\.\d+)"
+      re_pattern: '^(\d+\.\d+\.\d+)'
       result_output_var_name: shortversion
 
   - Processor: PkgRootCreator
