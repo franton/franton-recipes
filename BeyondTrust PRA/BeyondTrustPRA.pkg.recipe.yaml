@@ -1,13 +1,16 @@
 Description: |
-  Takes an existing DMG and then created a deployable pkg for BeyondTrust PRA.
+  Creates a deployable pkg for BeyondTrust PRA.
   
-  Requires you to place a downloaded DMG from your PRA console in the Cache folder.
+  Requires a downloaded DMG from your PRA console in the Cache folder.
   Also change the CORP_ID so your pkg has a personalised receipt.
   
   You really should be using https://richard-purves.com/2022/05/15/downloading-beyondtrust-remote-support-via-api-for-fun-and-profit/
   instead of this.
 
+  Future versions may end up using this: https://docs.beyondtrust.com/rs/docs/deploy-jump-clients
+
 Identifier: com.github.franton.pkg.BeyondTrustPRA
+ParentRecipe: com.github.franton.download.BeyondTrustPRA
 MinimumVersion: '2.9'
 
 Input:
@@ -18,7 +21,7 @@ Input:
 Process:
   - Processor: FileFinder
     Arguments:
-      pattern: "%RECIPE_CACHE_DIR%/sra-*.dmg"
+      pattern: "%RECIPE_CACHE_DIR%/downloads/sra-*.dmg"
 
   - Processor: EndOfCheckPhase
 
@@ -111,3 +114,4 @@ Process:
       path_list:
         - '%RECIPE_CACHE_DIR%/Scripts'
         - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
