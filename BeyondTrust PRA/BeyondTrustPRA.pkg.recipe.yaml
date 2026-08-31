@@ -50,6 +50,11 @@ Process:
       file_content: |
          #!/bin/zsh --no-rcs
 
+         time=$( /bin/date "+%d%m%y-%H%M" )
+         set -x
+         logfile=/private/tmp/pra-"$time".log
+         exec > $logfile 2>&1
+
          # Remove existing PRA installations via uninstall then a general clean up
          /usr/bin/find /Users/Shared /Applications -iname "sdcust" -type f -maxdepth 5 -exec {} -uninstall silent \;
          sleep 3
@@ -77,6 +82,7 @@ Process:
          # All done, so dismount and clean up.
          /usr/sbin/diskutil eject force "/private/tmp/$dmg"
          /bin/rm -f "/private/tmp/$dmg"
+         
          exit
 
   - Processor: FileMover
