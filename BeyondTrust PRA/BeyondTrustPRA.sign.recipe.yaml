@@ -4,7 +4,7 @@ ParentRecipe: com.github.franton.pkg.BeyondTrustPRA
 MinimumVersion: '2.9'
 
 Input:
-  NAME: BoxTools
+  NAME: BeyondTrustPRA
   SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
