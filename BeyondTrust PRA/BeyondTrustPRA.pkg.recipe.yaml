@@ -25,7 +25,6 @@ Process:
   - Processor: Versioner
     Arguments:
       input_plist_path: "%found_filename%/%APP_NAME%/Contents/Info.plist"
-      plist_version_key: CFBundleShortVersionString
 
   - Processor: PkgRootCreator
     Arguments:
