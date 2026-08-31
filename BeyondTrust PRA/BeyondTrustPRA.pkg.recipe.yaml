@@ -79,7 +79,6 @@ Process:
 
          # All done, so dismount and clean up.
          /usr/sbin/diskutil eject force "$dmgpath/$dmg"
-         /bin/rm -rf "$dmgpath/$dmg"
 
          exit
 
