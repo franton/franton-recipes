@@ -1,0 +1,33 @@
+Description: |
+  Downloads latest BeyondTrust Jump Client dmg.
+  
+  Requires you to change the TENANT name to your own.
+  
+  You really should be using https://richard-purves.com/2022/05/15/downloading-beyondtrust-remote-support-via-api-for-fun-and-profit/
+  instead of this.
+
+Identifier: com.github.franton.download.BeyondTrustPRA
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BeyondTrustPRA
+  TENANT: change-this.url.com
+  APP_NAME: "Open To Deploy Jump Client.app"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments: 
+      prefetch_filename: true
+      url: "https://%TENANT%/download_client_connector?jc=generic&p=mac-osx-x86" 
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%pathname%/%APP_NAME%"
+      requirement: 'identifier "com.bomgar.bomgar-pec" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = B65TM49E24'
