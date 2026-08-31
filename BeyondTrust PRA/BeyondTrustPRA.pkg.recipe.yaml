@@ -60,22 +60,22 @@ Process:
          /bin/rm -rf /Library/LaunchDaemons/com.bomgar.bomgar-ps*
 
          # Find the installer DMG. Name can change as new installers are generated.
-         dmgfullpathandname=$( /usr/bin/find /tmp -iname "*.dmg" -type f -maxdepth 1 )
+         dmgfullpathandname=$( /usr/bin/find /private/tmp -iname "*.dmg" -type f -maxdepth 1 )
          dmgname=$( /usr/bin/basename $dmgfullpathandname )
          dmg=$( echo "${dmgname%.*}" )
 
          # Create temp mount point. Silently mount dmg.
          # We have to run installer app direct from it because BeyondTrust.
-         /usr/bin/mktemp -d "/tmp/$dmg"
-         /usr/sbin/diskutil image attach --nobrowse -mountmount "/tmp/$dmg" "$dmgfullpathandname"
+         /usr/bin/mktemp -d "/private/tmp/$dmg"
+         /usr/sbin/diskutil image attach --nobrowse -mountmount "/private/tmp/$dmg" "$dmgfullpathandname"
 
          # Find and run the installer.
-         sdc=$( /usr/bin/find "/tmp/$dmg" -iname "sdcust" -type f )
+         sdc=$( /usr/bin/find "/private/tmp/$dmg" -iname "sdcust" -type f )
          "$sdc" --silent
          sleep 10
 
          # All done, so dismount and clean up.
-         /usr/sbin/diskutil eject force "/tmp/$dmg"
+         /usr/sbin/diskutil eject force "/private/tmp/$dmg"
 
          exit
 
