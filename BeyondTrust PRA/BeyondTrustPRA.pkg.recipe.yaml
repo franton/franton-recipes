@@ -81,7 +81,7 @@ Process:
 
          # All done, so dismount and clean up.
          /usr/sbin/diskutil eject force "/private/tmp/$dmg"
-         /bin/rm -f "/private/tmp/$dmg"
+         /bin/rm -rf "/private/tmp/$dmg"
          
          exit
 
