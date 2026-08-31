@@ -26,6 +26,12 @@ Process:
     Arguments:
       input_plist_path: "%found_filename%/%APP_NAME%/Contents/Info.plist"
 
+  - Processor: com.github.jazzace.processors/TextSearcher
+    Arguments:
+      text_in: "%version%"
+      re_pattern: "^(\d+\.\d+\.\d+)"
+      result_output_var_name: shortversion
+
   - Processor: PkgRootCreator
     Arguments:
       pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
@@ -87,10 +93,10 @@ Process:
       pkg_request: 
         pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
         pkgdir: "%RECIPE_CACHE_DIR%"
-        pkgname: "%NAME%-%version%"
+        pkgname: "%NAME%-%shortversion%"
         pkgtype: flat
         id: "com.%CORP_ID%.%NAME%"
-        version: "%version%"
+        version: "%shortversion%"
         chown:
           - path: tmp
             user: root
