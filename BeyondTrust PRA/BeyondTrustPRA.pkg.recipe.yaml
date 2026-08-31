@@ -80,8 +80,8 @@ Process:
 
   - Processor: FileMover
     Arguments:
-      source: "%RECIPE_CACHE_DIR%/%found_filename%"
-      target: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%found_filename%"
+      source: "%found_filename%"
+      target: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%found_basename%"
 
   - Processor: PkgCreator
     Arguments:
