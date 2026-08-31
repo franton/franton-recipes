@@ -67,7 +67,7 @@ Process:
          # Create temp mount point. Silently mount dmg.
          # We have to run installer app direct from it because BeyondTrust.
          /usr/bin/mktemp -d "/private/tmp/$dmg"
-         /usr/sbin/diskutil image attach --nobrowse -mountmount "/private/tmp/$dmg" "$dmgfullpathandname"
+         /usr/sbin/diskutil image attach --nobrowse --mountPoint "/private/tmp/$dmg" "$dmgfullpathandname"
 
          # Find and run the installer.
          sdc=$( /usr/bin/find "/private/tmp/$dmg" -iname "sdcust" -type f )
@@ -76,7 +76,7 @@ Process:
 
          # All done, so dismount and clean up.
          /usr/sbin/diskutil eject force "/private/tmp/$dmg"
-
+         /bin/rm -f "/private/tmp/$dmg"
          exit
 
   - Processor: FileMover
