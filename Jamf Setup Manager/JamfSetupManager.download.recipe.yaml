@@ -1,0 +1,34 @@
+Description: Downloads latest Jamf Setup Manager.
+Identifier: com.github.franton.download.JamfSetupManager
+MinimumVersion: '2.9'
+
+Input:
+  NAME: JamfSetupManager
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments: 
+      asset_regex: ".*\\.pkg$"
+      github_repo: "jamf/setup-manager"
+      latest_only: true
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "%url%"
+      download_dir: "%RECIPE_CACHE_DIR%"
+      filename: "%NAME%-%version%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      expected_authority_names: 
+        - "Developer ID Installer: JAMF Software (483DWKW443)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
