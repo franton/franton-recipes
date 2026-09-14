@@ -6,7 +6,7 @@ Comment: Specify TENANT for your NS Tenant and then configure the other variable
 
 Input:
   NAME: Netskope
-  TENANT: 'intuitive'
+  TENANT: ''
   TENANT_URL: "addon-%TENANT%.goskope.com"
   HOSTNAME: "download-%TENANT%.goskope.com"
   ORG_ID: ''
