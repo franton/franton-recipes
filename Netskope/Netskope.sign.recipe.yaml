@@ -6,6 +6,16 @@ MinimumVersion: '2.9'
 Input:
   NAME: Netskope
   SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  TENANT: ''
+  TENANT_URL: "addon-%TENANT%.goskope.com"
+  HOSTNAME: "download-%TENANT%.goskope.com"
+  ORG_ID: ''
+  AUTH_TOKEN: ''
+  ENCRYPT_TOKEN: ''
+  UNINSTALL_PWD: ''
+  JAMF_CLIENTID: ''
+  JAMF_SECRET: ''
+  DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
