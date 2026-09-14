@@ -1,11 +1,12 @@
 Description: Downloads current release version of Netskope Client.
 Identifier: com.github.franton.download.Netskope
 MinimumVersion: "2.9"
-Comment: Specify HOSTNAME for your NS Tenant
+Comment: Specify TENANT for your NS Tenant
 
 Input:
   NAME: NSClient
-  HOSTNAME: download-company.goskope.com
+  TENANT: ''
+  HOSTNAME: "download-%TENANT%.goskope.com"
   DOWNLOAD_URL: https://%HOSTNAME%/dlr/mac/get
 
 Process:
