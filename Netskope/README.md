@@ -2,11 +2,12 @@
 
 Original recipe inspiration: Patrick Gallagher's recipe - com.github.patgmac.download.Netskope
 
-Replace the hostname in the HOSTNAME field with download-*hostnamehere*.goskope.com
+Replace the hostname in the TENANT field with your tenant name, and the variables will do the rest.
 
 Download recipe just to get the latest admin deployable pkg.
-
 PKG recipe to wrap the downloaded pkg with the tamper protection file and a highly custom postinstall script.
+sign recipe to codesign the custom pkg from the PKG recipe.
+
 See tech notes below:
 
 Sign recipe to optionally codesign the created pkg.
