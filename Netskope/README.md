@@ -6,7 +6,10 @@ Replace the hostname in the HOSTNAME field with download-*hostnamehere*.goskope.
 
 Download recipe just to get the latest admin deployable pkg.
 
-PKG recipe to properly download then version the file.
+PKG recipe to wrap the downloaded pkg with the tamper protection file and a highly custom postinstall script.
+See tech notes below:
+
+Sign recipe to optionally codesign the created pkg.
 
 Tech notes:
 
@@ -15,7 +18,8 @@ Tech notes:
 - Unpack pkg to a folder.
 - Unpack a pkg in the decompressed folder to another folder. That gets us an .app we can work with.
 - Get the version from that .app bundle
-- Version rename the original pkg file.
+- Create a new pkg with custom post install script and tamper protection file
+- THIS pkg recipe requires that a client id/secret be created in Jamf so it can read out the email address from the device record and auto register the install. Do not use this if using anything other than plist registration!
 - Check the code signing
 - Clean up temp folders
 - Done!
