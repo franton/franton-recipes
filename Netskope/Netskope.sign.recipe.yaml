@@ -1,0 +1,20 @@
+Description: Signing recipe for Netskope Client
+Identifier: com.github.franton.sign.Netskope
+ParentRecipe: com.github.franton.pkg.Netskope
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Netskope
+  SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-unsigned.pkg'
