@@ -2,14 +2,47 @@ Description: Packages current release version of Netskope Client.
 Identifier: com.github.franton.pkg.Netskope
 ParentRecipe: com.github.franton.download.Netskope
 MinimumVersion: '2.9'
-Comment: Specify HOSTNAME for your NS Tenant
+Comment: Specify TENANT for your NS Tenant and then configure the other variables in an override. DO NOT USE this recipe directly.
 
 Input:
-  NAME: NSClient
-  HOSTNAME: "download-companyname.goskope.com"
+  NAME: Netskope
+  TENANT: 'intuitive'
+  TENANT_URL: "addon-%TENANT%.goskope.com"
+  HOSTNAME: "download-%TENANT%.goskope.com"
+  ORG_ID: ''
+  AUTH_TOKEN: ''
+  ENCRYPT_TOKEN: ''
+  UNINSTALL_PWD: ''
+  JAMF_CLIENTID: ''
+  JAMF_SECRET: ''
   DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'ORG_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'AUTH_TOKEN == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'ENCRYPT_TOKEN == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_CLIENTID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_SECRET == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
   - Processor: FlatPkgUnpacker
     Arguments:
       flat_pkg_path: "%pathname%"
@@ -24,11 +57,6 @@ Process:
     Arguments:
       input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Endpoint DLP.app/Contents/Info.plist"
 
-  - Processor: PkgCopier
-    Arguments:
-      source_pkg: "%pathname%"
-      pkg_path: "%RECIPE_CACHE_DIR%/NSClient-%version%.pkg"
-
   - Processor: CodeSignatureVerifier
     Arguments:
       input_path: "%pathname%"
@@ -37,9 +65,216 @@ Process:
         - "Developer ID Certification Authority"
         - "Apple Root CA"
 
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/NSClient.pkg"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Netskope installer wrapper - plist install method only.
+
+         # Verbose logging
+         set -x
+         logfile=/private/tmp/netskope.log
+         exec > $logfile 2>&1
+
+         # Set variables here for install
+         tenanturl="%TENANT_URL%"
+         orgid="%ORG_ID%"
+         authtoken="%AUTH_TOKEN%"
+         enctoken="%ENCRYPT_TOKEN%"
+         uninstpwd="%UNINSTALL_PWD%"
+
+         deviceserial=$( /usr/sbin/ioreg -rd1 -c IOPlatformExpertDevice | /usr/bin/awk -F'"' '/IOPlatformSerialNumber/{print $4}' )
+         jssurl=$( /usr/bin/defaults read /Library/Preferences/com.jamfsoftware.jamf jss_url )
+         jamfclientid="%JAMF_CLIENTID%"
+         jamfsecret="%JAMF_SECRET%"
+
+         # Set variables here
+         currentdir=$( /usr/bin/dirname $0 )
+
+         # Check for working network connection. Use captive.apple.com for this.
+         while true;
+         do
+         	if /usr/bin/nc -G 2 -z captive.apple.com 443 &> /dev/null;
+         	then
+         		echo "Connected"
+         		break
+         	else
+         		echo "Waiting for reconnect"
+         	fi
+         done
+
+         # API query against Jamf to grab email from the device record, which has originally come from Okta
+         jsonresponse=$( /usr/bin/curl --silent \
+         	--location \
+         	--request POST "${jssurl}api/oauth/token" \
+         	--header 'Content-Type: application/x-www-form-urlencoded' \
+         	--data-urlencode "client_id=${jamfclientid}" \
+         	--data-urlencode 'grant_type=client_credentials' \
+         	--data-urlencode "client_secret=${jamfsecret}" )
+
+         jamftoken=$( /usr/bin/plutil -extract access_token raw -o - - <<< "$jsonresponse" )
+         type=$( /usr/bin/plutil -extract token_type raw -o - - <<< "$jsonresponse" )
+
+         device=$( curl  --silent \
+           --request GET \
+           --url ${jssurl}'api/v4/computers-inventory?section=USER_AND_LOCATION&filter=hardware.serialNumber%3D%3D'${deviceserial} \
+           --header 'accept: application/json' \
+           --header "Authorization: ${type} ${jamftoken}" )
+
+         # Extract email and convert to lower case
+         email=$( echo $device | plutil -extract "results".0.userAndLocation.email raw - )
+         email=${email:l}
+
+         # Nothing found. Bail out.
+         [ -z "$email" ] && { echo "Cannot find email address."; exit 1; }
+
+         # Check for existing installation and remove if necessary.
+         # Big thanks to Steve Dagley for assistance on this
+         if [ -d /Library/Application\ Support/Netskope ];
+         then
+         	# Backup original com.apple.system-extension.admin settings from the authorization db and create copy for editing
+         	/usr/bin/security authorizationdb read com.apple.system-extensions.admin > /private/tmp/authdborig.plist
+         	/bin/cp /private/tmp/authdborig.plist /private/tmp/authdbmodified.plist
+
+         	# Modify the modified plist so that users aren't prompted for admin
+         	/usr/libexec/PlistBuddy -c "Set rule:0 allow" /private/tmp/authdbmodified.plist
+
+         	# Modify the auth db to allow system extensions to be uninstalled without prompting
+         	/usr/bin/security authorizationdb write com.apple.system-extensions.admin < /private/tmp/authdbmodified.plist
+
+         	# Uninstall the Netskope agent
+         	/Library/Application\ Support/Netskope/STAgent/Remove\ Netskope\ Client.app/Contents/MacOS/Remove\ Netskope\ Client uninstall_app ${uninstpwd}
+
+         	# Forget the package receipts
+         	/usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep com.netskope )
+         	/usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep epdlp )
+
+            # Set the auth db back to it's original settings
+            /usr/bin/security authorizationdb write com.apple.system-extensions.admin < /private/tmp/authdborig.plist
+
+         	# Clean up temp files
+         	/bin/rm -f /private/tmp/authdborig.plist
+         	/bin/rm -f /private/tmp/authdbmodified.plist
+
+         	# Wait for the system to settle
+         	sleep 3
+         fi
+
+         # Create the files needed for Netskope registration
+         /bin/mkdir /tmp/nsbranding
+         echo "{\"enrollauthtoken\": \"$authtoken\", \"enrollencryptiontoken\": \"$enctoken\"}" > /tmp/nsbranding/enroll.conf
+         echo "{\"TenantHostName\":\"$tenanturl\", \"Email\":\"$email\", \"OrgKey\":\"$orgid\"}" > /tmp/nsbranding/nsinstparams.json
+         chmod 700 /tmp/nsbranding/enroll.conf
+         chmod 644 /tmp/nsbranding/nsinstparams.json
+
+         # Install the provided package
+         /usr/sbin/installer -target / -pkg "$( /usr/bin/find $currentdir -maxdepth 1 \( -iname \*\.pkg -o -iname \*\.mpkg \) )" -dumplog -verboseR
+
+         # Check for install completion
+         [ $? != "0" ] && { echo "Error installing Netskope pkg."; exit 1; }
+
+         # Copy the tamperproof.plist file into place. Ensure permissions are correct.
+         mv /tmp/tamperproof.plist /Library/Application\ Support/Netskope/STAgent
+         chown root:staff /Library/Application\ Support/Netskope/STAgent/tamperproof.plist
+         chmod 644 /Library/Application\ Support/Netskope/STAgent/tamperproof.plist
+         
+         exit 0
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/tamperproof.plist"
+      file_mode: "0777"
+      file_content: |
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+              <key>TeamIdentifiers</key>
+              <dict>
+                    <key>24W52P9M7W.com.netskope.client.Netskope-Client</key>
+                    <dict>
+                          <key>DenyTrace</key>
+                          <true/>
+                          <key>ProcessCheck</key>
+                          <dict>
+                                <key>Enabled</key>
+                                <true/>
+                          </dict>
+                    </dict>
+                    <key>24W52P9M7W.com.netskope.client.Netskope-Client.NetskopeClientMacAppProxy</key>
+                    <dict>
+                          <key>DenyTrace</key>
+                          <true/>
+                          <key>ProcessCheck</key>
+                          <dict>
+                                <key>Enabled</key>
+                                <true/>
+                          </dict>
+                    </dict>
+                    <key>24W52P9M7W.nsAuxiliarySvc</key>
+                    <dict>
+                          <key>DenyTrace</key>
+                          <true/>
+                          <key>ProcessCheck</key>
+                          <dict>
+                                <key>Enabled</key>
+                                <true/>
+                          </dict>
+                    </dict>
+                    <key>24W52P9M7W.nsdiag</key>
+                    <dict>
+                          <key>DenyTrace</key>
+                          <true/>
+                          <key>ProcessCheck</key>
+                          <dict>
+                                <key>Enabled</key>
+                                <true/>
+                          </dict>
+                    </dict>
+              </dict>
+        </dict>
+        </plist>
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%TENANT%.%NAME%"
+        version: "%version%"
+        chown:
+          - path: tmp
+            user: root
+            group: wheel
+            mode: "0777"
+        scripts: "Scripts"
+
   - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/unpack'
         - '%RECIPE_CACHE_DIR%/outerunpack'
         - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
