@@ -21,6 +21,10 @@ Input:
 Process:
   - Processor: StopProcessingIf
     Arguments:
+      predicate: 'TENANT == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
       predicate: 'ORG_ID == nil'
 
   - Processor: StopProcessingIf
