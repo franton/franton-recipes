@@ -1,0 +1,145 @@
+Description: Packages current release version of NexThink Collector.
+Identifier: com.github.franton.pkg.NexThinkCollector-Install
+ParentRecipe: com.github.franton.download.NexThinkCollector
+MinimumVersion: '2.9'
+Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
+
+Input:
+  NAME: NexThinkCollector
+  DMG: Nexthink_Collector.dmg
+  CORP_ID: intuitive
+  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+  SERVER_ADDRESS: ""
+  UDP_PORT: ""
+  TCP_PORT: ""
+  ENGAGE: "enable"
+  DATA_TCP: "enable"
+  PROXYPAC_ADDRESS: ''
+  PROXY_ADDRESS: ''
+  PROXY_PORT: ''
+  ASSIGNMENT: "enable"
+  REMOTE_ACTIONS: "disabled"
+  STRING_TAG: ''
+  CUSTOMER_KEY_DATA: ""
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CORP_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SERVER_ADDRESS == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CUSTOMER_KEY_DATA == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs:
+        CustomerKeys: "0777"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs: {}
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/Scripts/%DMG%"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/CustomerKeys/%CUSTOMER_KEY_FILE%"
+      file_mode: "0777"
+      file_content: "%CUSTOMER_KEY_DATA%"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # NexThink Collector installer wrapper
+         # Original script by Rich Trouton. com.github.rtrouton.pkg.NexThinkCollector
+
+         # Verbose logging
+         set -x
+         logfile=/private/tmp/nexthink.log
+         exec > $logfile 2>&1
+
+         # Setup variables
+         currentpath="$( /usr/bin/dirname $0 )"
+         dmgfile=$( /usr/bin/find $currentpath -maxdepth 1 -iname "*.dmg" )
+         
+         option1="%SERVER_ADDRESS%"
+         option2="%UDP_PORT%"
+         option3="%TCP_PORT%"
+         option4="$currentpath/CustomerKeys/%CUSTOMER_KEY_FILE%"
+         option5="%ENGAGE%"
+         option6="%DATA_OVER_TCP%"
+         option7="%PROXY_PAC_ADDRESS%"
+         option8="%PROXY_ADDRESS%"
+         option9="%PROXY_PORT%"
+         option10="%ASSIGNMENT%"
+         option11="%REMOTE_ACTIONS%"
+         option12="%STRING_TAG%"
+
+         # Work out install switches
+         [[ -n ${option1} ]] && switch+="-address ${option1} "
+         [[ -n ${option2} ]] && switch+="-port ${option2} "
+         [[ -n ${option3} ]] && switch+="-tcp_port ${option3} "
+         [[ -n ${option4} ]] && switch+="-key ${option4} "
+         [[ -n ${option5} ]] && switch+="-engage ${option5} "
+         [[ -n ${option6} ]] && switch+="-data_over_tcp ${option6} "
+         [[ -n ${option7} ]] && switch+="-proxy_pac_address ${option7} "
+         [[ -n ${option8} ]] && switch+="-proxy_address ${option8} "
+         [[ -n ${option9} ]] && switch+="-proxy_port ${option9} "
+         [[ -n ${option10} ]] && switch+="-use_assignment ${option10} "
+         [[ -n ${option11} ]] && switch+="-ra_execution_policy ${option11} "
+         [[ -n ${option12} ]] && switch+="-string_tag ${option12} "
+
+         # Create a temporary mount point, then silently mount the dmg on it
+         tmpmount=$( /usr/bin/mktemp -d /private/tmp/nexthink.XXXX )
+         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$tmpmount" "$dmgfile"
+         
+         # Find and install the csi in that folder
+         ${tmpmount}/csi.app/Contents/MacOS/csi "${switch[@]}"
+
+         # Dismount the dmg now we're installed and clean up the temp mount folder
+         /usr/sbin/diskutil eject force "$tmpmount"
+         /bin/rm -rf "$tmpmount"
+         
+         # Disable / Enable the services
+         /bin/launchctl bootout system /Library/LaunchDaemons/com.nexthink.collector.nxtcoordinator.plist
+         /bin/launchctl bootstrap system /Library/LaunchDaemons/com.nexthink.collector.nxtcoordinator.plist
+
+         exit 0
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        scripts: "Scripts"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
