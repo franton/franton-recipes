@@ -5,7 +5,7 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: Netskope
-  SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  SIGNINGCERTIFICATE: ''
   TENANT: ''
   TENANT_URL: "addon-%TENANT%.goskope.com"
   HOSTNAME: "download-%TENANT%.goskope.com"
@@ -19,6 +19,10 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
   - Processor: com.github.rtrouton.SharedProcessors/PkgSigner
     Arguments:
       pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
