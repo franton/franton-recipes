@@ -1,0 +1,29 @@
+Description: Downloads current release version of NexThink Collector.
+Identifier: com.github.franton.download.NexThinkCollector
+MinimumVersion: "2.9"
+Comment: ''
+
+Input:
+  NAME: NexThinkCollector
+  DOWNLOAD_URL: https://download.nexthink.com/releases/latest/OSX_Collector/Nexthink_Collector.dmg
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: true
+      url: "%DOWNLOAD_URL%"
+  
+  - Processor: EndOfCheckPhase
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: %pathname%/csi.app/Contents/Info.plist
+      plist_version_key: CFBundleVersion
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: Nexthink SA (PDEKAZ43QL)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: "%pathname%/Nexthink_Collector.pkg"
