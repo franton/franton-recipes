@@ -17,7 +17,7 @@ Process:
 
   - Processor: Versioner
     Arguments:
-      input_plist_path: %pathname%/csi.app/Contents/Info.plist
+      input_plist_path: "%pathname%/csi.app/Contents/Info.plist"
       plist_version_key: CFBundleVersion
 
   - Processor: CodeSignatureVerifier
