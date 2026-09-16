@@ -30,9 +30,9 @@ Process:
       source_path: "%pathname%/uninstaller"
       destination_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
 
-  - Processor: com.github.franton.franton-recipes/SharedProcessors/FileMode
+  - Processor: com.github.mlbz521.SharedProcessors/FileMode
     Arguments:
-      file_path: "%pathname%/uninstaller"
+      file_path: "%pathname%/postinstall"
       file_mode: 0755
 
   - Processor: PkgCreator
