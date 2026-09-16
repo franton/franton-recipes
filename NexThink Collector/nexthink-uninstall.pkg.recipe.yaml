@@ -5,7 +5,7 @@ MinimumVersion: '2.9'
 Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
 
 Input:
-  NAME: NexThinkCollector-Uninstaller
+  NAME: NexThinkCollector_Uninstaller
   DMG: Nexthink_Collector.dmg
   CORP_ID: replace-me
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
