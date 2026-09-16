@@ -22,3 +22,8 @@ Process:
     Arguments:
       source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
       pkg_path: "%RECIPE_CACHE_DIR%/%NAME%_Uninstall-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
