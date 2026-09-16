@@ -7,7 +7,7 @@ Comment: Create an override and set the variables in an override. DO NOT USE thi
 Input:
   NAME: NexThinkCollector
   DMG: Nexthink_Collector.dmg
-  CORP_ID: intuitive
+  CORP_ID: replace-me
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
