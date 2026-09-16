@@ -1,0 +1,29 @@
+Description: Downloads current release version of Jamf Connect.
+Identifier: com.github.franton.download.JamfConnect
+MinimumVersion: "2.9"
+Comment: ''
+
+Input:
+  NAME: JamfConnect
+  DOWNLOAD_URL: https://files.jamfconnect.com/JamfConnect.dmg
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: true
+      url: "%DOWNLOAD_URL%"
+  
+  - Processor: EndOfCheckPhase
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%pathname%/Jamf Connect Configuration.app/Contents/Info.plist"
+      plist_version_key: CFBundleShortVersionString
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: JAMF Software (483DWKW443)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: "%pathname%/JamfConnectLogin.pkg"
