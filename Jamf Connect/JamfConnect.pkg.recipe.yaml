@@ -1,0 +1,24 @@
+Description: Extracts current release pkg of Jamf Connect.
+Identifier: com.github.franton.pkg.JamfConnect
+ParentRecipe: com.github.franton.download.JamfConnect
+MinimumVersion: "2.9"
+Comment: ''
+
+Input:
+  NAME: JamfConnectLogin
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%/JamfConnectLogin.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version.pkg"
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%_Uninstall-%version%.pkg"
