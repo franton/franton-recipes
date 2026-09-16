@@ -32,7 +32,7 @@ Process:
 
   - Processor: com.github.mlbz521.SharedProcessors/FileMode
     Arguments:
-      file_path: "%pathname%/postinstall"
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
       file_mode: 0755
 
   - Processor: PkgCreator
