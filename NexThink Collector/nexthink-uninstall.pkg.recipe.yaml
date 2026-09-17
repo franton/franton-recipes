@@ -30,7 +30,7 @@ Process:
       source_path: "%pathname%/uninstaller"
       destination_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
 
-  - Processor: com.github.mlbz521.SharedProcessors/FileMode
+  - Processor: com.github.franton.SharedProcessors/FileMode
     Arguments:
       file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
       file_mode: '0755'
