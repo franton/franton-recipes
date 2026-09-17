@@ -4,7 +4,7 @@ ParentRecipe: com.github.franton.pkg.NexThinkCollector-Uninstall
 MinimumVersion: '2.9'
 
 Input:
-  NAME: NexThinkCollector_Uninstaller
+  NAME: NexThinkCollector-Uninstall
   SIGNINGCERTIFICATE: ''
   CORP_ID: replace-me
   DMG: Nexthink_Collector.dmg
