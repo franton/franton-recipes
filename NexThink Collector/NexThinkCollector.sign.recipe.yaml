@@ -36,6 +36,11 @@ Process:
       pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-Install-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
 
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%NAME%-Install-%version%-unsigned.pkg'
+
   - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
       pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-Uninstall-%version%.pkg"
@@ -44,4 +49,4 @@ Process:
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%NAME%-Uninstall-%version%-unsigned.pkg'
