@@ -9,13 +9,12 @@ Input:
   DMG: Nexthink_Collector.dmg
   
   CORP_ID: ""
-
-  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
   SERVER_ADDRESS: ""
   UDP_PORT: ""
   TCP_PORT: ""
+  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
   ENGAGE: "enable"
   DATA_TCP: "enable"
   PROXYPAC_ADDRESS: ''
@@ -91,7 +90,7 @@ Process:
          option3="%TCP_PORT%"
          option4="$currentpath/CustomerKeys/%CUSTOMER_KEY_FILE%"
          option5="%ENGAGE%"
-         option6="%DATA_OVER_TCP%"
+         option6="%DATA_TCP%"
          option7="%PROXY_PAC_ADDRESS%"
          option8="%PROXY_ADDRESS%"
          option9="%PROXY_PORT%"
