@@ -29,7 +29,7 @@ Process:
     Arguments:
       input_plist_path: "%found_filename%/%APP_NAME%/Contents/Info.plist"
 
-  - Processor: com.github.jazzace.processors/TextSearcher
+  - Processor: com.github.franton.SharedProcessors/TextSearcher
     Arguments:
       text_in: "%version%"
       re_pattern: '^(\d+\.\d+\.\d+)'
