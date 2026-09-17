@@ -91,7 +91,7 @@ Process:
          option4="$currentpath/CustomerKeys/%CUSTOMER_KEY_FILE%"
          option5="%ENGAGE%"
          option6="%DATA_TCP%"
-         option7="%PROXY_PAC_ADDRESS%"
+         option7="%PROXYPAC_ADDRESS%"
          option8="%PROXY_ADDRESS%"
          option9="%PROXY_PORT%"
          option10="%ASSIGNMENT%"
