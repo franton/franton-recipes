@@ -5,7 +5,7 @@ MinimumVersion: '2.9'
 Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
 
 Input:
-  NAME: NexThinkCollector_Uninstaller
+  NAME: NexThinkCollector-Uninstall
   DMG: Nexthink_Collector.dmg
   CORP_ID: replace-me
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
@@ -42,7 +42,7 @@ Process:
         pkgdir: "%RECIPE_CACHE_DIR%"
         pkgname: "%NAME%-%version%"
         pkgtype: flat
-        id: "com.%CORP_ID%.%NAME%-Uninstall"
+        id: "com.%CORP_ID%.%NAME%"
         version: "%version%"
         scripts: "Scripts"
 
