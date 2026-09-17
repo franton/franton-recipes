@@ -14,7 +14,7 @@ Process:
     Arguments:
       predicate: 'SIGNINGCERTIFICATE == nil'
 
-  - Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
       pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
