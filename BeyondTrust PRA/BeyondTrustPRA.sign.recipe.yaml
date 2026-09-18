@@ -6,6 +6,11 @@ MinimumVersion: '2.9'
 Input:
   NAME: BeyondTrustPRA
   SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  CORP_ID: CHANGE-THIS
+  TENANT: "change-this.url.com"
+  JUMP_GROUP: "generic"
+  URL: "https://%TENANT%/download_client_connector?jc=%JUMP_GROUP%&p=mac-osx-x86"
+  APP_NAME: "Open To Deploy Jump Client.app"
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
