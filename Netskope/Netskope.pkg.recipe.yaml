@@ -94,6 +94,10 @@ Process:
 
          # Netskope installer wrapper - plist install method only.
 
+         # Keep the device awake!
+         caffeinate -dimsu &
+         caffeinepid=$!
+
          # Verbose logging
          set -x
          logfile=/private/tmp/netskope.log
@@ -117,13 +121,13 @@ Process:
          # Check for working network connection. Use captive.apple.com for this.
          while true;
          do
-         	if /usr/bin/nc -G 2 -z captive.apple.com 443 &> /dev/null;
-         	then
-         		echo "Connected"
-         		break
-         	else
-         		echo "Waiting for reconnect"
-         	fi
+           if /usr/bin/nc -G 2 -z captive.apple.com 443 &> /dev/null;
+           then
+             echo "Connected"
+             break
+           else
+             echo "Waiting for reconnect"
+         fi
          done
 
          # API query against Jamf to grab email from the device record, which has originally come from Okta
@@ -149,38 +153,38 @@ Process:
          email=${email:l}
 
          # Nothing found. Bail out.
-         [ -z "$email" ] && { echo "Cannot find email address."; exit 1; }
+         [ -z "$email" ] && { echo "Cannot find email address."; kill $caffeinepid; exit 1; }
 
          # Check for existing installation and remove if necessary.
          # Big thanks to Steve Dagley for assistance on this
          if [ -d /Library/Application\ Support/Netskope ];
          then
-         	# Backup original com.apple.system-extension.admin settings from the authorization db and create copy for editing
-         	/usr/bin/security authorizationdb read com.apple.system-extensions.admin > /private/tmp/authdborig.plist
-         	/bin/cp /private/tmp/authdborig.plist /private/tmp/authdbmodified.plist
+         	  # Backup original com.apple.system-extension.admin settings from the authorization db and create copy for editing
+         	  /usr/bin/security authorizationdb read com.apple.system-extensions.admin > /private/tmp/authdborig.plist
+         	  /bin/cp /private/tmp/authdborig.plist /private/tmp/authdbmodified.plist
 
-         	# Modify the modified plist so that users aren't prompted for admin
-         	/usr/libexec/PlistBuddy -c "Set rule:0 allow" /private/tmp/authdbmodified.plist
+         	  # Modify the modified plist so that users aren't prompted for admin
+         	  /usr/libexec/PlistBuddy -c "Set rule:0 allow" /private/tmp/authdbmodified.plist
 
-         	# Modify the auth db to allow system extensions to be uninstalled without prompting
-         	/usr/bin/security authorizationdb write com.apple.system-extensions.admin < /private/tmp/authdbmodified.plist
+         	  # Modify the auth db to allow system extensions to be uninstalled without prompting
+         	  /usr/bin/security authorizationdb write com.apple.system-extensions.admin < /private/tmp/authdbmodified.plist
 
-         	# Uninstall the Netskope agent
-         	/Library/Application\ Support/Netskope/STAgent/Remove\ Netskope\ Client.app/Contents/MacOS/Remove\ Netskope\ Client uninstall_app ${uninstpwd}
+         	  # Uninstall the Netskope agent
+         	  /Library/Application\ Support/Netskope/STAgent/Remove\ Netskope\ Client.app/Contents/MacOS/Remove\ Netskope\ Client uninstall_app ${uninstpwd}
 
-         	# Forget the package receipts
-         	/usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep com.netskope )
-         	/usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep epdlp )
+         	  # Forget the package receipts
+         	  /usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep com.netskope )
+         	  /usr/sbin/pkgutil --forget $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep epdlp )
 
             # Set the auth db back to it's original settings
             /usr/bin/security authorizationdb write com.apple.system-extensions.admin < /private/tmp/authdborig.plist
 
-         	# Clean up temp files
-         	/bin/rm -f /private/tmp/authdborig.plist
-         	/bin/rm -f /private/tmp/authdbmodified.plist
+         	  # Clean up temp files
+         	  /bin/rm -f /private/tmp/authdborig.plist
+         	  /bin/rm -f /private/tmp/authdbmodified.plist
 
-         	# Wait for the system to settle
-         	sleep 3
+         	  # Wait for the system to settle
+         	  sleep 3
          fi
 
          # Create the files needed for Netskope registration
@@ -194,12 +198,15 @@ Process:
          /usr/sbin/installer -target / -pkg "$( /usr/bin/find $currentdir -maxdepth 1 \( -iname \*\.pkg -o -iname \*\.mpkg \) )" -dumplog -verboseR
 
          # Check for install completion
-         [ $? != "0" ] && { echo "Error installing Netskope pkg."; exit 1; }
+         [ $? != "0" ] && { echo "Error installing Netskope pkg."; kill $caffeinepid; exit 1; }
 
          # Copy the tamperproof.plist file into place. Ensure permissions are correct.
          mv /tmp/tamperproof.plist /Library/Application\ Support/Netskope/STAgent
          chown root:staff /Library/Application\ Support/Netskope/STAgent/tamperproof.plist
          chmod 644 /Library/Application\ Support/Netskope/STAgent/tamperproof.plist
+
+         # Remove the caffeine
+         kill $caffeinepid
          
          exit 0
 
