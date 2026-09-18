@@ -195,7 +195,7 @@ Process:
          chmod 644 /tmp/nsbranding/nsinstparams.json
 
          # Install the provided package
-         /usr/sbin/installer -target / -pkg "$( /usr/bin/find $currentdir -maxdepth 1 \( -iname \*\.pkg -o -iname \*\.mpkg \) )" -dumplog -verboseR
+         /usr/sbin/installer -target / -pkg "/private/tmp/NSClient.pkg" -dumplog -verboseR
 
          # Check for install completion
          [ $? != "0" ] && { echo "Error installing Netskope pkg."; kill $caffeinepid; exit 1; }
