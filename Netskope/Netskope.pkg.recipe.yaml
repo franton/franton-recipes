@@ -194,8 +194,9 @@ Process:
          chmod 700 /tmp/nsbranding/enroll.conf
          chmod 644 /tmp/nsbranding/nsinstparams.json
 
-         # Install the provided package
+         # Install and cleanup the provided package
          /usr/sbin/installer -target / -pkg "/private/tmp/NSClient.pkg" -dumplog -verboseR
+         /bin/rm -f /private/tmp/NSClient.pkg
 
          # Check for install completion
          [ $? != "0" ] && { echo "Error installing Netskope pkg."; kill $caffeinepid; exit 1; }
