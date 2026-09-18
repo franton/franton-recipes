@@ -16,7 +16,11 @@ MinimumVersion: '2.9'
 Input:
   NAME: BeyondTrustPRA
   CORP_ID: CHANGE-THIS
+  TENANT: "change-this.url.com"
+  URL: "https://%TENANT%/download_client_connector?jc=%JUMP_GROUP%&p=mac-osx-x86"
+  JUMP_GROUP: "generic"
   APP_NAME: "Open To Deploy Jump Client.app"
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: FileFinder
