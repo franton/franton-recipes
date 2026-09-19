@@ -77,6 +77,7 @@ class IconGenerator(Processor):
            sys.exit("Error: Required binary 'icons_cli' was not found.")
         
         # If size not specified then default to 512.
+        size = self.env["size"]
         if size is None:
            size = 512
         
