@@ -24,7 +24,6 @@ import shutil
 import subprocess
 
 from autopkglib import Processor, ProcessorError
-from autopkglib.DmgMounter import DmgMounter
 
 __all__ = ["IconGenerator"]
 
@@ -68,6 +67,17 @@ class IconGenerator(Processor):
 
     __doc__ = description
 
+    def parsePathForDMG(self, pathname):
+        """Helper method for working with paths that reference something
+        inside a disk image"""
+        for extension in self.DMG_EXTENSIONS:
+            dmg_path, dmg, dmg_source_path = pathname.partition(extension + "/")
+            if dmg:
+                dmg_path += extension
+                return dmg_path, dmg, dmg_source_path
+        # no disk image in path
+        return pathname, "", ""
+    
     def main(self):
 
         # Test for icons_cli presence. Not present means we fail out.
