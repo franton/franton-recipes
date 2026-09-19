@@ -24,7 +24,7 @@ import shutil
 import subprocess
 
 from autopkglib import Processor, ProcessorError
-
+from autopkglib.Copier import Copier
 
 __all__ = ["IconGenerator"]
 
