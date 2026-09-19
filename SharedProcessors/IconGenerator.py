@@ -29,7 +29,7 @@ from autopkglib import Processor, ProcessorError
 __all__ = ["IconGenerator"]
 
 
-class PkgSigner(Processor):
+class IconGenerator(Processor):
     description = ( "Creates app icon files in png format.",
                     "WARNING: This requires that SAP Icons be present on the mac this is",
                     "running on." )
