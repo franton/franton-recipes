@@ -14,9 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# IconGenerator - Author: Richard Purves (with code contributions from others)
+# IconGenerator - Author: Richard Purves (with a LOT of code contributions from others)
 # (since this project exists outside of the normal autopkg repo, i'm having to do bad copy paste code to make this work)
 # so far dmgmounter has been partially copied (and modified to use diskutil). so has pkgcopier.
+# eventually all this code bloat will go away.
 
 import os
 import os.path
@@ -86,6 +87,31 @@ class IconGenerator(Processor):
         # no disk image in path
         return pathname, "", ""
 
+    def get_first_plist(self, text_string):
+        """Gets the first plist from a text string that may contain one or
+        more text-style plists.
+        Returns a tuple - the first plist (if any) and the remaining
+        string after the plist"""
+
+        plist_header = "<?xml version"
+        plist_footer = "</plist>"
+        plist_start_index = text_string.find(plist_header)
+        if plist_start_index == -1:
+            # not found
+            return ("", text_string)
+        plist_end_index = text_string.find(
+            plist_footer, plist_start_index + len(plist_header)
+        )
+        if plist_end_index == -1:
+            # not found
+            return ("", text_string)
+        # adjust end value
+        plist_end_index = plist_end_index + len(plist_footer)
+        return (
+            text_string[plist_start_index:plist_end_index],
+            text_string[plist_end_index:],
+        )
+    
     def dmg_has_sla(self, dmgpath):
         """Returns true if dmg has a Software License Agreement.
         These dmgs normally cannot be attached without user intervention"""
