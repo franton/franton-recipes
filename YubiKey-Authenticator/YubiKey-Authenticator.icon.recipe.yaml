@@ -20,7 +20,7 @@ Process:
       output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
       size: "%SIZE%"
 
-- Processor: PathDeleter
+  - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
