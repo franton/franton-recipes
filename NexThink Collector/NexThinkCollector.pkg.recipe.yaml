@@ -179,3 +179,10 @@ Process:
         id: "com.%CORP_ID%.%NAME%"
         version: "%version%"
         scripts: "Scripts"
+
+- Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
