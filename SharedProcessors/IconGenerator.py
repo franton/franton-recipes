@@ -91,7 +91,7 @@ class IconGenerator(Processor):
         These dmgs normally cannot be attached without user intervention"""
         has_sla = False
         proc = subprocess.Popen(
-            ["/usr/bin/hdiutil", "imageinfo", dmgpath, "-plist"],
+            ["/usr/sbin/diskutil", "image", "info", "-plist", dmgpath],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -100,7 +100,7 @@ class IconGenerator(Processor):
         if stderr:
             # some error with hdiutil. Print it, but try to continue anyway.
             # (APFS disk images generate extraneous output to stderr)
-            self.output(f"hdiutil imageinfo error {stderr} with image {dmgpath}.")
+            self.output(f"diskutil image info error {stderr} with image {dmgpath}.")
 
         pliststr, stdout = self.get_first_plist(stdout)
         if pliststr:
