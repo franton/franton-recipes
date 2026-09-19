@@ -1,0 +1,21 @@
+Description: Icon creation recipe for YubiKey Authenticator
+Identifier: com.github.franton.icon.Yubikey-Authenticator
+ParentRecipe: com.github.franton.download.Yubikey-Authenticator
+MinimumVersion: '2.9'
+
+Input:
+  NAME: YubiKeyAuthenticator
+  SIZE: '512'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%pathname%/Yubico Authenticator.app"
+      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      size: "%SIZE%"
