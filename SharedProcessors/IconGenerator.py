@@ -25,6 +25,8 @@ import glob
 import shutil
 import subprocess
 
+import plistlib
+
 from autopkglib import Processor, ProcessorError
 from autopkglib.DmgMounter import DmgMounter
 
