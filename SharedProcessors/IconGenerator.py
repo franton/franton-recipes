@@ -15,7 +15,8 @@
 # limitations under the License.
 #
 # IconGenerator - Author: Richard Purves (with code contributions from others)
-#
+# (since this project exists outside of the normal autopkg repo, i'm having to do bad copy paste code to make this work)
+# so far dmgmounter has been partially copied (and modified to use diskutil). so has pkgcopier.
 
 import os
 import os.path
@@ -66,10 +67,102 @@ class IconGenerator(Processor):
         },
     }
 
+    dmg_exts = [".dmg", ".iso", ".DMG", ".ISO"]
+
     __doc__ = description
     
-    def main(self):
+    def parsePathForDMG(self, pathname):
+        """Helper method for working with paths that reference something
+        inside a disk image"""
+        for extension in self.dmg_exts:
+            dmg_path, dmg, dmg_source_path = pathname.partition(extension + "/")
+            if dmg:
+                dmg_path += extension
+                return dmg_path, dmg, dmg_source_path
+        # no disk image in path
+        return pathname, "", ""
 
+    def mount(self, pathname):
+        """Mount image with disktuil."""
+        # Make sure we don't try to mount something twice.
+        if pathname in self.mounts:
+            raise ProcessorError(f"{pathname} is already mounted")
+
+        stdin = ""
+        if self.dmg_has_sla(pathname):
+            stdin = "Y\n"
+
+        # Call diskutil.
+        try:
+            proc = subprocess.Popen(
+                (
+                    "/usr/sbin/diskutil",
+                    "image",
+                    "attach",
+                    "--nobrowse",
+                    "--plist",
+                    pathname,
+                ),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                text=True,
+            )
+            stdout, stderr = proc.communicate(stdin)
+        except OSError as err:
+            raise ProcessorError(
+                f"diskutil execution failed with error code {err.errno}: {err.strerror}"
+            )
+        if proc.returncode != 0:
+            raise ProcessorError(f"mounting {pathname} failed: {stderr}")
+
+        # Read output plist.
+        pliststr, stdout = self.get_first_plist(stdout)
+        try:
+            output = plistlib.loads(pliststr.encode())
+        except Exception:
+            raise ProcessorError(
+                f"mounting {pathname} failed: unexpected output from diskutil"
+            )
+
+        # Find mount point.
+        for part in output.get("system-entities", []):
+            if "mount-point" in part:
+                # Add to mount list.
+                self.mounts[pathname] = part["mount-point"]
+                self.output(f"Mounted disk image {pathname}")
+                return self.mounts[pathname]
+        raise ProcessorError(
+            f"mounting {pathname} failed: unexpected output from diskutil"
+        )
+
+    def unmount(self, pathname) -> None:
+        """Unmount previously mounted image."""
+
+        # Don't try to unmount something we didn't mount.
+        if pathname not in self.mounts:
+            raise ProcessorError(f"{pathname} is not mounted")
+
+        # Call disktuil.
+        try:
+            proc = subprocess.Popen(
+                ("/usr/sbin/diskutil", "eject", "force", self.mounts[pathname]),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            _, stderr = proc.communicate()
+        except OSError as err:
+            raise ProcessorError(
+                f"diskutil execution failed with error code {err.errno}: {err.strerror}"
+            )
+        if proc.returncode != 0:
+            raise ProcessorError(f"unmounting {pathname} failed: {stderr}")
+
+        # Delete mount from mount list.
+        del self.mounts[pathname]    
+
+    def main(self):
         # Test for icons_cli presence. Not present means we fail out.
         icons_cli = shutil.which("icons_cli")
 
