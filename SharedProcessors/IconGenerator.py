@@ -86,6 +86,34 @@ class IconGenerator(Processor):
         # no disk image in path
         return pathname, "", ""
 
+    def dmg_has_sla(self, dmgpath):
+        """Returns true if dmg has a Software License Agreement.
+        These dmgs normally cannot be attached without user intervention"""
+        has_sla = False
+        proc = subprocess.Popen(
+            ["/usr/bin/hdiutil", "imageinfo", dmgpath, "-plist"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        stdout, stderr = proc.communicate()
+        if stderr:
+            # some error with hdiutil. Print it, but try to continue anyway.
+            # (APFS disk images generate extraneous output to stderr)
+            self.output(f"hdiutil imageinfo error {stderr} with image {dmgpath}.")
+
+        pliststr, stdout = self.get_first_plist(stdout)
+        if pliststr:
+            try:
+                plist = plistlib.loads(pliststr.encode())
+                properties = plist.get("Properties")
+                if properties:
+                    has_sla = properties.get("Software License Agreement", False)
+            except Exception:
+                pass
+
+        return has_sla
+        
     def mount(self, pathname):
         """Mount image with disktuil."""
         # Make sure we don't try to mount something twice.
