@@ -67,6 +67,8 @@ class IconGenerator(Processor):
 
     __doc__ = description
 
+    DMG_EXTENSIONS = [".dmg", ".iso", ".DMG", ".ISO"]
+    
     def parsePathForDMG(self, pathname):
         """Helper method for working with paths that reference something
         inside a disk image"""
