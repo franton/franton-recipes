@@ -6,6 +6,7 @@ Comment: ''
 
 Input:
   NAME: JamfConnectLogin
+  UNINSTALL_NAME: JamfConnectUninstaller
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -21,7 +22,7 @@ Process:
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%_Uninstall-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%UNINSTALL_NAME%-%version%.pkg"
 
   - Processor: PathDeleter
     Arguments:
