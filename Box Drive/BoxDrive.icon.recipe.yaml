@@ -1,0 +1,41 @@
+Description: Icon creation recipe for Box Drive
+Identifier: com.github.franton.icon.BoxDrive
+ParentRecipe: com.github.dataJAR-recipes.download.boxdrive
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BoxDrive
+  SIZE: ''
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/BoxDesktopDrive.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Box.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Box.app"
+      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/downloads'
