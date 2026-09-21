@@ -180,7 +180,7 @@ Process:
         version: "%version%"
         scripts: "Scripts"
 
-- Processor: PathDeleter
+  - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
