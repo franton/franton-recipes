@@ -24,6 +24,7 @@ import os.path
 import glob
 import shutil
 import subprocess
+import sys
 
 import plistlib
 
