@@ -1,5 +1,5 @@
 Description: Icon creation recipe for NexThink Collector
-Identifier: com.github.franton.icon.Netskope
+Identifier: com.github.franton.icon.NexThinkCollector
 ParentRecipe: com.github.franton.download.NexThinkCollector
 MinimumVersion: '2.9'
 
