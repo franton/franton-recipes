@@ -225,7 +225,7 @@ class IconGenerator(Processor):
 
     def main(self):
         # Test for icons_cli presence. Not present means we fail out.
-        icons_cli = shutil.which("icons_cli")
+        icons_cli = shutil.which("/Applications/Icons.app/Contents/MacOS/icons_cli")
 
         if not icons_cli:
            sys.exit("Error: Required binary 'icons_cli' was not found.")
