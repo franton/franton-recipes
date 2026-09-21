@@ -1,0 +1,53 @@
+Description: Icon creation recipe for Netskope Client
+Identifier: com.github.franton.icon.Netskope
+ParentRecipe: com.github.franton.download.Netskope
+MinimumVersion: '2.9'
+
+Input:
+  NAME: NSClient
+  TENANT: ''
+  HOSTNAME: "download-%TENANT%.goskope.com"
+  DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
+  SIZE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'TENANT == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/epdlp.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Endpoint DLP.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Endpoint DLP.app"
+      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/downloads'
