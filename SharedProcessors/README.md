@@ -4,6 +4,8 @@ This is a compendium of autopkg shared processors that I've found useful or have
 
 Copyright remains with the original authors.
 
+Think of this as the "artifactory" model. I've had too many commits elsewhere break stuff I was working on, so I'm keeping my own known good variants here. This is something that autopkg in general has been "terrible" for and picking through recipes to figure out who broke what is awful.
+
 ## DistributionPackageCreator.py
 * Author: Rich Trouton
 * Description: Converts a standard pkg file (as output from other processors) into a distribution format pkg.
