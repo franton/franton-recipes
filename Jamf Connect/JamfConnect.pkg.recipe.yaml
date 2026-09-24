@@ -7,7 +7,6 @@ Comment: ''
 Input:
   NAME: JamfConnectLogin
   UNINSTALL_NAME: JamfConnectUninstaller
-  CORP_FOLDER: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -27,11 +26,10 @@ Process:
         tmp: "0777"
         usr: "0755"
         usr/local: "0755"
-        usr/local/%CORP_FOLDER%: "0755"
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_FOLDER%/user.sh"
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/user.sh"
       file_mode: "0777"
       file_content: |
          #!/bin/zsh --no-rcs
@@ -43,7 +41,9 @@ Process:
          /usr/local/bin/jamf recon -endUsername $user
 
          # Clean up and secure
-         /bin/rm %CORP_FOLDER%/user.sh
+         /bin/rm /usr/local/user.sh
+         /usr/bin/touch /usr/local/user.sh
+         /bin/chmod 000 /usr/local/user.sh
 
          exit 0
 
