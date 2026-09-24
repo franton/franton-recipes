@@ -97,3 +97,5 @@ Process:
         - '%RECIPE_CACHE_DIR%/downloads'
         - '%RECIPE_CACHE_DIR%/Scripts'
         - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-unsigned.pkg'
