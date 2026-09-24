@@ -7,6 +7,7 @@ Comment: ''
 Input:
   NAME: JamfConnectLogin
   UNINSTALL_NAME: JamfConnectUninstaller
+  CORP_ID: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -70,7 +71,25 @@ Process:
       source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
       pkg_path: "%RECIPE_CACHE_DIR%/%UNINSTALL_NAME%-%version%.pkg"
 
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        chown:
+          - path: tmp
+            user: root
+            group: wheel
+            mode: "0777"
+        scripts: "Scripts"
+
   - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
