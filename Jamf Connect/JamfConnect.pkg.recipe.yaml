@@ -17,7 +17,7 @@ Process:
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/JamfConnectLogin.pkg"
-      pkg_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
 
   - Processor: PkgCopier
     Arguments:
