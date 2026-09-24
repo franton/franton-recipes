@@ -7,6 +7,7 @@ Comment: ''
 Input:
   NAME: JamfConnectLogin
   UNINSTALL_NAME: JamfConnectUninstaller
+  CORP_FOLDER: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -14,10 +15,55 @@ Process:
     Arguments:
       predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
 
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+        usr: "0755"
+        usr/local: "0755"
+        usr/local/%CORP_FOLDER%: "0755"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_FOLDER%/user.sh"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Look for user accounts. Ignore any prefixed with a _ .
+         user=$( /usr/bin/dscl /Local/Default -list /Users uid | /usr/bin/awk '$2 >= 501 { print $1 }' | /usr/bin/grep -v -E "^(_)" )
+
+         # Run a recon to put the username directly into the Jamf record
+         /usr/local/bin/jamf recon -endUsername $user
+
+         # Clean up and secure
+         /bin/rm %CORP_FOLDER%/user.sh
+
+         exit 0
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Jamf Connect postinstall wrapper script
+
+         /usr/sbin/installer -target / -pkg /tmp/%NAME%-%version%.pkg
+
+         exit 0
+
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/JamfConnectLogin.pkg"
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%NAME%-%version%.pkg"
 
   - Processor: PkgCopier
     Arguments:
