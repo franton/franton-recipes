@@ -1,5 +1,5 @@
 Description: Signing recipe for Jamf Connect
-Identifier: com.github.franton.sign.JamfConnectv
+Identifier: com.github.franton.sign.JamfConnect
 ParentRecipe: com.github.franton.pkg.JamfConnect
 MinimumVersion: '2.9'
 
