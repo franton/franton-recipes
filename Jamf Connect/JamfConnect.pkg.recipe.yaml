@@ -23,7 +23,3 @@ Process:
     Arguments:
       source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
       pkg_path: "%RECIPE_CACHE_DIR%/%UNINSTALL_NAME%-%version%.pkg"
-
-  - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
-    Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
