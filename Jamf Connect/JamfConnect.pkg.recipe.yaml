@@ -87,6 +87,10 @@ Process:
             mode: "0777"
         scripts: "Scripts"
 
+  - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+
   - Processor: PathDeleter
     Arguments:
       path_list:
