@@ -1,0 +1,42 @@
+Description: Icon creation recipe for Claude Desktop
+Identifier: com.github.franton.icon.ClaudeDesktop
+ParentRecipe: com.github.franton.download.ClaudeDesktop
+MinimumVersion: '2.9'
+
+Input:
+  NAME: ClaudeDesktop
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/Claude-component.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Claude.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Box.app"
+      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/downloads'
