@@ -30,7 +30,7 @@ Process:
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/unpack/Box.app"
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Claude.app"
       output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
       size: "%SIZE%"
 
