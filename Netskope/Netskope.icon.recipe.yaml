@@ -27,12 +27,12 @@ Process:
 
   - Processor: PkgPayloadUnpacker
     Arguments:
-      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/epdlp.pkg/Payload"
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/STAgent_unsigned.pkg/Payload"
       destination_path: "%RECIPE_CACHE_DIR%/unpack"
 
   - Processor: Versioner
     Arguments:
-      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Endpoint DLP.app/Contents/Info.plist"
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Client.app/Contents/Info.plist"
 
   - Processor: PkgRootCreator
     Arguments:
