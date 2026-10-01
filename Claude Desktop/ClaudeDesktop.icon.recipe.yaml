@@ -6,6 +6,8 @@ MinimumVersion: '2.9'
 Input:
   NAME: ClaudeDesktop
   DOWNLOAD_MISSING_FILE: null
+  SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -25,13 +27,15 @@ Process:
 
   - Processor: PkgRootCreator
     Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
       pkgdirs: {}
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
       file_path: "%RECIPE_CACHE_DIR%/unpack/Claude.app"
-      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
       size: "%SIZE%"
 
   - Processor: PathDeleter
