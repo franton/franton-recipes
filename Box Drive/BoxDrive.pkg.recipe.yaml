@@ -1,0 +1,28 @@
+Description: Pkg versioner recipe for Box Drive
+Identifier: com.github.franton.pkg.BoxDrive
+ParentRecipe: com.github.franton.icon.BoxDrive
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BoxDrive
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      filename: '%NAME%.pkg'
+      url: 'https://e3.boxcdn.net/desktop/releases/mac/BoxDrive.pkg'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%/%NAME%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
