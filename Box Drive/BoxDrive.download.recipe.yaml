@@ -1,0 +1,27 @@
+Description: Download recipe for Box Drive
+Identifier: com.github.franton.download.BoxDrive
+MinimumVersion: '2.9'
+
+Input:
+  NAME: BoxDrive
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      filename: '%NAME%.pkg'
+      url: 'https://e3.boxcdn.net/desktop/releases/mac/BoxDrive.pkg'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: Box, Inc. (M683GB7CPW)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: '%pathname%'
