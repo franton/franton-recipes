@@ -331,7 +331,7 @@ class IconGenerator(Processor):
             
             # Run the icons command. Raise CalledProcessError if it fails
             result = subprocess.run(
-                [icons_cli], capture_output=True, text=True, check=True
+                icons_cli, capture_output=True, text=True, check=True
             )
 
             # Print output from the executable
