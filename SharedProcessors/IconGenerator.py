@@ -295,6 +295,7 @@ class IconGenerator(Processor):
 
             # Attempt to generate the correct switches with defaults
             # If size specified, use that or default to 512.
+            size = self.env.get("size")
             try:
                 print(size)
             except NameError:
@@ -303,6 +304,7 @@ class IconGenerator(Processor):
                 icons_cli.extend(["-s", size])
 
             # Set any name prefix here. Default to name input if unset.
+            name_prefix = self.env.get("name_prefix")
             try:
                 print(name_prefix)
             except NameError:
@@ -311,6 +313,7 @@ class IconGenerator(Processor):
                 icons_cli.extend(["-n", name_prefix])
 
             # Add any exclusions if specified
+            exclude = self.env.get("exclude")
             try:
                 print(exclude)
             except NameError:
