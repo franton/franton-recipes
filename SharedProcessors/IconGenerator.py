@@ -304,11 +304,11 @@ class IconGenerator(Processor):
 
             # Set any name prefix here. Default to name input if unset.
             try:
-                nameprefix
+                name_prefix
             except NameError:
                 icons_cli.extend(["-n", ""])
             else:
-                icons_cli.extend(["-n", nameprefix])
+                icons_cli.extend(["-n", name_prefix])
 
             # Add any exclusions if specified
             try:
