@@ -7,6 +7,7 @@ Input:
   NAME: NexThinkCollector
   DMG: Nexthink_Collector.dmg
   SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -32,12 +33,7 @@ Process:
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
       file_path: "%RECIPE_CACHE_DIR%/unpack/nxtsvc.app"
-      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      exclude: "%EXCLUDE%"
+      name_prefix: "%NAME%"
+      output_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
       size: "%SIZE%"
-
-  - Processor: PathDeleter
-    Arguments:
-      path_list:
-        - '%RECIPE_CACHE_DIR%/unpack'
-        - '%RECIPE_CACHE_DIR%/outerunpack'
-        - '%RECIPE_CACHE_DIR%/downloads'
