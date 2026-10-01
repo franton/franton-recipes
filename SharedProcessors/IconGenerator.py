@@ -293,7 +293,7 @@ class IconGenerator(Processor):
             try:
                 size
             except NameError:
-                icons_cli.extend(["-s", 512])
+                icons_cli.extend(["-s", "512"])
             else:
                 icons_cli.extend(["-s", size])
 
