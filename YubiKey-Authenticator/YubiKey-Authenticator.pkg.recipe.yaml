@@ -10,11 +10,6 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
-  - Processor: PkgRootCreator
-    Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
-      pkgdirs: {}
-
   - Processor: AppPkgCreator 
     Arguments:
       app_path: "%pathname%/Yubico Authenticator.app"
