@@ -5,7 +5,8 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: YubiKeyAuthenticator
-  SIZE: '512'
+  SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
