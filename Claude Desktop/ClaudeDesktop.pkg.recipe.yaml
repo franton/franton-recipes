@@ -20,5 +20,3 @@ Process:
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
-        - '%RECIPE_CACHE_DIR%/outerunpack'
-        - '%RECIPE_CACHE_DIR%/unpack'
