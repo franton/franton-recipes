@@ -35,9 +35,11 @@ __all__ = ["IconGenerator"]
 
 
 class IconGenerator(Processor):
-    description = ( "Creates app icon files in png format.",
-                    "WARNING: This requires that SAP Icons be present on the mac this is",
-                    "running on." )
+    description = (
+        "Creates app icon files in png format.",
+        "WARNING: This requires that SAP Icons be present on the mac this is",
+        "running on.",
+    )
     input_variables = {
         "file_path": {
             "required": True,
@@ -70,13 +72,11 @@ class IconGenerator(Processor):
                 "e.g. 128 or 256 or 512 or 1024."
                 "Default will be 512."
             ),
-        }
+        },
     }
     output_variables = {
         "icon_path": {"description": "Path to generated png files."},
-        "icon_summary_result": {
-            "description": "Description of results."
-        },
+        "icon_summary_result": {"description": "Description of results."},
     }
 
     dmg_exts = [".dmg", ".iso", ".DMG", ".ISO"]
@@ -122,7 +122,7 @@ class IconGenerator(Processor):
             text_string[plist_start_index:plist_end_index],
             text_string[plist_end_index:],
         )
-    
+
     def dmg_has_sla(self, dmgpath):
         """Returns true if dmg has a Software License Agreement.
         These dmgs normally cannot be attached without user intervention"""
@@ -150,7 +150,7 @@ class IconGenerator(Processor):
                 pass
 
         return has_sla
-        
+
     def mount(self, pathname):
         """Mount image with disktuil."""
         # Make sure we don't try to mount something twice.
@@ -229,7 +229,7 @@ class IconGenerator(Processor):
             raise ProcessorError(f"unmounting {pathname} failed: {stderr}")
 
         # Delete mount from mount list.
-        del self.mounts[pathname]    
+        del self.mounts[pathname]
 
     def main(self):
         # Test for icons_cli presence. Not present means we fail out.
@@ -238,14 +238,16 @@ class IconGenerator(Processor):
         icons_cli = [icons] if icons else []
 
         if not icons_cli:
-           sys.exit("Error: Required binary 'icons_cli' was not found in Applications folder.")
-        
+            sys.exit(
+                "Error: Required binary 'icons_cli' was not found in Applications folder."
+            )
+
         # Clear any pre-existing summary
         if "icon_summary_result" in self.env:
             del self.env["icon_summary_result"]
 
         # Code shamelessly "borrowed" from Greg Neagles PkgCopier processor
-        
+
         # Check if we're trying to copy something inside a dmg.
         dmg_path, dmg, dmg_source_path = self.parsePathForDMG(self.env["file_path"])
         try:
@@ -274,7 +276,7 @@ class IconGenerator(Processor):
                 )
 
             # Check that the source path ends with supported extension
-            app_extensions = (".app")
+            app_extensions = ".app"
             if os.path.splitext(matched_source_path)[1] not in app_extensions:
                 raise ProcessorError(
                     "Source does not appear to be a app bundle based on its filename: "
@@ -287,43 +289,45 @@ class IconGenerator(Processor):
             )
 
             # Attempt to generate the correct switches with defaults
-			# If size specified, use that or default to 512.
-			try:
-			    size
-			except NameError:
-			    icons_cli.extend(["-s", 512])
-			else:
+            # If size specified, use that or default to 512.
+            try:
+                size
+            except NameError:
+                icons_cli.extend(["-s", 512])
+            else:
                 icons_cli.extend(["-s", size])
-            
+
             # Set any name prefix here. Default to name input if unset.
             try:
-				nameprefix
-			except NameError:
+                nameprefix
+            except NameError:
                 icons_cli.extend(["-n", ""])
             else:
                 icons_cli.extend(["-n", nameprefix])
-            
+
             # Add any exclusions if specified
-			try:
-				exclude
-			except NameError:
-				exclude = None
+            try:
+                exclude
+            except NameError:
+                exclude = None
             if exclude:
                 icons_cli.extend(["-x", exclude])
-            
+
             # Input path which we've already validated
             icons_cli.extend(["-i", file_path])
-            
+
             # Output path which we specified or used a default
             icons_cli.extend("-o", output_path)
-            
+
             # Run the icons command. Raise CalledProcessError if it fails
-            result = subprocess.run(icons_cli, capture_output=True, text=True, check=True)
+            result = subprocess.run(
+                icons_cli, capture_output=True, text=True, check=True
+            )
 
             # Output variables here
             icon_path = os.path.join(output_path)
             self.env["icon_path"] = icon_path
-            
+
             self.env["icon_summary_result"] = {
                 "summary_text": "The following plist file was created:",
                 "report_fields": ["icon_path"],
@@ -338,6 +342,6 @@ class IconGenerator(Processor):
                 self.unmount(dmg_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     processor = IconGenerator()
     processor.execute_shell()
