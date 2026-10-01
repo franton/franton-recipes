@@ -5,8 +5,10 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: YubiKeyAuthenticator
-  SIGNINGCERTIFICATE: "PLACE SIGNING CERT NAME HERE - COPY NAME FROM YOUR KEYCHAIN ENTRY"
+  SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  SIGNINGCERTIFICATE: ''
 
 Process:
   - Processor: com.github.franton.SharedProcessors/PkgSigner
