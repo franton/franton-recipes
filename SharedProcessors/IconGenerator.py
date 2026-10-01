@@ -74,10 +74,6 @@ class IconGenerator(Processor):
             ),
         },
     }
-    output_variables = {
-        "icon_path": {"description": "Path to generated png files."},
-        "icon_summary_result": {"description": "Description of results."},
-    }
 
     dmg_exts = [".dmg", ".iso", ".DMG", ".ISO"]
 
@@ -323,16 +319,6 @@ class IconGenerator(Processor):
             result = subprocess.run(
                 icons_cli, capture_output=True, text=True, check=True
             )
-
-            # Output variables here
-            icon_path = os.path.join(output_path)
-            self.env["icon_path"] = icon_path
-
-            self.env["icon_summary_result"] = {
-                "summary_text": "The following plist file was created:",
-                "report_fields": ["icon_path"],
-                "data": {"icon_summary_result": result.stdout},
-            }
 
             # Print output from the executable
             print("Output:", result.stdout)
