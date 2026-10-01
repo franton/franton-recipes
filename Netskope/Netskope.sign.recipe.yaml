@@ -16,6 +16,8 @@ Input:
   JAMF_CLIENTID: ''
   JAMF_SECRET: ''
   DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
+  SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -25,10 +27,10 @@ Process:
 
   - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
