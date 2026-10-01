@@ -10,6 +10,9 @@ Input:
   CORP_ID: ""
   SIGNINGCERTIFICATE: ""
 
+  SIZE: ''
+  EXCLUDE: ''
+
   CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
