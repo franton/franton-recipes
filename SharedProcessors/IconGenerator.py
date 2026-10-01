@@ -57,6 +57,14 @@ class IconGenerator(Processor):
                 "Defaults to RECIPE_CACHE_DIR/os.path.basename(source_pkg)"
             ),
         },
+        "name_prefix": {
+            "required": False,
+            "description": (
+                "A base name to be used as a prefix for the file name."
+                "If an empty string is specified, the prefix is generated"
+                "from the name of the input file."
+            ),
+        },
         "exclude": {
             "required": False,
             "description": (
