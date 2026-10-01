@@ -14,32 +14,13 @@ Process:
     Arguments:
       dmg_path: "%pathname%"
 
-  - Processor: PkgRootCreator
+  - Processor: AppPkgCreator 
     Arguments:
-      pkgdirs:
-        Applications: "0775"
-      pkgroot: "%RECIPE_CACHE_DIR%/payload"
-
-  - Processor: Copier
-    Arguments:
-      destination_path: "%pkgroot%/Applications/Yubico Authenticator.app"
-      source_path: "%pathname%/Yubico Authenticator.app"
-
-  - Processor: PkgCreator
-    Arguments:
-      pkg_request:
-        chown:
-          - path: Applications
-            group: admin
-            user: root
-            mode: "0755"
-      id: "com.yubico.yubioath"
-      options: "purge_ds_store"
-      pkgdir: "%RECIPE_CACHE_DIR%/%version%"
-      pkgname: "%NAME%-%version%"
+      app_path: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME-%version%.pkg"
+      force_pkg_build: True
 
   - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
-        - '%RECIPE_CACHE_DIR%/payload'
