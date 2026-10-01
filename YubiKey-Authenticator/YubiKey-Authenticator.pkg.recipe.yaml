@@ -17,7 +17,7 @@ Process:
 
   - Processor: AppPkgCreator 
     Arguments:
-      app_path: "%pathname%"
+      app_path: "%pathname%/Yubico Authenticator.app"
       pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME-%version%.pkg"
       force_pkg_build: True
 
