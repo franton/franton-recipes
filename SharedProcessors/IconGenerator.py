@@ -306,7 +306,7 @@ class IconGenerator(Processor):
             try:
                 name_prefix
             except NameError:
-                icons_cli.extend(["-n", ""])
+                name_prefix = None
             else:
                 icons_cli.extend(["-n", name_prefix])
 
