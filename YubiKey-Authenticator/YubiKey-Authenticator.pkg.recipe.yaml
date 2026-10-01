@@ -10,9 +10,10 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
-  - Processor: AppDmgVersioner 
+  - Processor: PkgRootCreator
     Arguments:
-      dmg_path: "%pathname%"
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
 
   - Processor: AppPkgCreator 
     Arguments:
