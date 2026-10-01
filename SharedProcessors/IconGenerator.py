@@ -55,6 +55,14 @@ class IconGenerator(Processor):
                 "Defaults to RECIPE_CACHE_DIR/os.path.basename(source_pkg)"
             ),
         },
+        "exclude": {
+            "required": False,
+            "description": (
+                "The icons to exclude from icon creation."
+                "Valid arguments are i (install), u (uninstall) and a (animated)"
+                "Or a combination such as ua . Default is no exclusions."
+            ),
+        },
         "size": {
             "required": False,
             "description": (
@@ -225,15 +233,12 @@ class IconGenerator(Processor):
 
     def main(self):
         # Test for icons_cli presence. Not present means we fail out.
-        icons_cli = shutil.which("/Applications/Icons.app/Contents/MacOS/icons_cli")
+        # Also convert string to list which will be useful later.
+        icons = shutil.which("/Applications/Icons.app/Contents/MacOS/icons_cli")
+        icons_cli = [icons] if icons else []
 
         if not icons_cli:
-           sys.exit("Error: Required binary 'icons_cli' was not found.")
-        
-        # If size not specified then default to 512.
-        size = self.env["size"]
-        if size is None:
-           size = 512
+           sys.exit("Error: Required binary 'icons_cli' was not found in Applications folder.")
         
         # Clear any pre-existing summary
         if "icon_summary_result" in self.env:
@@ -281,13 +286,41 @@ class IconGenerator(Processor):
                 self.env["RECIPE_CACHE_DIR"], os.path.basename(matched_source_path)
             )
 
-            # Run the SAP icons binary with the supplied details
-            result = subprocess.run(
-                [icons_cli, "-s", size, "-i", file_path, "-o", output_path],
-                capture_output=True,
-                text=True,
-                check=True,  # Raises CalledProcessError if the command fails
-            )
+            # Attempt to generate the correct switches with defaults
+			# If size specified, use that or default to 512.
+            if size:
+               icons_cli.extend(["-s", size])
+            else:
+               icons_cli.extend(["-s", 512])
+            
+            # Set any name prefix here. Default to name input if unset.
+            if nameprefix:
+               icons_cli.extend(["-n", nameprefix])
+            else:
+               icons_cli.extend(["-n", ""])
+            
+            # Add any exclusions if specified
+            if exclude:
+               icons_cli.extend(["-x", exclude])
+            
+            # Input path which we've already validated
+            icons_cli.extend(["-i", file_path])
+            
+            # Output path which we specified or used a default
+            icons_cli.extend("-o", output_path)
+            
+            # Run the icons command. Raise CalledProcessError if it fails
+            result = subprocess.run(icons_cli, capture_output=True, text=True, check=True)
+
+            # Output variables here
+            icon_path = os.path.join(output_path)
+            self.env["icon_path"] = icon_path
+            
+            self.env["icon_summary_result"] = {
+                "summary_text": "The following plist file was created:",
+                "report_fields": ["icon_path"],
+                "data": {"icon_summary_result": result.stdout},
+            }
 
             # Print output from the executable
             print("Output:", result.stdout)
