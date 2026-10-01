@@ -330,7 +330,7 @@ class IconGenerator(Processor):
             )
 
             # Print output from the executable
-            print("Output:", result.stdout)
+            print("Output:", icons_cli, result.stdout)
 
         finally:
             if dmg:
