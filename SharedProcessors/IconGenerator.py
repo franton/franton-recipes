@@ -74,7 +74,8 @@ class IconGenerator(Processor):
             ),
         },
     }
-
+    output_variables = {}
+    
     dmg_exts = [".dmg", ".iso", ".DMG", ".ISO"]
 
     __doc__ = description
