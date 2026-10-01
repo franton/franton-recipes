@@ -10,15 +10,6 @@ Input:
   EXCLUDE: ''
 
 Process:
-  - Processor: URLDownloader
-    Arguments:
-      filename: '%NAME%.pkg'
-      url: 'https://e3.boxcdn.net/desktop/releases/mac/BoxDrive.pkg'
-
-  - Processor: StopProcessingIf
-    Arguments:
-      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
-
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/%NAME%.pkg"
