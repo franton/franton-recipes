@@ -6,6 +6,8 @@ MinimumVersion: '2.9'
 Input:
   NAME: BoxDrive
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  SIZE: ''
+  EXCLUDE: ''
 
 Process:
   - Processor: URLDownloader
