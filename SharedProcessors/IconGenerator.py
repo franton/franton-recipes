@@ -315,7 +315,7 @@ class IconGenerator(Processor):
                 print(exclude)
             except NameError:
                 print("No Exclusions set")
-            if exclude:
+            else:
                 icons_cli.extend(["-x", exclude])
 
             # Input path which we've already validated
