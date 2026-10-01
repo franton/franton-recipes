@@ -327,6 +327,8 @@ class IconGenerator(Processor):
             # Output path which we specified or used a default
             icons_cli.append(["-o", output_path])
 
+            print("CLI to run:", icons_cli)
+            
             # Run the icons command. Raise CalledProcessError if it fails
             result = subprocess.run(
                 icons_cli, capture_output=True, text=True, check=True
