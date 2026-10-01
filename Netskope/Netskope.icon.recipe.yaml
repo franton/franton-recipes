@@ -9,6 +9,7 @@ Input:
   HOSTNAME: "download-%TENANT%.goskope.com"
   DOWNLOAD_URL: "https://%HOSTNAME%/dlr/mac/get"
   SIZE: ''
+  EXCLUDE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
@@ -34,15 +35,25 @@ Process:
     Arguments:
       input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Client.app/Contents/Info.plist"
 
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      input_path: "%pathname%"
+      expected_authority_names:
+        - "Developer ID Installer: netSkope, Inc. (24W52P9M7W)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+
   - Processor: PkgRootCreator
     Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/icons-%version%"
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
       pkgdirs: {}
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
       file_path: "%RECIPE_CACHE_DIR%/unpack/Netskope Client.app"
-      output_path: "%RECIPE_CACHE_DIR%/icons-%version%"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
       size: "%SIZE%"
 
   - Processor: PathDeleter
