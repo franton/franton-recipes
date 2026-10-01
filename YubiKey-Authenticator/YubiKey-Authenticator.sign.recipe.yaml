@@ -13,10 +13,10 @@ Input:
 Process:
   - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/%NAME%-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-%version%-unsigned.pkg'
