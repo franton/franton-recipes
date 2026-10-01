@@ -288,20 +288,28 @@ class IconGenerator(Processor):
 
             # Attempt to generate the correct switches with defaults
 			# If size specified, use that or default to 512.
-            if size:
-               icons_cli.extend(["-s", size])
-            else:
-               icons_cli.extend(["-s", 512])
+			try:
+			    size
+			except NameError:
+			    icons_cli.extend(["-s", 512])
+			else:
+                icons_cli.extend(["-s", size])
             
             # Set any name prefix here. Default to name input if unset.
-            if nameprefix:
-               icons_cli.extend(["-n", nameprefix])
+            try:
+				nameprefix
+			except NameError:
+                icons_cli.extend(["-n", ""])
             else:
-               icons_cli.extend(["-n", ""])
+                icons_cli.extend(["-n", nameprefix])
             
             # Add any exclusions if specified
+			try:
+				exclude
+			except NameError:
+				exclude = None
             if exclude:
-               icons_cli.extend(["-x", exclude])
+                icons_cli.extend(["-x", exclude])
             
             # Input path which we've already validated
             icons_cli.extend(["-i", file_path])
