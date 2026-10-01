@@ -35,8 +35,8 @@ Process:
             mode: "0755"
       id: "com.yubico.yubioath"
       options: "purge_ds_store"
-      pkgdir: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
-      pkgname: "%NAME%-%version%.pkg"
+      pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+      pkgname: "%NAME%-%version%"
 
   - Processor: PathDeleter
     Arguments:
