@@ -12,7 +12,7 @@ Input:
 Process:
   - Processor: PkgRootCreator
     Arguments:
-      pkgroot: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
       pkgdirs: {}
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
