@@ -5,6 +5,9 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: YubiKeyAuthenticator
+  SIZE: ''
+  EXCLUDE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: AppDmgVersioner 
