@@ -134,7 +134,7 @@ Process:
     Arguments:
       pkg_request: 
         pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-        pkgdir: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
         pkgname: "%NAME%-Install-%version%"
         pkgtype: flat
         id: "com.%CORP_ID%.%NAME%"
@@ -164,7 +164,7 @@ Process:
     Arguments:
       pkg_request: 
         pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-        pkgdir: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
         pkgname: "%NAME%-Uninstall-%version%"
         pkgtype: flat
         id: "com.%CORP_ID%.%NAME%"
