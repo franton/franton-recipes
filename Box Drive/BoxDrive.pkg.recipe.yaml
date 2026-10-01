@@ -12,7 +12,7 @@ Input:
 Process:
   - Processor: PkgCopier
     Arguments:
-      source_pkg: "%pathname%/%NAME%.pkg"
+      source_pkg: "%pathname%"
       pkg_path: "%RECIPE_CACHE_DIR%/%version%"
 
   - Processor: PathDeleter
