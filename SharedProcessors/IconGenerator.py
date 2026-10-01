@@ -322,10 +322,10 @@ class IconGenerator(Processor):
                 icons_cli.extend(["-x", exclude])
 
             # Input path which we've already validated
-            icons_cli.extend(["-i", file_path])
+            icons_cli.append(["-i", file_path])
 
             # Output path which we specified or used a default
-            icons_cli.extend(["-o", output_path])
+            icons_cli.append(["-o", output_path])
 
             # Run the icons command. Raise CalledProcessError if it fails
             result = subprocess.run(
