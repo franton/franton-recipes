@@ -17,6 +17,8 @@ Process:
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
-      file_path: '%pathname%/Yubico*.app'
+      file_path: '%pathname%/Yubico Authenticator.app'
       output_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%"
+      exclude: "%EXCLUDE%"
+      name_prefix: "%NAME%"
       size: "%SIZE%"
