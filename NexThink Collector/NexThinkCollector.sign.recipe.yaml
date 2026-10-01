@@ -36,20 +36,20 @@ Process:
 
   - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-Install-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-Install-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-Install-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-Install-%version%-unsigned.pkg'
 
   - Processor: com.github.franton.SharedProcessors/PkgSigner
     Arguments:
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-Uninstall-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-Uninstall-%version%.pkg"
       signing_cert: "%SIGNINGCERTIFICATE%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/%NAME%-%version%/%NAME%-Uninstall-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-Uninstall-%version%-unsigned.pkg'
