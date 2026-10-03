@@ -14,14 +14,10 @@ Process:
       predicate: 'HOSTNAME == nil'
 
 Process:
-  - Processor: URLDownloaderPython
+  - Processor: URLDownloader
     Arguments:
-      download_missing_file: '%DOWNLOAD_MISSING_FILE%'
-      prefetch_filename: true
       url: 'https://%HOSTNAME%/global-protect/getmsi.esp?platform=mac'
       filename: '%NAME%.pkg'
-      request_headers:
-        user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
 
   - Processor: EndOfCheckPhase
 
