@@ -1,0 +1,40 @@
+Description: Downloads the latest version of Okta Verify.
+Identifier: com.github.franton.download.OktaVerify
+MinimumVersion: '2.9'
+
+Input:
+  NAME: OktaVerify
+  TENANT: ''
+  CHANNEL: 'GA'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'TENANT == nil'
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      download_missing_file: '%DOWNLOAD_MISSING_FILE%'
+      prefetch_filename: false
+      url: 'https://%TENANT%/api/v1/artifacts/OKTA_VERIFY_MACOS/download?releaseChannel=%CHANNEL%'
+      filename: '%NAME%.pkg'
+      request_headers:
+        user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      deep_verification: true
+      strict_verification: true
+      input_path: '%pathname%'
+      expected_authority_names:
+        - "Developer ID Installer: Okta, Inc. (B7F62B65BN)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
