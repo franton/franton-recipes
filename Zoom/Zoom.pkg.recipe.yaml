@@ -1,0 +1,23 @@
+Description: Downloads the latest version of the Zoom client for IT Administrators.
+Identifier: com.github.franton.pkg.zoom
+ParentRecipe: com.github.franton.icon.zoom
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Zoom
+  DOWNLOAD_URL: https://zoom.us/client/latest/ZoomInstallerIT.pkg
+  SIZE: '512'
+  EXCLUDE: 'ua'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
