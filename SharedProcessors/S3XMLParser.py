@@ -105,9 +105,7 @@ class S3XMLParser(Processor):
             
             # Check if the entry matches our expected filename and version
             if key_path.endswith(download_name):
-                last_modified_str = (
-                    last_modified_elem.text if last_modified_elem is not None else ""
-            )
+                last_modified_str = last_modified_elem.text if last_modified_elem is not None else ""
 
             print (last_modified_str)
             print(type(last_modified_str))
