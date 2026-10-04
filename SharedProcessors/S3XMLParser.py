@@ -17,7 +17,7 @@
 
 from datetime import datetime
 import xml.etree.ElementTree as ET
-import requests
+from urllib.request import Request, urlopen
 
 from autopkglib import Processor, ProcessorError
 
