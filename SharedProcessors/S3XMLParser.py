@@ -97,12 +97,15 @@ class S3XMLParser(Processor):
 
             if key_elem is not None and key_elem.text:
                 key_path = key_elem.text
-                print("Key Path: ", key_path)
-            
+                            
             # Check if the entry matches our expected filename and version
+            if key_path.startswith(version):
+                version_str = version.text
+            else:
+                continue
+            
             if key_path.endswith(download_name):
                 last_modified_str = last_modified_elem.text if last_modified_elem is not None else ""
-                print("Last Modified String: ", last_modified_str)
             else:
                 continue
             
@@ -110,6 +113,7 @@ class S3XMLParser(Processor):
             last_modified_dt = datetime.fromisoformat(
                 last_modified_str.replace("Z", "+00:00")
             )
+            print("Key Path: ", key_path)
             print("Last Modified DT: ", last_modified_dt)
 
             # Passed checks. Append to variable.
