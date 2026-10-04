@@ -96,11 +96,14 @@ class S3XMLParser(Processor):
             last_modified_elem = content.find(f"{ns}LastModified")
 
             print(key_elem)
+            print(type(key_elem))
             print(last_modified_elem)
+            print(type(key_elem))
             
             if key_elem is not None and key_elem.text:
                 key_path = key_elem.text
                 print("key_path")
+                print(type(key_path))
             
             # Check if the entry matches our expected filename and version
             if key_path.endswith(download_name):
@@ -109,12 +112,14 @@ class S3XMLParser(Processor):
             )
 
             print (last_modified_str)
+            print(type(last_modified_str))
             
             # Parse ISO 8601 timestamp
             last_modified_dt = datetime.fromisoformat(
                 last_modified_str.replace("Z", "+00:00")
             )
             print (last_modified_dt)
+            print(type(last_modified_dt))
 
             # Passed checks. Append to variable.
             matching_files.append(
