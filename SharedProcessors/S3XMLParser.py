@@ -111,8 +111,6 @@ class S3XMLParser(Processor):
             last_modified_dt = datetime.fromisoformat(
                 last_modified_str.replace("Z", "+00:00")
             )
-            print("Key Path: ", key_path)
-            print("Last Modified DT: ", last_modified_dt)
 
             # Passed checks. Append to variable.
             matching_files.append(
