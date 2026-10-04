@@ -129,8 +129,8 @@ class S3XMLParser(Processor):
         latest_file = max(matching_files, key=lambda x: x["last_modified_dt"])
         
         # Report out findings
-        print(f:"download_url: {latest_file['url']}")
-        self.download_url = (f:"{latest_file['url']}")
+        print(f"download_url: {latest_file['url']}")
+        self.download_url = (f"{latest_file['url']}")
 
 if __name__ == "__main__":
     processor = S3XMLParser()
