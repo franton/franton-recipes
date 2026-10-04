@@ -85,7 +85,7 @@ class S3XMLParser(Processor):
 
         # Parse response
         root = ET.fromstring(response)
-        print("root")
+        print(root)
         
         # Extract S3 namespace if present
         ns = ""
@@ -99,8 +99,8 @@ class S3XMLParser(Processor):
             key_elem = content.find(f"{ns}Key")
             last_modified_elem = content.find(f"{ns}LastModified")
 
-            print("key_elem")
-            print("last_modified_elem")
+            print(key_elem)
+            print(last_modified_elem)
             
             if key_elem is not None and key_elem.text:
                 key_path = key_elem.text
@@ -112,13 +112,13 @@ class S3XMLParser(Processor):
                     last_modified_elem.text if last_modified_elem is not None else ""
             )
 
-            print ("last_modified_str")
+            print (last_modified_str)
             
             # Parse ISO 8601 timestamp
             last_modified_dt = datetime.fromisoformat(
                 last_modified_str.replace("Z", "+00:00")
             )
-            print ("last_modified_dt")
+            print (last_modified_dt)
 
             # Passed checks. Append to variable.
             matching_files.append(
