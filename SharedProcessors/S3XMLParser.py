@@ -131,7 +131,7 @@ class S3XMLParser(Processor):
         
         # Report out findings
         print(f"download_url: {latest_file['url']}")
-        self.download_url = (f"{latest_file['url']}")
+        self.env["download_url"] = (f"{latest_file['url']}")
 
 if __name__ == "__main__":
     processor = S3XMLParser()
