@@ -25,6 +25,10 @@ Think of this as the "artifactory" model. I've had too many commits elsewhere br
 * Description: Applies code signing to an output pkg file
 * Link: https://derflounder.wordpress.com/2021/07/30/signing-autopkg-built-packages-using-a-sign-recipe/
 
+## S3XMLParser.py
+* Author: Richard Purves
+* Description: Feed this the url of a public s3 bucket, it'll parse the xml to look for a specified filename and version. If more than one version, it'll give you the latest as a variable output to "download_url"
+
 ## TextSearcher.py
 * Author: Anthony Reimer
 * Description: Looks for regex patterns in autopkg variable outputs
