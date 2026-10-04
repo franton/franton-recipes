@@ -94,15 +94,10 @@ class S3XMLParser(Processor):
         for content in root.findall(f"{ns}Contents"):
             key_elem = content.find(f"{ns}Key")
             last_modified_elem = content.find(f"{ns}LastModified")
-
-            print(key_elem)
-            print(type(key_elem))
-            print(last_modified_elem)
-            print(type(key_elem))
             
             if key_elem is not None and key_elem.text:
                 key_path = key_elem.text
-                print("key_path")
+                print(key_path)
                 print(type(key_path))
             
             # Check if the entry matches our expected filename and version
