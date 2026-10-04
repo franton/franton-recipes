@@ -1,0 +1,42 @@
+Description: Downloads the latest specified version of GlobalProtect VPN.
+Identifier: com.github.franton.download.GlobalProtect
+MinimumVersion: '2.9'
+
+Input:
+  NAME: GlobalProtect
+  URL: 'https://pan-gp-client.s3.amazonaws.com'
+  VERSION: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'VERSION == nil'
+
+  - Processor: com.github.franton.SharedProcessors/S3XMLParser
+    Arguments:
+      url: '%URL%'
+      version: '%VERSION%'
+      download_name: '%NAME%.pkg'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: false
+      url: "%download_url%"
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      deep_verification: true
+      strict_verification: true
+      input_path: '%pathname%'
+      expected_authority_names:
+        - "Developer ID Installer: Palo Alto Networks (PXPZ95SK77)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
