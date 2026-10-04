@@ -82,8 +82,6 @@ class S3XMLParser(Processor):
         with urllib.request.urlopen(url) as content:
             response = content.read()
             root = ET.fromstring(response)
-        except urllib.error.HTTPError as e:
-            print(f"HTTP Error {e.code}: Make sure the URL is correct.")
         
         # Extract S3 namespace if present
         ns = ""
