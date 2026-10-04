@@ -107,7 +107,7 @@ class S3XMLParser(Processor):
             if key_path.endswith(download_name):
                 last_modified_str = last_modified_elem.text if last_modified_elem is not None else ""
             else:
-                last_modified_str = ""
+                continue
             
             # Parse ISO 8601 timestamp
             last_modified_dt = datetime.fromisoformat(
