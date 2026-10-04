@@ -80,12 +80,10 @@ class S3XMLParser(Processor):
 
         # Attempt to download xml for processing
         with urllib.request.urlopen(url) as content:
-            response = content.read().decode('utf-8')
-            print(type(response))  # Output: <class 'bytes'>
-
-        # Parse response
-        root = ET.fromstring(response)
-        print(root)
+            response = content.read()
+            root = ET.fromstring(response)
+        except urllib.error.HTTPError as e:
+            print(f"HTTP Error {e.code}: Make sure the URL is correct.")
         
         # Extract S3 namespace if present
         ns = ""
