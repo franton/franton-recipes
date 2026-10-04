@@ -80,6 +80,7 @@ class S3XMLParser(Processor):
 
         # Attempt to download xml for processing
         with urllib.request.urlopen(url) as response:
+            print(response)
 
         # Parse response
         root = ET.fromstring(response.content)
