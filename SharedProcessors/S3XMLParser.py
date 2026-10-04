@@ -96,7 +96,7 @@ class S3XMLParser(Processor):
             last_modified_elem = content.find(f"{ns}LastModified")
 
             print("key elem: ", key_elem)
-            print(type(key_elem)
+            print(type(key_elem))
 
             if key_elem is not None and key_elem.text:
                 key_path = key_elem.text
