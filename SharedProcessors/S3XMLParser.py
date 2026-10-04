@@ -82,10 +82,9 @@ class S3XMLParser(Processor):
         with urllib.request.urlopen(url) as content:
             response = content.read()
             print(type(response))  # Output: <class 'bytes'>
-            print(response[:20])   # Prints the first 20 raw bytes
 
         # Parse response
-        root = ET.fromstring(response.content)
+        root = ET.fromstring(response.bytes)
         
         # Extract S3 namespace if present
         ns = ""
