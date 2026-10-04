@@ -17,7 +17,7 @@
 
 from datetime import datetime
 import xml.etree.ElementTree as ET
-from urllib.request import Request, urlopen
+import urllib.request
 
 from autopkglib import Processor, ProcessorError
 
@@ -79,7 +79,9 @@ class S3XMLParser(Processor):
             )
 
         # Attempt to download xml for processing
-        response = Request(url, headers={"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"})
+        with urllib.request.urlopen(url) as content:
+            response = content.read().decode('utf-8')
+        
         response.raise_for_status()
 
         # Parse response
