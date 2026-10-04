@@ -81,10 +81,10 @@ class S3XMLParser(Processor):
         # Attempt to download xml for processing
         with urllib.request.urlopen(url) as response:
             html_content = response.read()
-            print(response)
+            print(html_content)
 
         # Parse response
-        root = ET.fromstring(response.content)
+        root = ET.fromstring(html_content.content)
         
         # Extract S3 namespace if present
         ns = ""
