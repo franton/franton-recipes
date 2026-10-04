@@ -80,6 +80,7 @@ class S3XMLParser(Processor):
 
         # Attempt to download xml for processing
         with urllib.request.urlopen(url) as response:
+            html_content = response.read()
             print(response)
 
         # Parse response
