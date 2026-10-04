@@ -79,9 +79,9 @@ class S3XMLParser(Processor):
             )
 
         # Attempt to download xml for processing
-        response = requests.get(url)
+        response = Request(url, headers={"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"})
         response.raise_for_status()
-        
+
         # Parse response
         root = ET.fromstring(response.content)
         
