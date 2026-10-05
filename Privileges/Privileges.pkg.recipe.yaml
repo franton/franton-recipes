@@ -1,0 +1,21 @@
+Description: Versions SAP Privileges pkg.
+Identifier: com.github.franton.pkg.Privileges
+ParentRecipe: com.github.franton.icon.Privileges
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Privileges
+  EXCLUDE: ''
+  SIZE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
