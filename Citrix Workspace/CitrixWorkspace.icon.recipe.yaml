@@ -1,0 +1,45 @@
+Description: Generates the icon from Citrix Workspace.
+Identifier: com.github.franton.icon.CitrixWorkspace
+ParentRecipe: com.github.franton.download.CitrixWorkspace
+MinimumVersion: '2.9'
+
+Input:
+  NAME: CitrixWorkspace
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%/Install Citrix Workspace.pkg"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/com.citrix.ICAClient.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Applications/Citrix Workspace.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Applications/Citrix Workspace.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
