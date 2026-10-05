@@ -3,7 +3,7 @@ Identifier: com.github.franton.download.Privileges
 MinimumVersion: '2.9'
 
 Input:
-  NAME: JamfSetupManager
+  NAME: Privileges
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
