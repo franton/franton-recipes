@@ -1,0 +1,52 @@
+Description: Downloads the latest specified version of Nessus agent.
+Identifier: com.github.franton.icon.Nessus
+ParentRecipe: com.github.franton.download.Nessus
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Nessus
+  URL: 'https://www.tenable.com/downloads/nessus-agents'
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'URL == nil'
+
+   - Processor: FlatPkgUnpacker
+     Arguments:
+      flat_pkg_path: "%pathname%/Install Nessus Agent.pkg"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+   - Processor: PkgPayloadUnpacker
+     Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/.NessusAgent.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+   - Processor: FileMover
+     Arguments:
+      source: "%RECIPE_CACHE_DIR%/unpack/Library/PreferencePanes/Nessus Agent Preferences.prefPane"
+      target: "%RECIPE_CACHE_DIR%/%NAME%.app"
+
+   - Processor: PkgRootCreator
+     Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+   - Processor: com.github.franton.SharedProcessors/IconGenerator
+     Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/%NAME%.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
+
+   - Processor: PathDeleter
+     Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/%NAME%.app'
