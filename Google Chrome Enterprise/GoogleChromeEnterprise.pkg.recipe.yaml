@@ -1,0 +1,24 @@
+Description: Versions Google Chrome for Enterprise
+Identifier: com.github.franton.pkg.GoogleChromeEnterprise
+ParentRecipe: com.github.franton.icon.GoogleChromeEnterprise
+MinimumVersion: '2.9'
+
+Input:
+  NAME: 'GoogleChrome'
+  CHANNEL: 'stable'   # stable or beta
+  EXCLUDE: ''
+  SIZE: ''
+  URL: 'https://dl.google.com/chrome/mac/%CHANNEL%/'
+  TOS: 'accept_tos%3Dhttps%253A%252F%252Fwww.google.com%252Fintl%252Fen_ph%252Fchrome%252Fterms%252F%26_and_accept_tos%3Dhttps%253A%252F%252Fpolicies.google.com%252Fterms/googlechrome.pkg'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
