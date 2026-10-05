@@ -1,0 +1,122 @@
+Description: Packages the latest specified version of Nessus agent.
+Identifier: com.github.franton.pkg.Nessus
+ParentRecipe: com.github.franton.icon.Nessus
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Nessus
+  URL: 'https://www.tenable.com/downloads/nessus-agents'
+  EXCLUDE: ''
+  SIZE: ''
+  CORP_ID: ''
+  NESSUS_KEY: ''
+  NESSUS_HOST: ''
+  NESSUS_PORT: ''
+  NESSUS_GROUPS: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'URL == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'CORP_ID == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_KEY == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_HOST == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_PORT == nil'
+
+   - Processor: PkgRootCreator
+     Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+   - Processor: PkgRootCreator
+     Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
+   - Processor: Copier
+     Arguments:
+      source_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/Nessus.dmg"
+
+   - Processor: FileCreator
+     Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Install Tenable Nessus
+
+         key="%NESSUS_KEY%"
+         host="%NESSUS_HOST%"
+         port="%NESSUS_PORT%"
+         groups="%NESSUS_GROUPS%"
+
+         # Create a temporary mount point, then silently mount the dmg on it
+         tmpmount=$( /usr/bin/mktemp -d /private/tmp/nessus.XXXX )
+         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$tmpmount" /tmp/Nessus.dmg
+
+         # Find and install the pkg in that folder
+         # Over complex find due to the fact the pkg name could change or we want to reuse this elsewhere
+         /usr/sbin/installer -target "$3" -pkg "$( /usr/bin/find $tmpmount -maxdepth 1 \( -iname \*\.pkg -o -iname \*\.mpkg \) )"
+
+         # Dismount the dmg now we're installed and clean up the temp mount folder
+         /usr/sbin/diskutil eject force "$tmpmount"
+         /bin/rm -rf "$tmpmount"
+         /bin/rm -f /tmp/Nessus.dmg
+
+         #
+         ## Register Nessus
+         #
+         if [ -d /Library/NessusAgent ];
+         then
+         	/Library/NessusAgent/run/sbin/nessuscli agent link \
+         	--key="$key" \
+         	--host="$host" \
+         	--port="$port" \
+         	--groups="${groups}"
+         	exitcode=0
+         else
+         	echo "Installation failed. Nessus not present."
+         	exitcode=1
+         fi
+
+         exit "$exitcode"
+
+   - Processor: PkgCreator
+     Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        chown:
+          - path: tmp
+            user: root
+            group: wheel
+            mode: "0777"
+        scripts: "Scripts"
+
+   - Processor: PathDeleter
+     Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
