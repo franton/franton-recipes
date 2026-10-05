@@ -27,7 +27,7 @@ Process:
 
   - Processor: CodeSignatureVerifier
     Arguments: 
-      input_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      input_path: "%RECIPE_CACHE_DIR%/downloads/%NAME%-%version%.pkg"
       expected_authority_names: 
         - "Developer ID Installer: SAP SE (7R5ZEU67FQ)"
         - "Developer ID Certification Authority"
