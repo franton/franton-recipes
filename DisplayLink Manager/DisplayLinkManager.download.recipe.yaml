@@ -1,0 +1,43 @@
+Description: Downloads the latest version of DisplayLink Manager.
+Identifier: com.github.franton.download.DisplayLinkManager
+MinimumVersion: '2.9'
+
+Input:
+  NAME: DisplayLinkManager
+  BASE_URL: https://www.synaptics.com
+  SEARCH_URL: products/displaylink-graphics/downloads/macos
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '/products/displaylink-.+\?filetype=exe'
+      url: '%BASE_URL%/%SEARCH_URL%'
+
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '<a.*href="(?P<download_url>.*[.]pkg)" download>Accept<\/a>'
+      url: '%BASE_URL%%match%'
+
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: false
+      filename: '%NAME%.pkg'
+      url: '%BASE_URL%%download_url%'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      deep_verification: true
+      strict_verification: true
+      expected_authority_names:
+        - 'Developer ID Installer: DisplayLink Corp (73YQY62QM3)'
+        - 'Developer ID Certification Authority'
+        - 'Apple Root CA'
+      input_path: '%RECIPE_CACHE_DIR%/downloads/%NAME%.pkg'
