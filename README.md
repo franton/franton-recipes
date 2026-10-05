@@ -26,3 +26,5 @@ It is ***highly recommended*** that you generate an autopkg override of the stag
 Please see the README.md file in the SharedProcessors folder for author and copyright information. All shared processors are copyright of their respective authors.
 
 IconGenerator.py is written partly by myself and requires [SAP macOS icon generator](https://github.com/SAP/macOS-icon-generator) to be installed on the system to run. Details on switches can be found in the code itself but the defaults are reasonably sensible.
+
+S3XMLParser.py is my own effort, inspired by information obtained from Robert Hammen on GlobalProtect's s3 bucket. It takes the URL of a public S3 bucket, parses the xml of contents for both a filename and a version number. GlobalProtect likes 6.2.8-122/GlobalProtect.pkg for example, so I specify GlobalProtect.pkg for the name and 6.2.8 for the version. The processor auto finds the latest version from that.
