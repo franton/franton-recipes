@@ -1,0 +1,22 @@
+Description: Extracts the Citrix Workspace pkg.
+Identifier: com.github.franton.pkg.CitrixWorkspace
+ParentRecipe: com.github.franton.icon.CitrixWorkspace
+MinimumVersion: '2.9'
+
+Input:
+  NAME: CitrixWorkspace
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      source_pkg: "%pathname%/*.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/downloads"
