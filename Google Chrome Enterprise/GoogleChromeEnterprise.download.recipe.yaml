@@ -1,0 +1,26 @@
+Description: Downloads latest pkg version of Google Chrome for Enterprise
+Identifier: com.github.franton.download.GoogleChromeEnterprise
+MinimumVersion: '2.9'
+
+Input:
+  NAME: 'GoogleChrome'
+  CHANNEL: 'stable'   # stable or beta
+  URL: 'https://dl.google.com/chrome/mac/%CHANNEL%/'
+  TOS: 'accept_tos%3Dhttps%253A%252F%252Fwww.google.com%252Fintl%252Fen_ph%252Fchrome%252Fterms%252F%26_and_accept_tos%3Dhttps%253A%252F%252Fpolicies.google.com%252Fterms/googlechrome.pkg'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      url: '%URL%%TOS%'
+      filename: '%NAME%.pkg'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      expected_authority_names:
+        - "Developer ID Installer: Google LLC (EQHXZ8M8AV)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
+      input_path: '%pathname%'
