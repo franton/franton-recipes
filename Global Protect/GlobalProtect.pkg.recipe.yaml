@@ -7,8 +7,10 @@ Input:
   NAME: GlobalProtect
   URL: 'https://pan-gp-client.s3.amazonaws.com'
   VERSION: ''
+  PORTAL: ''
   SIZE: ''
   EXCLUDE: ''
+  CORP_ID: ''
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
@@ -19,16 +21,246 @@ Process:
 
   - Processor: StopProcessingIf
     Arguments:
+      predicate: 'PORTAL == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
       predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
 
   - Processor: EndOfCheckPhase
 
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%"
-      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/GlobalProtect.pkg"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/preinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh
+
+         # Preinstall for GlobalProtect VPN
+
+         if [ -d /Applications/GlobalProtect.app ];
+         then
+         	echo "Uninstalling GlobalProtect"
+
+         	# Disable all the services
+         	echo "Disabling existing LaunchAgents"
+         	user=$( /bin/echo "show State:/Users/ConsoleUser" | /usr/sbin/scutil | /usr/bin/awk '/Name :/ && ! /loginwindow/ { print $3 }')
+         	uid=$( /usr/bin/id -u "$user" )
+
+         	/bin/launchctl bootout gui/${uid} /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
+         	/bin/launchctl bootout gui/${uid} /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
+
+         	/bin/launchctl remove com.paloaltonetworks.gp.pangpsd
+
+         	echo "Removing LaunchD files"
+         	/bin/rm -f "/Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist"
+             /bin/rm -f "/Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist"
+             /bin/rm -f "/Library/LaunchDaemons/com.paloaltonetworks.gp.pangpsd.plist"
+
+         	# Kill the running processes	
+         	echo "Terminating existing processes"
+         	/usr/bin/killall -15 PanGPS
+         	/usr/bin/killall -15 GlobalProtect
+
+         	# Clean up leftovers
+         	echo "Cleaning SSO"
+         	/Applications/GlobalProtect.app/Contents/Resources/PanGPS -dsso
+
+         	# Clean up networking
+         	echo "Removing networking entries"
+         	echo "remove State:/Network/Service/gpd.pan/IPv4" | /usr/sbin/scutil
+            echo "remove State:/Network/Service/gpd.pan/DNS"  | /usr/sbin/scutil
+
+         	# Removing system extension
+         	echo "Attempting to remove system extension"
+         	/usr/bin/open /Applications/GlobalProtect.app --args -uninstall-sys-ext
+            /bin/launchctl remove NetworkExtension.com.paloaltonetworks.GlobalProtect.client.extension
+
+         	# Clean up files and folders
+         	echo "Deleting existing files and folders"
+         	/bin/rm -rf "/Library/Application Support/PaloAltoNetworks/GlobalProtect"
+             /bin/rm -rf "/Applications/GlobalProtect.app"
+             /bin/rm -rf "/Applications/GlobalProtect.app.bak"
+             /bin/rm -rf "/System/Library/Extensions/gplock.kext"
+             /bin/rm -rf "/Library/Extensions/gplock.kext"
+             /bin/rm -rf "/Library/Security/SecurityAgentPlugins/gplogin.bundle"
+
+             /bin/rm -rf /Library/Preferences/com.paloaltonetworks.GlobalProtect*
+             /bin/rm -rf /Library/Preferences/PanGPS*
+    
+         	# Forget any existing pkg receipts
+         	echo "Forgetting existing pkg receipts"
+         	for pkg in $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep com.paloaltonetworks.globalprotect )
+            do
+             	/usr/sbin/pkgutil --forget "$pkg"
+            done
+
+         	# Remove log file folders
+         	echo "Removing log folders"
+         	/bin/rm -rf /Library/Logs/PaloAltoNetworks/GlobalProtect/*
+            /bin/rm -rf $user/Library/Logs/PaloAltoNetworks/GlobalProtect/*
+
+         	# Remove GlobalProtectService keychain item from all users' login keychains.
+         	# Also nuke any user preference files too.
+         	useraccounts=($( /usr/bin/dscl . -list /Users UniqueID | /usr/bin/awk '$2 > 500 {print $1}' ))
+
+         	for user ($useraccounts);
+         	do
+         		homefolder=$( /usr/bin/dscl . -read "/Users/$user" NFSHomeDirectory | /usr/bin/awk '{print $2}' )
+         		keychain="$homefolder/Library/Keychains/login.keychain-db"
+
+         		if [ -f "$keychain" ];
+         		then
+         			echo "Processing keychain for user: $user"
+         			if /usr/bin/security find-generic-password -s "GlobalProtect" "$keychain" &>/dev/null;
+         			then
+         				/usr/bin/security delete-generic-password -s "GlobalProtect" "$keychain" &>/dev/null
+         			fi
+
+         			if /usr/bin/security find-generic-password -s "GlobalProtectService" "$keychain" &>/dev/null;
+         			then
+         				/usr/bin/security delete-generic-password -s "GlobalProtectService" "$keychain" &>/dev/null
+         			fi
+         		fi
+
+         		echo "Removing preferences for user: $user"
+         		/bin/rm -rf "$homefolder/Library/Application Support/PaloAltoNetworks/GlobalProtect"
+         		/bin/rm -f $homefolder/Library/Preferences/com.paloaltonetworks.GlobalProtect*
+         		/bin/rm -f $homefolder/Library/Preferences/PanGPS*
+         	done
+
+         	# Clear any existing master preference files in favour of config profiles
+         	echo "Finally deleting master preference files"
+         	/usr/bin/defaults delete /Library/Preferences/com.paloaltonetworks.GlobalProtect.settings.plist
+         	/bin/rm /Library/Preferences/com.paloaltonetworks.GlobalProtect.settings.plist
+         fi
+
+         # Write out a temp config file, use defaults to import properly.
+         gPrefs=/private/tmp/prefs.plist
+
+         echo '<?xml version="1.0" encoding="UTF-8"?>
+         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+         <plist version="1.0">
+         <dict>
+             <key>Palo Alto Networks</key>
+             <dict>
+                 <key>GlobalProtect</key>
+                 <dict> 
+                     <key>PanSetup</key>
+                     <dict>
+                         <key>Portal</key>
+                         <string>%PORTAL%</string>
+                         <key>Prelogon</key>
+                         <string>0</string>
+                         <key>full-chain-cert-verify</key>
+                         <string>yes</string>
+                     </dict>
+                     <key>Settings</key>
+                     <dict>
+                        <key>connect-method</key>
+                        <string>on-demand</string>
+         				<key>connect-timeout</key>
+         				<integer>5</integer>
+           				<key>on-demand</key>
+          				<string>yes</string>
+                     </dict>
+                 </dict>
+             </dict>
+         </dict>
+         </plist>
+         ' > $gPrefs
+
+         /usr/bin/defaults import /Library/Preferences/com.paloaltonetworks.GlobalProtect.settings.plist /private/tmp/prefs.plist
+         /bin/rm /private/tmp/prefs.plist
+
+         exit 0
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh
+
+         # Postinstall for GlobalProtect VPN
+
+         /usr/sbin/installer -pkg /tmp/GlobalProtect.pkg -target / -applyChoiceChangesXML /tmp/installchoices.xml
+         /bin/rm -f /tmp/GlobalProtect.pkg
+         /bin/rm -f /tmp/installchoices.xml
+
+         exit 0
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/installchoices.xml"
+      file_mode: "0777"
+      file_content: |
+         <?xml version="1.0" encoding="UTF-8"?>
+         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+         <plist version="1.0">
+         <array>
+         	<dict>
+         		<key>attributeSetting</key>
+         		<integer>1</integer>
+         		<key>choiceAttribute</key>
+         		<string>selected</string>
+         		<key>choiceIdentifier</key>
+         		<string>default</string>
+         	</dict>
+         	<dict>
+         		<key>attributeSetting</key>
+         		<integer>0</integer>
+         		<key>choiceAttribute</key>
+         		<string>selected</string>
+         		<key>choiceIdentifier</key>
+         		<string>second</string>
+         	</dict>
+         	<dict>
+         		<key>attributeSetting</key>
+         		<integer>1</integer>
+         		<key>choiceAttribute</key>
+         		<string>selected</string>
+         		<key>choiceIdentifier</key>
+         		<string>third</string>
+         	</dict>
+         </array>
+         </plist>
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        chown:
+          - path: tmp
+            user: root
+            group: wheel
+            mode: "0777"
+        scripts: "Scripts"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
