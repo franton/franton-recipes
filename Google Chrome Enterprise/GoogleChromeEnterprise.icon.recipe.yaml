@@ -1,4 +1,4 @@
-Description: Downloads latest pkg version of Google Chrome for Enterprise
+Description: Creates icon for Google Chrome for Enterprise
 Identifier: com.github.franton.icon.GoogleChromeEnterprise
 ParentRecipe: com.github.franton.download.GoogleChromeEnterprise
 MinimumVersion: '2.9'
