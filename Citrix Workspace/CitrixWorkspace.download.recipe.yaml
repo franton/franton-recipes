@@ -1,1 +1,38 @@
+Description: Downloads the latest version of Citrix Workspace.
+Identifier: com.github.franton.download.CitrixWorkspace
+MinimumVersion: '2.9'
 
+Input:
+  NAME: CitrixWorkspace
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: 'rel="(//downloads\.citrix\.com/\d+/CitrixWorkspaceApp\.dmg\?[^"]*)"'
+      url: 'https://www.citrix.com/downloads/workspace-app/mac/workspace-app-for-mac-latest.html'
+      request_headers:
+        User-Agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36'
+
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: true
+      filename: 'downloads/%NAME%.pkg'
+      url: 'https:%match%'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      deep_verification: true
+      strict_verification: true
+      expected_authority_names:
+        - 'Developer ID Installer: Citrix Systems, Inc. (S272Y5R93J)'
+        - 'Developer ID Certification Authority'
+        - 'Apple Root CA'
+      input_path: '%pathname%/Install Citrix Workspace.pkg'
