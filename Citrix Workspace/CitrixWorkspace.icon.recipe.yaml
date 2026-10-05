@@ -37,9 +37,3 @@ Process:
       name_prefix: '%NAME%'
       output_path: "%RECIPE_CACHE_DIR%/%version%"
       size: "%SIZE%"
-
-  - Processor: PathDeleter
-    Arguments:
-      path_list:
-        - '%RECIPE_CACHE_DIR%/unpack'
-        - '%RECIPE_CACHE_DIR%/outerunpack'
