@@ -16,7 +16,7 @@ Process:
   - Processor: URLDownloader
     Arguments:
       url: "%url%"
-      download_dir: "%RECIPE_CACHE_DIR%"
+      download_dir: "%RECIPE_CACHE_DIR%/downloads"
       filename: "%NAME%-%version%.pkg"
 
   - Processor: EndOfCheckPhase
