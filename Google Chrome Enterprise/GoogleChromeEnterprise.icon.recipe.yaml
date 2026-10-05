@@ -1,0 +1,47 @@
+Description: Downloads latest pkg version of Google Chrome for Enterprise
+Identifier: com.github.franton.icon.GoogleChromeEnterprise
+ParentRecipe: com.github.franton.download.GoogleChromeEnterprise
+MinimumVersion: '2.9'
+
+Input:
+  NAME: 'GoogleChrome'
+  CHANNEL: 'stable'   # stable or beta
+  EXCLUDE: ''
+  SIZE: ''
+  URL: 'https://dl.google.com/chrome/mac/%CHANNEL%/'
+  TOS: 'accept_tos%3Dhttps%253A%252F%252Fwww.google.com%252Fintl%252Fen_ph%252Fchrome%252Fterms%252F%26_and_accept_tos%3Dhttps%253A%252F%252Fpolicies.google.com%252Fterms/googlechrome.pkg'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/GoogleChrome.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Google Chrome.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Google Chrome.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
