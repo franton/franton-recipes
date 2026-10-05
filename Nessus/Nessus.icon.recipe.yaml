@@ -6,8 +6,8 @@ MinimumVersion: '2.9'
 Input:
   NAME: Nessus
   URL: 'https://www.tenable.com/downloads/nessus-agents'
-  EXCLUDE: 'ua'
-  SIZE: '512'
+  EXCLUDE: ''
+  SIZE: ''
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
