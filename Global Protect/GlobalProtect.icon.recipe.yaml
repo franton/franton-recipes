@@ -1,4 +1,4 @@
-Description: Downloads the latest specified version of GlobalProtect VPN.
+Description: Creates the icon for GlobalProtect VPN.
 Identifier: com.github.franton.icon.GlobalProtect
 ParentRecipe: com.github.franton.download.GlobalProtect
 MinimumVersion: '2.9'
