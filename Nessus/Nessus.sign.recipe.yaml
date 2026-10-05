@@ -1,0 +1,49 @@
+Description: Packages the latest specified version of Nessus agent.
+Identifier: com.github.franton.sign.Nessus
+ParentRecipe: com.github.franton.pkg.Nessus
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Nessus
+  URL: 'https://www.tenable.com/downloads/nessus-agents'
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  SIGNINGCERTIFICATE: ''
+  CORP_ID: 'intuitive'
+  NESSUS_KEY: '95725d10992adda0a4841981493dc58fc5bf19e7b33fe686a3c0955ae7dcd57d'
+  NESSUS_HOST: 'sensor.cloud.tenable.com'
+  NESSUS_PORT: '443'
+  NESSUS_GROUPS: 'UK Endpoints'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'URL == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'CORP_ID == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_KEY == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_HOST == nil'
+
+   - Processor: StopProcessingIf
+     Arguments:
+      predicate: 'NESSUS_PORT == nil'
+
+   - Processor: com.github.franton.SharedProcessors/PkgSigner
+     Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+   - Processor: PathDeleter
+     Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
