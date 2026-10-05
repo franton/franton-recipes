@@ -5,7 +5,9 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: Privileges
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  EXCLUDE: ''
+  SIZE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
 Process:
   - Processor: FlatPkgUnpacker
@@ -20,7 +22,7 @@ Process:
 
   - Processor: Versioner
     Arguments:
-      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/%NAME%.app/Contents/Info.plist"
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Applications/%NAME%.app/Contents/Info.plist"
 
   - Processor: PkgRootCreator
     Arguments:
@@ -29,7 +31,7 @@ Process:
 
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/unpack/%NAME%.app"
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Applications/%NAME%.app"
       exclude: '%EXCLUDE%'
       name_prefix: '%NAME%'
       output_path: "%RECIPE_CACHE_DIR%/%version%"
