@@ -1,0 +1,52 @@
+Description: Generates the Copilot icon from the Microsoft 365 Business Pro Suite
+Identifier: com.github.franton.icon.Microsoft365BusinessPro
+ParentRecipe: com.github.franton.download.Microsoft365BusinessPro
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Microsoft365BusinessPro
+  MS_ID: '2009112'
+  MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: FlatPkgUnpacker
+    Arguments:
+      flat_pkg_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/outerunpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/microsoft.m365copilot.shim.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: PkgPayloadUnpacker
+    Arguments:
+      pkg_payload_path: "%RECIPE_CACHE_DIR%/outerunpack/Microsoft_Outlook_Internal.pkg/Payload"
+      destination_path: "%RECIPE_CACHE_DIR%/unpack"
+
+  - Processor: Versioner
+    Arguments:
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Microsoft Outlook.app/Contents/Info.plist"
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/unpack/Microsoft 365 Copilot Shim.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
