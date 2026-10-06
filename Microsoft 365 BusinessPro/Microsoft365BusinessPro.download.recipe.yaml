@@ -11,16 +11,10 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
-  - Processor: URLTextSearcher
-    Arguments:
-      url: '%MS_RELEASE_URL%'
-      re_pattern: 'Version (\*|\d+(\.\d+){0,2}(\.\*)?)'
-      result_output_var_name: version
-
   - Processor: URLDownloader
     Arguments:
       url: '%MS_URL%%MS_ID%'
-      filename: '%NAME%-%version%.pkg'
+      filename: '%NAME%.pkg'
 
   - Processor: CodeSignatureVerifier
     Arguments: 
