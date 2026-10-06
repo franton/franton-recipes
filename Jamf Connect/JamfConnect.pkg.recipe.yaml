@@ -14,15 +14,20 @@ Process:
     Arguments:
       predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
 
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/JamfConnectLogin.pkg"
-      pkg_path: "%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
 
   - Processor: PkgCopier
     Arguments:
       source_pkg: "%pathname%/Resources/JamfConnectUninstaller.pkg"
-      pkg_path: "%RECIPE_CACHE_DIR%/%UNINSTALL_NAME%-%version%.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%UNINSTALL_NAME%-%version%.pkg"
 
   - Processor: PathDeleter
     Arguments:
