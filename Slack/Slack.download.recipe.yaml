@@ -1,6 +1,5 @@
 Description: Downloads the latest Slack for IT
 Identifier: com.github.franton.download.Slack
-#ParentRecipe: com.github.franton.download.Slack
 MinimumVersion: '2.9'
 
 Input:
