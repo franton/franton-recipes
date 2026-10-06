@@ -1,0 +1,24 @@
+Description: Versions the Slack for IT pkg
+Identifier: com.github.franton.pkg.Slack
+ParentRecipe: com.github.franton.icon.Slack
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Slack
+  # https://slack.com/help/articles/360035635174-Deploy-Slack-for-macOS
+  URL: 'https://slack.com/api/desktop.latestRelease?redirect=1&variant=pkg&arch=universal'
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
