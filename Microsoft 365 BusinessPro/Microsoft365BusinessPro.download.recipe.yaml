@@ -6,7 +6,6 @@ Input:
   NAME: Microsoft365BusinessPro
   MS_ID: '2009112'
   MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
-  MS_RELEASE_URL: 'https://learn.microsoft.com/en-us/officeupdates/release-notes-office-for-mac'
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
