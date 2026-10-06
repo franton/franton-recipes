@@ -1,0 +1,33 @@
+Description: Downloads the latest version of Packages.
+Identifier: com.github.franton.download.Packages
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Packages
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
+      prefetch_filename: true
+      url: 'http://s.sudre.free.fr/Software/files/%NAME%.dmg'
+      request_headers:
+        user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      deep_verification: true
+      strict_verification: true
+      input_path: '%pathname%/Install Packages.pkg'
+      expected_authority_names:
+        - "Developer ID Installer: Stephane Sudre (NL5M9E394P)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
