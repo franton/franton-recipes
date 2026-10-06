@@ -1,0 +1,31 @@
+Description: Downloads the latest Microsoft 365 Business Pro Suite
+Identifier: com.github.franton.download.Microsoft365BusinessPro
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Microsoft365BusinessPro
+  MS_ID: '2009112'
+  MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
+  MS_RELEASE_URL: 'https://learn.microsoft.com/en-us/officeupdates/release-notes-office-for-mac'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: '%MS_RELEASE_URL%'
+      re_pattern: 'Version (\*|\d+(\.\d+){0,2}(\.\*)?)'
+      result_output_var_name: version
+
+  - Processor: URLDownloader
+    Arguments:
+      url: '%MS_URL%%MS_ID%'
+      filename: '%NAME%-%version%.pkg'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%pathname%"
+      expected_authority_names: 
+        - "Developer ID Installer: Microsoft Corporation (UBF8T346G9)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
