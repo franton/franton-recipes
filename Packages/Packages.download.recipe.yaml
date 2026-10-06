@@ -5,7 +5,7 @@ MinimumVersion: '2.9'
 Input:
   NAME: Packages
   DOWNLOAD_MISSING_FILE: null
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: URLDownloader
