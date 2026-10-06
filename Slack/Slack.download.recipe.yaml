@@ -1,1 +1,32 @@
+Description: Downloads the latest Slack for IT
+Identifier: com.github.franton.download.Slack
+#ParentRecipe: com.github.franton.download.Slack
+MinimumVersion: '2.9'
 
+Input:
+  NAME: Slack
+  # https://slack.com/help/articles/360035635174-Deploy-Slack-for-macOS
+  URL: 'https://slack.com/api/desktop.latestRelease?redirect=1&variant=pkg&arch=universal'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      url: "%URL%"
+      download_dir: "%RECIPE_CACHE_DIR%/downloads"
+      filename: "%NAME%.pkg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%RECIPE_CACHE_DIR%/downloads/%NAME%.pkg"
+      expected_authority_names: 
+        - "Developer ID Installer: SLACK TECHNOLOGIES L.L.C. (BQR82RBBHL)"
+        - "Developer ID Certification Authority"
+        - "Apple Root CA"
