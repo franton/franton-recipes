@@ -1,0 +1,30 @@
+Description: Versions the Microsoft Windows App pkg
+Identifier: com.github.franton.pkg.MicrosoftWindowsApp
+ParentRecipe: com.github.franton.icon.MicrosoftWindowsApp
+MinimumVersion: '2.9'
+
+Input:
+  NAME: WindowsApp
+  MS_ID: '868963'
+  MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
