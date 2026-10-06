@@ -1,0 +1,22 @@
+Description: Versions the Packages pkg file.
+Identifier: com.github.franton.pkg.Packages
+ParentRecipe: com.github.franton.icon.Packages
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Packages
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%/Install Packages.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
