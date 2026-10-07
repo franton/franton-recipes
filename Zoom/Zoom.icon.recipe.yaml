@@ -1,15 +1,15 @@
 Description: Downloads the latest version of the Zoom client for IT Administrators.
 Identifier: com.github.franton.icon.zoom
 ParentRecipe: com.github.franton.download.zoom
-MinimumVersion: '2.9'
+MinimumVersion: "2.9"
 
 Input:
   NAME: Zoom
   DOWNLOAD_URL: https://zoom.us/client/latest/ZoomInstallerIT.pkg
-  SIZE: ''
-  EXCLUDE: ''
+  SIZE: ""
+  EXCLUDE: ""
   DOWNLOAD_MISSING_FILE: null
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: "False"
 
 Process:
   - Processor: FlatPkgUnpacker
@@ -25,7 +25,7 @@ Process:
   - Processor: Versioner
     Arguments:
       input_plist_path: "%RECIPE_CACHE_DIR%/unpack/zoom.us.app/Contents/Info.plist"
-      plist_version_key: 'CFBundleVersion'
+      plist_version_key: CFBundleVersion
 
   - Processor: PkgRootCreator
     Arguments:
@@ -35,13 +35,13 @@ Process:
   - Processor: com.github.franton.SharedProcessors/IconGenerator
     Arguments:
       file_path: "%RECIPE_CACHE_DIR%/unpack/zoom.us.app"
-      exclude: '%EXCLUDE%'
-      name_prefix: '%NAME%'
+      exclude: "%EXCLUDE%"
+      name_prefix: "%NAME%"
       output_path: "%RECIPE_CACHE_DIR%/%version%"
       size: "%SIZE%"
 
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/unpack'
-        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - "%RECIPE_CACHE_DIR%/unpack"
+        - "%RECIPE_CACHE_DIR%/outerunpack"
