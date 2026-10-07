@@ -1,10 +1,11 @@
-Description: Downloads latest Tableau Desktop disk images for Apple Silicon
+Description: Downloads latest Tableau Desktop disk images for specified cpu arch.
 Identifier: com.github.franton.download.TableauDesktop
 MinimumVersion: '2.9'
 
 Input:
   NAME: Tableau Desktop
   DMG: Tableau_Desktop
+  CPU: arm64                  # arm64 or x86_64
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
@@ -20,8 +21,8 @@ Process:
   - Processor: URLDownloaderPython
     Arguments:
       download_missing_file: '%DOWNLOAD_MISSING_FILE%'
-      filename: '%DMG%-arm64.dmg'
-      url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%major%-%minor%-%patch%-arm64.dmg
+      filename: '%DMG%-%CPU%.dmg'
+      url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%major%-%minor%-%patch%-%CPU%.dmg
 
   - Processor: EndOfCheckPhase
 
@@ -37,4 +38,4 @@ Process:
         - 'Developer ID Installer: Tableau Software, LLC (QJ4XPRK37C)'
         - 'Developer ID Certification Authority'
         - 'Apple Root CA'
-      input_path: '%RECIPE_CACHE_DIR%/downloads/%DMG%-arm64.dmg/Tableau Desktop.pkg'
+      input_path: '%RECIPE_CACHE_DIR%/downloads/%DMG%-%CPU%.dmg/Tableau Desktop.pkg'
