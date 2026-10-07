@@ -17,9 +17,9 @@ Process:
       re_pattern: <a href="(\/.*?)+\/(?P<version>(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+))#.*class="cta">
       url: https://www.tableau.com/support/releases
 
-  - Processor: URLDownloaderPython
+  - Processor: URLDownloader
     Arguments:
-      download_missing_file: '%DOWNLOAD_MISSING_FILE%'
+      DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
       filename: '%NAME%-%CPU%.dmg'
       url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%major%-%minor%-%patch%-%CPU%.dmg
 
