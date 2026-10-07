@@ -1,0 +1,22 @@
+Description: Versions pkg for Tableau Desktop
+Identifier: com.github.franton.pkg.TableauDesktop
+ParentRecipe: com.github.franton.icon.TableauDesktop
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Tableau_Desktop
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgCopier
+    Arguments:
+      source_pkg: "%pathname%/Tableau Desktop.pkg"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
