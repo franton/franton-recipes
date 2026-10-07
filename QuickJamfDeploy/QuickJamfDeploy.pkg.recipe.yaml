@@ -111,6 +111,5 @@ Process:
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/%NAME%-%VERSION%-component.pkg'
-        - '%RECIPE_CACHE_DIR%/downloads'
         - '%RECIPE_CACHE_DIR%/Scripts'
         - '%RECIPE_CACHE_DIR%/pkgroot'
