@@ -1,0 +1,44 @@
+Description: Signs QuickJamfDeploy
+Identifier: com.github.franton.sign.QuickJamfDeploy
+ParentRecipe: com.github.franton.pkg.QuickJamfDeploy
+MinimumVersion: '2.9'
+
+Input:
+  NAME: QuickJamfDeploy
+  JAMF_API_ID: ''
+  JAMF_API_SECRET: ''
+  JAMF_URL: ''
+  TENANT: ''
+  VERSION: '1.0'
+  SIGNINGCERTIFICATE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_API_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_API_SECRET == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_URL == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
