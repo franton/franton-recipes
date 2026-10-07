@@ -106,10 +106,3 @@ Process:
   - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
     Arguments:
       pkg_path: "%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%.pkg"
-
-  - Processor: PathDeleter
-    Arguments:
-      path_list:
-        - '%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%-component.pkg'
-        - '%RECIPE_CACHE_DIR%/Scripts'
-        - '%RECIPE_CACHE_DIR%/pkgroot'
