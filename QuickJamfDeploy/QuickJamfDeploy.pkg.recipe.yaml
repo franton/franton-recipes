@@ -1,0 +1,116 @@
+Description: Packages QuickJamfDeploy
+Identifier: com.github.franton.pkg.QuickJamfDeploy
+MinimumVersion: '2.9'
+
+Input:
+  NAME: QuickJamfDeploy
+  JAMF_API_ID: ''
+  JAMF_API_SECRET: ''
+  JAMF_URL: ''
+  TENANT: ''
+  VERSION: '1.0'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_API_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_API_SECRET == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'JAMF_URL == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'TENANT == nil'
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%VERSION%"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs: {}
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # https://github.com/sebLuns/QuickJamfDeploy
+         # with autopkg mods by Richard Purves
+
+         API_ID="%JAMF_API_ID%"
+         API_SECRET="%JAMF_API_SECRET%"
+         MDM_URL="%JAMF_URL%"
+         SERIAL_NUMBER=$( ioreg -l | awk -F '"' '/IOPlatformSerialNumber/{print $4}' )
+
+         if [[ $(profiles status -type enrollment) == *"MDM enrollment: No"* ]]; then
+             echo "No MDM Server Found" > /private/tmp/deployframe.log
+             exit 0
+         fi
+
+         TOKEN_REQUEST=$(curl -X POST \
+             "https://$MDM_URL/api/oauth/token" \
+         	-H "Content-Type: application/x-www-form-urlencoded" \
+             -d "grant_type=client_credentials&client_id=$API_ID&client_secret=$API_SECRET")
+
+         TOKEN=$(echo "$TOKEN_REQUEST" | jq -r '.access_token')
+
+         SEARCH_REQUEST=$(curl -X 'GET' \
+         "https://$MDM_URL/api/v3/computers-inventory?section=GENERAL&filter=hardware.serialNumber==$SERIAL_NUMBER" \
+         -H "accept: application/json" \
+         -H "Authorization: Bearer $TOKEN")
+
+         JSS_ID=$(echo $SEARCH_REQUEST | jq -r '.results[0].id')
+
+         DEPLOY_REQUEST=$(curl -X 'POST' \
+           "https://$MDM_URL/api/v1/jamf-management-framework/redeploy/$JSS_ID" \
+           -H "accept: application/json" \
+           -H "Authorization: Bearer $TOKEN" \
+           -d "")
+
+         INVALIDATE_REQUEST=$(curl -X 'POST' \
+           "https://$MDM_URL/api/v1/auth/invalidate-token" \
+           -H "accept: */*" \
+           -H "Authorization: Bearer $TOKEN" \
+           -d "")
+
+         exit 0
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%VERSION%"
+        pkgname: "%NAME%-%VERSION%"
+        pkgtype: flat
+        id: "com.%TENANT%.%NAME%"
+        version: "%VERSION%"
+        scripts: "Scripts"
+
+  # Convert the pkg
+  - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%VERSION%/%NAME%-%VERSION%.pkg"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%NAME%-%VERSION%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
