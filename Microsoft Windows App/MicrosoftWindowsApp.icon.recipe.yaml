@@ -4,7 +4,7 @@ ParentRecipe: com.github.franton.download.MicrosoftWindowsApp
 MinimumVersion: '2.9'
 
 Input:
-  NAME: WindowsApp
+  NAME: MicrosoftWindowsApp
   MS_ID: '868963'
   MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
   EXCLUDE: ''
