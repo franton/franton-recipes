@@ -1,0 +1,60 @@
+Description: Uploads Google Chrome client to Jamf.
+Identifier: com.github.franton.upload.jamf.GoogleChromeEnterprise
+ParentRecipe: com.github.franton.pkg.GoogleChromeEnterprise
+MinimumVersion: '2.9'
+
+Input:
+  NAME: 'GoogleChrome'
+  CHANNEL: 'stable'       # stable or beta
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  URL: 'https://dl.google.com/chrome/mac/%CHANNEL%/'
+  TOS: 'accept_tos%3Dhttps%253A%252F%252Fwww.google.com%252Fintl%252Fen_ph%252Fchrome%252Fterms%252F%26_and_accept_tos%3Dhttps%253A%252F%252Fpolicies.google.com%252Fterms/googlechrome.pkg'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'
+
+  CATEGORY: 'Browsers'
+  SELF_SERVICE_ICON: '%NAME%_install.png'
+  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+  # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+    Arguments:
+      pkg_category: '%CATEGORY%'
+      pkg_info: '%pkg_path%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: FileFinder
+    Arguments:
+      pattern: '%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfIconUploader
+    Arguments:
+      icon_file: '%found_filename%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+      
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
+    Arguments:
+      pkg_name_match: '%PKG_NAME_MATCH%'
+      versions_to_keep: '%PKG_TO_KEEP%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
