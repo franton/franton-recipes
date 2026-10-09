@@ -12,8 +12,10 @@
 		<computer_groups>
 			<computer_group>
 				<name>%POLICY_GROUP_A%</name>
-				<name>%POLICY_GROUP_B%</name>
 			</computer_group>
+			<computer_group>
+				<name>%POLICY_GROUP_B%</name>
+			</computer_group>			
 		</computer_groups>
 	</scope>
 	<package_configuration>
