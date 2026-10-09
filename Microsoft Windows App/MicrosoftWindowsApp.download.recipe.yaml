@@ -2,7 +2,7 @@ Description: Downloads the latest Microsoft Windows App
 Identifier: com.github.franton.download.MicrosoftWindowsApp
 
 Input:
-  NAME: WindowsApp
+  NAME: MicrosoftWindowsApp
   MS_ID: '868963'
   MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
   DOWNLOAD_MISSING_FILE: null
