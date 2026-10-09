@@ -1,0 +1,48 @@
+Description: Creates/Updates Microsoft Windows App Self Service policy in Jamf.
+Identifier: com.github.franton.policy.jamf.MicrosoftWindowsApp
+ParentRecipe: com.github.franton.upload.jamf.MicrosoftWindowsApp
+MinimumVersion: '2.9'
+
+Input:
+  NAME: 'MicrosoftWindowsApp'
+  MS_ID: '868963'
+  MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+ 
+  # Policy variables 
+  CATEGORY: 'Remote Access'
+  POLICY_NAME: 'Microsoft Windows App'
+  POLICY_GROUP: 'All Managed Clients'
+  POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
+  POLICY_TEMPLATE: '%NAME%Template.xml'
+  POLICY_REPLACE: 'True'
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
+  SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
+  SELF_SERVICE_ICON: '%NAME%_install.png'
+  SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
+  SELF_SERVICE_DESCRIPTION: ''
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'
+  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+  # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%POLICY_NAME%'
+      policy_template: '%POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      icon: "%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%"
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
