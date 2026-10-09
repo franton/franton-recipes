@@ -10,7 +10,7 @@ Input:
   EXCLUDE: 'ua'
   SIZE: '512'
   DOWNLOAD_MISSING_FILE: null
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
   
   # Processor variables
   REMOVE_OLD_PACKAGES: 'True'
@@ -22,7 +22,7 @@ Input:
   
   SLEEP: '1'
   MAX_TRIES: '5'
-  DRY_RUN: 'True'
+  DRY_RUN: 'False'
 
   # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
 
