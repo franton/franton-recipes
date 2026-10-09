@@ -23,7 +23,7 @@ Input:
   SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
   SELF_SERVICE_ICON: '%NAME%_install.png'
   SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
-  SELF_SERVICE_DESCRIPTION: ''
+  SELF_SERVICE_DESCRIPTION: 'Windows App is your gateway to securely connect to Windows servers across Windows 365, Azure Virtual Desktop, Microsoft Dev Box, and more.'
 
   # Processor variables
   REMOVE_OLD_PACKAGES: 'True'
