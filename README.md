@@ -21,6 +21,15 @@ It is ***highly recommended*** that you generate an autopkg override of the stag
 
 (The idea for icon and sign recipes came from [Rich Trouton's blog](https://derflounder.wordpress.com/2021/07/30/signing-autopkg-built-packages-using-a-sign-recipe/) and I give attribution and thanks.)
 
+#### Jamf Specific Recipes
+
+* upload recipe - This takes all the output from previous stages, signed pkg, icon and uploads into Jamf. Special shoutout to [smithjw](https://smithjw.me/) for the idea of retry logic. It also removes n-3 and older pkg files from Jamf.
+* policy recipe - We have the package and icon in Jamf. This first creates any missing categories, then (with a few recipe exceptions) creates or modifies a Self Service policy for the app.
+
+By making an override of the final policy recipe, you can have a complete lifecycle of the application.
+
+(Big thanks also go to [graham pugh](https://grahamrpugh.com/about.html) for all the Jamf Uploader processor work.
+
 ### Shared Processors
 
 Please see the README.md file in the SharedProcessors folder for author and copyright information. All shared processors are copyright of their respective authors.
