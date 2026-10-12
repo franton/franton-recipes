@@ -12,6 +12,7 @@ Input:
 
   # Policy variables
   JSM_CATEGORY: ''
+  JSM_CUSTOM_TRIGGER: ''
   JSM_POLICY_NAME: ''
   JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
   POLICY_REPLACE: 'True'
