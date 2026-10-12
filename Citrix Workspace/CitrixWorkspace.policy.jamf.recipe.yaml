@@ -1,0 +1,60 @@
+Description: Creates/Updates Citrix Workspaces policies in Jamf.
+Identifier: com.github.franton.policy.jamf.CitrixWorkspace
+ParentRecipe: com.github.franton.upload.jamf.CitrixWorkspace
+MinimumVersion: '2.9'
+
+Input:
+  NAME: CitrixWorkspace
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+  # Policy variables
+  JSM_CATEGORY: ''
+  JSM_POLICY_NAME: ''
+  JSM_TEMPLATE: '%NAME%JSMTemplate.xml'
+  POLICY_REPLACE: 'True'
+  SELF_SERVICE_CATEGORY: ''
+  SELF_SERVICE_POLICY_NAME: ''
+  SELF_SERVICE_TEMPLATE: ''%NAMESelfServiceTemplate.xml'
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
+  SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
+  SELF_SERVICE_ICON: '%NAME%_install.png'
+  SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
+  SELF_SERVICE_DESCRIPTION: 'Citrix Workspace is a digital platform that provides secure, unified access to all your work applications, desktops, and files from a single interface.'
+  
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'
+  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+  # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%JSM_POLICY_NAME%'
+      policy_template: '%JSM_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      icon: "%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%"
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
