@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy>
+	<general>
+		<name>Install %POLICY_NAME%</name>
+		<enabled>true</enabled>
+		<trigger>EVENT</trigger>
+		<trigger_other>%CUSTOM_TRIGGER%</trigger_other>
+		<frequency>Ongoing</frequency>
+		<category>
+			<name>%JSM_CATEGORY%</name>
+		</category>
+	</general>
+	<scope>
+		<computer_groups>
+			<computer_group>
+				<name>%POLICY_GROUP%</name>
+			</computer_group>
+		</computer_groups>
+	</scope>
+	<package_configuration>
+		<packages>
+			<size>1</size>
+			<package>
+				<id>863</id>
+				<name>%pkg_name%</name>
+				<action>Install</action>
+			</package>
+		</packages>
+		<distribution_point>default</distribution_point>
+	</package_configuration>
+</policy>
