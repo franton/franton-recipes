@@ -35,7 +35,7 @@
 		<self_service_description>%SELF_SERVICE_DESCRIPTION%</self_service_description>
 		<self_service_categories>
 			<category>
-				<name>%CATEGORY%</name>
+				<name>%SELF_SERVICE_CATEGORY%</name>
 				<display_in>true</display_in>
 				<feature_in>false</feature_in>
 			</category>
