@@ -23,7 +23,7 @@ Input:
   SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
   SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
   SELF_SERVICE_ICON: '%NAME%_install.png'
-  SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
+  SELF_SERVICE_DISPLAY_NAME: '%SELF_SERVICE_POLICY_NAME% %version%'
   SELF_SERVICE_DESCRIPTION: 'Citrix Workspace is a digital platform that provides secure, unified access to all your work applications, desktops, and files from a single interface.'
   SELF_SERVICE_POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
   
