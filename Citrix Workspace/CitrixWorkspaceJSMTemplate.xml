@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <policy>
 	<general>
-		<name>Install %POLICY_NAME%</name>
+		<name>%JSM_POLICY_NAME%</name>
 		<enabled>true</enabled>
 		<trigger>EVENT</trigger>
 		<trigger_other>%CUSTOM_TRIGGER%</trigger_other>
