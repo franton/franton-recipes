@@ -13,7 +13,7 @@ Input:
   # Policy variables
   JSM_CATEGORY: ''
   JSM_POLICY_NAME: ''
-  JSM_TEMPLATE: '%NAME%JSMTemplate.xml'
+  JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
   POLICY_REPLACE: 'True'
   SELF_SERVICE_CATEGORY: ''
   SELF_SERVICE_POLICY_NAME: ''
