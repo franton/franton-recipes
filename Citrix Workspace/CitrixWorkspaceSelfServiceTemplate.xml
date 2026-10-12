@@ -42,6 +42,6 @@
 		</self_service_categories>
 	</self_service>
 	<files_processes>
-		<run_command>%POLICY_RUN_COMMAND%</run_command>
+		<run_command>%SELF_SERVICE_POLICY_RUN_COMMAND%</run_command>
 	</files_processes>
 </policy>
