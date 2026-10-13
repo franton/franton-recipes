@@ -1,0 +1,73 @@
+Description: Creates/Updates Microsoft Office 365 Business Pro policies in Jamf.
+Identifier: com.github.franton.policy.jamf.Microsoft365BusinessPro
+ParentRecipe: com.github.franton.upload.jamf.Microsoft365BusinessPro
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Microsoft365BusinessPro
+  MS_ID: '2009112'
+  MS_URL: 'https://go.microsoft.com/fwlink/?linkid='
+  MS_RELEASE_URL: 'https://learn.microsoft.com/en-us/officeupdates/release-notes-office-for-mac'
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+  # Generic Policy variables
+  POLICY_REPLACE: 'True'
+
+  # Jamf Setup Manager Policy
+  JSM_CATEGORY: ''
+  JSM_CUSTOM_TRIGGER: ''
+  JSM_POLICY_NAME: ''
+  JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
+  JSM_POLICY_SCOPE_A: ''
+  JSM_POLICY_SCOPE_B: ''
+
+  # Self Service Policy
+  SELF_SERVICE_CATEGORY: ''
+  SELF_SERVICE_POLICY_NAME: ''
+  SELF_SERVICE_POLICY_TEMPLATE: '%NAME%SelfServiceTemplate.xml'
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
+  SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
+  SELF_SERVICE_ICON: '%NAME%_install.png'
+  SELF_SERVICE_DISPLAY_NAME: '%SELF_SERVICE_POLICY_NAME% %version%'
+  SELF_SERVICE_DESCRIPTION: ''
+  SELF_SERVICE_POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
+  SELF_SERVICE_POLICY_SCOPE: ''
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%JSM_POLICY_NAME%'
+      policy_template: '%JSM_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      icon: "%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%"
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
