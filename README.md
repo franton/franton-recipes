@@ -10,8 +10,6 @@ This repo is meant as a self contained repo where all the recipes and shared pro
 
 The recipes here are comprised of the following and are executed in the following order:
 
-![Recipe Order](assets/recipe-order.png)
-
 * download recipe - This merely downloads the .zip / .dmg / .pkg from the respective vendor.
 * icon recipe - Takes the download output, versions it and processes the app through [SAP's macOS icon generator](https://github.com/SAP/macOS-icon-generator) tool and places into a versioned folder.
 * pkg recipe - Takes either the download output or the decompressed output from the icon recipe and turns it into a deployable pkg. Some recipes have big custom scripting.
@@ -28,7 +26,33 @@ It is ***highly recommended*** that you generate an autopkg override of the stag
 
 By making an override of the final policy recipe, you can have a complete lifecycle of the application.
 
+```mermaid
+graph TD
+  A[Download] --> B[Icon]  
+  B[Icon] --> C{pkg}
+  C -->|Vendor Supplied| E[finish]
+  C -->|Custom Pkg| D[Sign]
+  D[Sign] --> E{Upload}
+  E[Upload] --> F[Policy]
+```
+
 (Big thanks also go to [graham pugh](https://grahamrpugh.com/about.html) for all the Jamf Uploader processor work.
+
+#### Folder Structure
+
+```
+franton-recipes/
+├── <App>/	                            # Per-app folders
+│   ├── <App>.download.recipe.yaml          # Download recipe
+│   ├── <App>.icon.recipe.yaml              # Generate icon file from download recipe
+│   ├── <App>.pkg.recipe.yaml               # Generate a versioned installer pkg recipe
+│   ├── <App>.sign.recipe.yaml              # (OPTIONAL) Custom package signing
+│   ├── <App>.upload.jamf.recipe.yaml       # Upload icon and pkg recipe. Prune older than two versions.
+│   ├── <App>.smartgroup.jamf.recipe.yaml   # Smart group recipe (OPTIONAL)
+│   ├── <App>.policies.jamf.recipe.yaml     # Self Service and Standard policy recipe
+│   ├── <App>.(jsm/SelfService)Template.xml # Jamf Setup Manager / Self Service policy template
+├── SharedProcessors/                       # Shared Custom processors
+```
 
 ### Shared Processors
 
