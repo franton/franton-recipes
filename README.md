@@ -30,10 +30,13 @@ By making an override of the final policy recipe, you can have a complete lifecy
 graph TD
   A[Download] --> B[Icon]  
   B[Icon] --> C{pkg}
-  C -->|Vendor Supplied| E[finish]
+  C -->|Vendor Supplied| E[Upload]
   C -->|Custom Pkg| D[Sign]
-  D[Sign] --> E{Upload}
-  E[Upload] --> F[Policy]
+  D[Sign] --> E[Upload]
+  E -->| | G[Policy]
+  E -->|Optional| F[Smart Group]
+  F[Smart Group] --> G[Policy]
+  G[Policy]
 ```
 
 (Big thanks also go to [graham pugh](https://grahamrpugh.com/about.html) for all the Jamf Uploader processor work.
@@ -42,7 +45,7 @@ graph TD
 
 ```
 franton-recipes/
-├── <App>/	                            # Per-app folders
+├── <App>/	                                # Per-app folders
 │   ├── <App>.download.recipe.yaml          # Download recipe
 │   ├── <App>.icon.recipe.yaml              # Generate icon file from download recipe
 │   ├── <App>.pkg.recipe.yaml               # Generate a versioned installer pkg recipe
