@@ -106,7 +106,7 @@ Process:
          /usr/sbin/diskutil image attach --nobrowse -mountPoint "$BASE_PATH" "$dmgfile"
          
          # Find and install the csi in that folder
-         ${BASE_PATH}/csi.app/Contents/MacOS/csi "$args"
+         ${BASE_PATH}/csi.app/Contents/MacOS/csi "${args[@]}"
 
          # Dismount the dmg now we're installed and clean up the temp mount folder
          /usr/sbin/diskutil eject force "$BASE_PATH"
