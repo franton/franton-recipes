@@ -110,7 +110,7 @@ Process:
 
          # Dismount the dmg now we're installed and clean up the temp mount folder
          /usr/sbin/diskutil eject force "$BASE_PATH"
-         /bin/rm -rf "$tmpmount"
+         /bin/rm -rf "$BASE_PATH"
          
          # Clean up
          /bin/rm -f "$dmgfile"
