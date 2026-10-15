@@ -87,7 +87,7 @@ Process:
 
          # Setup variables
          KEYFILE="/tmp/%CUSTOMER_KEY_FILE%"
-         dmgfile=$( /usr/bin/find /tmp -maxdepth 1 -iname "*.dmg" )
+         dmgfile="/tmp/Nexthink_Collector.dmg"
          
          option1="%DATA_OVER_TCP%"
          option2="%USE_ASSIGNMENT%"
