@@ -1,5 +1,5 @@
 Description: Packages current release installer and uninstaller of NexThink Collector.
-Identifier: com.github.franton.pkg.NexThinkCollector
+Identifier: com.github.franton.test.NexThinkCollector
 ParentRecipe: com.github.franton.icon.NexThinkCollector
 MinimumVersion: '2.9'
 Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
@@ -7,23 +7,27 @@ Comment: Create an override and set the variables in an override. DO NOT USE thi
 Input:
   NAME: NexThinkCollector
   DMG: Nexthink_Collector.dmg
-  
-  CORP_ID: ""
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  CORP_ID: 'intuitive'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
-  SERVER_ADDRESS: ""
-  UDP_PORT: ""
-  TCP_PORT: ""
+  # Icon recipe settings
+  EXCLUDE: ''
+  SIZE: ''
+
+  # NexThink switches for csi.app go here. They apparently like to completely change these on a regular basis.
+  # These are the current switch names taken from their MSI table as of 15th October 2026
+  DATA_OVER_TCP: ''
+  USE_ASSIGNMENT: ''
+  CRD_PORT: ''
+  DRV_IP: ''
+  EXECUTION_POLICY: ''
+  WINDOW_FOCUS_TIME_MONITORING: ''
+  ANONYMIZE_WIFI_NETWORK: ''
+  DOMAIN_NAME_REPORTING: ''
+
+  # NexThink registration details
   CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
-  ENGAGE: "enable"
-  DATA_TCP: "enable"
-  PROXYPAC_ADDRESS: ''
-  PROXY_ADDRESS: ''
-  PROXY_PORT: ''
-  ASSIGNMENT: "enable"
-  REMOTE_ACTIONS: "disabled"
-  STRING_TAG: ''
-  CUSTOMER_KEY_DATA: ""
+  CUSTOMER_KEY_DATA: "-----BEGIN CUSTOMER KEY-----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-----END CUSTOMER KEY-----"
 
 Process:
 # Prereqs checks before proceeding
@@ -33,7 +37,7 @@ Process:
 
   - Processor: StopProcessingIf
     Arguments:
-      predicate: 'SERVER_ADDRESS == nil'
+      predicate: 'DRV_IP == nil'
 
   - Processor: StopProcessingIf
     Arguments:
@@ -47,23 +51,23 @@ Process:
   - Processor: PkgRootCreator
     Arguments:
       pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
-      pkgdirs:
-        CustomerKeys: "0777"
+      pkgdirs: {}
 
   - Processor: PkgRootCreator
     Arguments:
       pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-      pkgdirs: {}
+      pkgdirs:
+        tmp: "0777"
 
   - Processor: Copier
     Arguments:
       source_path: "%pathname%"
-      destination_path: "%RECIPE_CACHE_DIR%/Scripts/%DMG%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%DMG%"
 
   - Processor: FileCreator
     Arguments:
-      file_path: "%RECIPE_CACHE_DIR%/Scripts/CustomerKeys/%CUSTOMER_KEY_FILE%"
-      file_mode: "0777"
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%CUSTOMER_KEY_FILE%"
+      file_mode: "0440"
       file_content: "%CUSTOMER_KEY_DATA%"
 
   - Processor: FileCreator
@@ -82,46 +86,35 @@ Process:
          exec > $logfile 2>&1
 
          # Setup variables
-         currentpath="$( /usr/bin/dirname $0 )"
-         dmgfile=$( /usr/bin/find $currentpath -maxdepth 1 -iname "*.dmg" )
+         KEYFILE="/tmp/%CUSTOMER_KEY_FILE%"
+         dmgfile=$( /usr/bin/find /tmp -maxdepth 1 -iname "*.dmg" )
          
-         option1="%SERVER_ADDRESS%"
-         option2="%UDP_PORT%"
-         option3="%TCP_PORT%"
-         option4="$currentpath/CustomerKeys/%CUSTOMER_KEY_FILE%"
-         option5="%ENGAGE%"
-         option6="%DATA_TCP%"
-         option7="%PROXYPAC_ADDRESS%"
-         option8="%PROXY_ADDRESS%"
-         option9="%PROXY_PORT%"
-         option10="%ASSIGNMENT%"
-         option11="%REMOTE_ACTIONS%"
-         option12="%STRING_TAG%"
+         option1="%DATA_OVER_TCP%"
+         option2="%USE_ASSIGNMENT%"
+         option3="%CRD_PORT%"
+         option4="%DRV_IP%"
+         option5="%EXECUTION_POLICY%"
+         option6="%WINDOW_FOCUS_TIME_MONITORING%"
+         option7="%ANONYMIZE_WIFI_NETWORK%"
+         option8="%DOMAIN_NAME_REPORTING%"
 
-         # Work out install switches
-         [[ -n ${option1} ]] && switch+="-address ${option1} "
-         [[ -n ${option2} ]] && switch+="-port ${option2} "
-         [[ -n ${option3} ]] && switch+="-tcp_port ${option3} "
-         [[ -n ${option4} ]] && switch+="-key ${option4} "
-         [[ -n ${option5} ]] && switch+="-engage ${option5} "
-         [[ -n ${option6} ]] && switch+="-data_over_tcp ${option6} "
-         [[ -n ${option7} ]] && switch+="-proxy_pac_address ${option7} "
-         [[ -n ${option8} ]] && switch+="-proxy_address ${option8} "
-         [[ -n ${option9} ]] && switch+="-proxy_port ${option9} "
-         [[ -n ${option10} ]] && switch+="-use_assignment ${option10} "
-         [[ -n ${option11} ]] && switch+="-ra_execution_policy ${option11} "
-         [[ -n ${option12} ]] && switch+="-string_tag ${option12} "
+         args=(--data_over_tcp ${option1} --use_assignment ${option2} --tcp_port ${option3} --address ${option4} --ra_execution_policy ${option5} --windows_focus_time_monitoring ${option6} --anonymize_wifi_network ${option7} --domain_name_reporting ${option8})
 
          # Create a temporary mount point, then silently mount the dmg on it
-         tmpmount=$( /usr/bin/mktemp -d /private/tmp/nexthink.XXXX )
-         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$tmpmount" "$dmgfile"
+         # Using BASE_PATH as per NT docs as of Thursday October 15th 2026
+         BASE_PATH=$( /usr/bin/mktemp -d /private/tmp/nexthink.XXXX )
+         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$BASE_PATH" "$dmgfile"
          
          # Find and install the csi in that folder
-         ${tmpmount}/csi.app/Contents/MacOS/csi "${switch[@]}"
+         ${BASE_PATH}/csi.app/Contents/MacOS/csi "$args"
 
          # Dismount the dmg now we're installed and clean up the temp mount folder
-         /usr/sbin/diskutil eject force "$tmpmount"
+         /usr/sbin/diskutil eject force "$BASE_PATH"
          /bin/rm -rf "$tmpmount"
+         
+         # Clean up
+         /bin/rm -f "$dmgfile"
+         /bin/rm -f "$KEYFILE"
          
          # Disable / Enable the services
          /bin/launchctl bootout system /Library/LaunchDaemons/com.nexthink.collector.nxtcoordinator.plist
@@ -145,8 +138,7 @@ Process:
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/Scripts/%DMG%'
-        - '%RECIPE_CACHE_DIR%/Scripts/CustomerKeys'
+        - '%RECIPE_CACHE_DIR%/pkgroot/tmp'
         - '%RECIPE_CACHE_DIR%/Scripts/postinstall'
 
 # Now create the uninstaller pkg as a zero payload pkg
@@ -175,8 +167,8 @@ Process:
   - Processor: PathDeleter
     Arguments:
       path_list:
-        - '%RECIPE_CACHE_DIR%/Scripts'
-        - '%RECIPE_CACHE_DIR%/pkgroot'
         - '%RECIPE_CACHE_DIR%/unpack'
         - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
         - '%RECIPE_CACHE_DIR%/downloads'
