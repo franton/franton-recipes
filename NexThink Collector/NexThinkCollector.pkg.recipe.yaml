@@ -1,5 +1,5 @@
 Description: Packages current release installer and uninstaller of NexThink Collector.
-Identifier: com.github.franton.test.NexThinkCollector
+Identifier: com.github.franton.pkg.NexThinkCollector
 ParentRecipe: com.github.franton.icon.NexThinkCollector
 MinimumVersion: '2.9'
 Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
