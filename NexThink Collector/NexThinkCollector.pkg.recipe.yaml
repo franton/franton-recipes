@@ -98,7 +98,7 @@ Process:
          option7="%ANONYMIZE_WIFI_NETWORK%"
          option8="%DOMAIN_NAME_REPORTING%"
 
-         args=(--data_over_tcp ${option1} --use_assignment ${option2} --tcp_port ${option3} --address ${option4} --ra_execution_policy ${option5} --windows_focus_time_monitoring ${option6} --anonymize_wifi_network ${option7} --domain_name_reporting ${option8})
+         args=(--data_over_tcp ${option1} --use_assignment ${option2} --key ${KEYFILE} --tcp_port ${option3} --address ${option4} --ra_execution_policy ${option5} --windows_focus_time_monitoring ${option6} --anonymize_wifi_network ${option7} --domain_name_reporting ${option8})
 
          # Create a temporary mount point, then silently mount the dmg on it
          # Using BASE_PATH as per NT docs as of Thursday October 15th 2026
