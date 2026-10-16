@@ -47,10 +47,27 @@ Input:
   # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
 
 Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_CATEGORY%"
+
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
     Arguments:
-      policy_name: '%POLICY_NAME%'
-      policy_template: '%POLICY_TEMPLATE%'
+      policy_name: '%JSM_POLICY_NAME%'
+      policy_template: '%JSM_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
       replace_policy: '%POLICY_REPLACE%'
       sleep: '%SLEEP%'
       max_tries: '%MAX_TRIES%'
