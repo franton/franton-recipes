@@ -43,13 +43,6 @@ Process:
   - Processor: FileFinder
     Arguments:
       pattern: '%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%'
-
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfIconUploader
-    Arguments:
-      icon_file: '%found_filename%'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
       
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
     Arguments:
