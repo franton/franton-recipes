@@ -43,7 +43,6 @@ Process:
       policy_name: '%POLICY_NAME%'
       policy_template: '%POLICY_TEMPLATE%'
       replace_policy: '%POLICY_REPLACE%'
-      icon: "%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%"
       sleep: '%SLEEP%'
       max_tries: '%MAX_TRIES%'
       dry_run: '%DRY_RUN%'
