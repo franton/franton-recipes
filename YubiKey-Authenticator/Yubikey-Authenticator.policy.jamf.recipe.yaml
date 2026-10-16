@@ -5,31 +5,41 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: 'YubikeyAuthenticator'
-  EXCLUDE: 'ua'
-  SIZE: '512'
-  SIGNINGCERTIFICATE: ''
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
- 
-  # Policy variables 
-  CATEGORY: 'IT Tools'
-  POLICY_NAME: 'Yubikey Authenticator'
-  POLICY_GROUP_A: ''
-  POLICY_GROUP_B: 'O'
-  POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
-  POLICY_TEMPLATE: '%NAME%Template.xml'
+  SIGNINGCERTIFICATE: ''
+
+  # Icon settings
+  EXCLUDE: 'ua'
+  SIZE: '512'
+
+  # Generic Policy variables
   POLICY_REPLACE: 'True'
+
+  # Jamf Setup Manager Policy
+  JSM_CATEGORY: ''
+  JSM_CUSTOM_TRIGGER: ''
+  JSM_POLICY_NAME: ''
+  JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
+  JSM_POLICY_SCOPE: ''
+
+  # Self Service Policy
+  SELF_SERVICE_CATEGORY: ''
+  SELF_SERVICE_DESCRIPTION: ''
+  SELF_SERVICE_POLICY_NAME: ''
+  SELF_SERVICE_POLICY_TEMPLATE: '%NAME%SelfServiceTemplate.xml'
+  SELF_SERVICE_POLICY_SCOPE_A: ''
+  SELF_SERVICE_POLICY_SCOPE_B: ''
   SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
   SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
   SELF_SERVICE_ICON: '%NAME%_install.png'
-  SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
-  SELF_SERVICE_DESCRIPTION: ''
+  SELF_SERVICE_DISPLAY_NAME: '%SELF_SERVICE_POLICY_NAME% %version%'
+  SELF_SERVICE_POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
 
   # Processor variables
   REMOVE_OLD_PACKAGES: 'True'
   PKG_TO_KEEP: '2'
-  PKG_NAME_MATCH: '%NAME%-'
-  
+  PKG_NAME_MATCH: '%NAME%-'  
   SLEEP: '1'
   MAX_TRIES: '5'
   DRY_RUN: 'False'
