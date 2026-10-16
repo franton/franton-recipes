@@ -103,8 +103,8 @@ Process:
 
              /bin/rm -rf /Library/Preferences/com.paloaltonetworks.GlobalProtect*
              /bin/rm -rf /Library/Preferences/PanGPS*
-    
-         	# Forget any existing pkg receipts
+
+          # Forget any existing pkg receipts
          	echo "Forgetting existing pkg receipts"
          	for pkg in $( /usr/sbin/pkgutil --pkgs | /usr/bin/grep com.paloaltonetworks.globalprotect )
             do
