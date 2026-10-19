@@ -59,6 +59,15 @@ Process:
         pkgtype: flat
         id: "com.%CORP_ID%.%NAME%"
         version: "%version%"
+        chown:
+          - path: Applications
+            user: root
+            group: wheel
+            mode: "0775"
+          - path: "Library/PrivilegedHelperTools"
+            user: root
+            group: wheel
+            mode: "0544"
 
   - Processor: PathDeleter
     Arguments:
