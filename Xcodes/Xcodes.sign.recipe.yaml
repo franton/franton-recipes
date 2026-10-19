@@ -1,0 +1,31 @@
+Description: Signing recipe for Xcodes
+Identifier: com.github.franton.sign.Xcodes
+ParentRecipe: com.github.franton.pkg.Xcodes
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Xcodes
+  PURGE_DESTINATION: 'False'
+
+  # Package and signing variables
+  CORP_ID: ""
+  SIGNINGCERTIFICATE: ""
+
+  # Icon recipe settings
+  EXCLUDE: ''
+  SIZE: ''
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
