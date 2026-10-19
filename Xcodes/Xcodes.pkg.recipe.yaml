@@ -64,7 +64,7 @@ Process:
             user: root
             group: wheel
             mode: "0775"
-          - path: "Library/PrivilegedHelperTools"
+          - path: "Library/PrivilegedHelperTools/com.xcodesorg.xcodesapp.Helper"
             user: root
             group: wheel
             mode: "0544"
