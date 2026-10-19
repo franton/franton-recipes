@@ -9,11 +9,11 @@ Input:
   PURGE_DESTINATION: 'False'
 
   # Package settings
-  CORP_ID: ''
+  CORP_ID: 'test'
 
   # Icon recipe settings
-  EXCLUDE: ''
-  SIZE: ''
+  EXCLUDE: 'ua'
+  SIZE: '512'
 
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
@@ -39,6 +39,11 @@ Process:
     Arguments:
       source_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%.app"
       destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Applications"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%.app/Contents/Library/LaunchServices/com.xcodesorg.xcodesapp.Helper"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Library/PrivilegedHelperTools"
 
   - Processor: PathDeleter
     Arguments:
