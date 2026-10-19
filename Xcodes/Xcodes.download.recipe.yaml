@@ -19,15 +19,14 @@ Process:
       url: "%url%"
       filename: "%NAME%-%version%.zip"
 
-#  - Processor: Unarchiver
-#    Arguments:
-#      archive_path: '%pathname%'
-#      destination_path: '%RECIPE_CACHE_DIR%/%version%'
-#      purge_destination: '%PURGE_DESTINATION%'
-#      USE_PYTHON_NATIVE_EXTRACTOR: 'True'
-
-  - Processor: EndOfCheckPhase
-
-  - Processor: StopProcessingIf
+  - Processor: Unarchiver
     Arguments:
-      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+      archive_path: '%pathname%'
+      destination_path: '%RECIPE_CACHE_DIR%/%version%'
+      purge_destination: '%PURGE_DESTINATION%'
+
+#  - Processor: EndOfCheckPhase
+
+#  - Processor: StopProcessingIf
+#    Arguments:
+#      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
