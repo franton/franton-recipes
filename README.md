@@ -22,6 +22,7 @@ It is ***highly recommended*** that you generate an autopkg override of the stag
 #### Jamf Specific Recipes
 
 * upload recipe - This takes all the output from previous stages, signed pkg, icon and uploads into Jamf. Special shoutout to [smithjw](https://smithjw.me/) for the idea of retry logic. It also removes n-3 and older pkg files from Jamf.
+* smartgroup recipe - **Optional** Creates / modifies smart groups.
 * policy recipe - We have the package and icon in Jamf. This first creates any missing categories, then (with a few recipe exceptions) creates or modifies a Self Service policy for the app.
 
 By making an override of the final policy recipe, you can have a complete lifecycle of the application.
