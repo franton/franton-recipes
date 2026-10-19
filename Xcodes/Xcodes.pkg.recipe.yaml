@@ -1,0 +1,46 @@
+Description: Creates current release pkg of Xcodes.
+Identifier: com.github.franton.pkg.Xcodes
+ParentRecipe: com.github.franton.icon.Xcodes
+MinimumVersion: "2.9"
+Comment: ''
+
+Input:
+  NAME: Xcodes
+  PURGE_DESTINATION: 'False'
+
+  # Package settings
+  CORP_ID: ''
+
+  # Icon recipe settings
+  EXCLUDE: ''
+  SIZE: ''
+
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+# Prereqs checks before proceeding
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CORP_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+         Applications: "0775"
+         Library: "0755"
+         Library/PrivilegedHelperTools: "0755"
+      
+  - Processor: Copier
+    Arguments:
+      source_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%.app"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/Applications"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
