@@ -9,11 +9,11 @@ Input:
   PURGE_DESTINATION: 'False'
 
   # Package settings
-  CORP_ID: 'test'
+  CORP_ID: ''
 
   # Icon recipe settings
-  EXCLUDE: 'ua'
-  SIZE: '512'
+  EXCLUDE: ''
+  SIZE: ''
 
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
