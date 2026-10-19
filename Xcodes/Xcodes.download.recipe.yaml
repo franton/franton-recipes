@@ -19,12 +19,12 @@ Process:
       url: "%url%"
       filename: "%NAME%-%version%.zip"
 
-  - Processor: Unarchiver
-    Arguments:
-      archive_path: '%pathname%'
-      destination_path: '%RECIPE_CACHE_DIR%'
-      purge_destination: '%PURGE_DESTINATION%'
-      USE_PYTHON_NATIVE_EXTRACTOR: 'True'
+#  - Processor: Unarchiver
+#    Arguments:
+#      archive_path: '%pathname%'
+#      destination_path: '%RECIPE_CACHE_DIR%/%version%'
+#      purge_destination: '%PURGE_DESTINATION%'
+#      USE_PYTHON_NATIVE_EXTRACTOR: 'True'
 
   - Processor: EndOfCheckPhase
 
