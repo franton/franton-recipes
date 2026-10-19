@@ -65,3 +65,4 @@ Process:
       path_list:
         - '%RECIPE_CACHE_DIR%/%version%/%NAME%.app'
         - '%RECIPE_CACHE_DIR%/downloads'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
