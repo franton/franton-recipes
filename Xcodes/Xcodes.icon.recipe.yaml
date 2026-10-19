@@ -1,0 +1,27 @@
+Description: Generates icon file for latest Xcodes
+Identifier: com.github.franton.icon.Xcodes
+ParentRecipe: com.github.franton.download.Xcodes
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Xcodes
+  PURGE_DESTINATION: 'False'
+
+# Icon recipe settings
+  EXCLUDE: ''
+  SIZE: ''
+
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%.app"
+      exclude: "%EXCLUDE%"
+      name_prefix: "%NAME%"
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
