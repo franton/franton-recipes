@@ -16,7 +16,6 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
-Process:
   - Processor: StopProcessingIf
     Arguments:
       predicate: 'SIGNINGCERTIFICATE == nil'
