@@ -8,7 +8,7 @@ Input:
   EXCLUDE: ''
   SIZE: ''
   CORP_ID: ''   # NOTE: Replace folder name in PkgRootCreator step!!!!
-  IMG_PATH: ""  # Set a folder name here to copy any png files you require into the pkg.
+  LEGALFILE_PATH: ""  # Set a folder name here to copy any legal warning files you require into the pkg.
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
 Process:
@@ -18,7 +18,7 @@ Process:
 
   - Processor: StopProcessingIf
     Arguments:
-      predicate: 'IMG_PATH == nil'
+      predicate: 'LEGALFILE_PATH == nil'
 
 # Create pkg folders
   - Processor: PkgRootCreator
@@ -46,8 +46,8 @@ Process:
 # Icon files
   - Processor: Copier
     Arguments:
-      source_path: "%IMG_PATH%"
-      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/imgs"
+      source_path: "%LEGALFILE_PATH%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/legal"
 
 # Create postinstall script
   - Processor: FileCreator
@@ -57,18 +57,18 @@ Process:
       file_content: |
          #!/bin/zsh --no-rcs
 
-         # Install Jamf Setup Manager and branding
+         # Install Jamf Setup Checklist and Legal notices
          # 06/17/2026
 
          # Find and install the Jamf Setup pkg in that folder
-         /usr/sbin/installer -target / -pkg "/private/tmp/JamfSetupManager.pkg"
+         /usr/sbin/installer -target / -pkg "/private/tmp/JamfSetupChecklist.pkg"
 
          # macOS has a horrible habit of applying com.apple.quarantine attributes to files after placement.
          # So use xattr to clear all extended attributes.
          /usr/bin/xattr -cr /usr/local/%CORP_ID%
 
          # Remove cached installed
-         /bin/rm -rf "/private/tmp/JamfSetupManager.pkg"
+         /bin/rm -rf "/private/tmp/JamfSetupChecklist.pkg"
 
          exit 0
 
