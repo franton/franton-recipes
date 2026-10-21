@@ -39,7 +39,7 @@ Process:
         private/tmp: "0777"
         usr: "0755"
         usr/local: "0755"
-        usr/local/CORP_ID: "0755"
+        usr/local/intuitive: "0755"
 # REPLACE FOLDER NAME ABOVE !!
 
 # Copy files/folders in place
