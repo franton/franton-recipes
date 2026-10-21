@@ -1,4 +1,4 @@
-Description: Creates icon from latest Jamf Setup Checklist.
+Description: Creates custom pkg from latest Jamf Setup Checklist.
 Identifier: com.github.franton.pkg.JamfSetupChecklist
 ParentRecipe: com.github.franton.icon.JamfSetupChecklist
 MinimumVersion: '2.9'
