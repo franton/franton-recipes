@@ -1,0 +1,104 @@
+Description: Creates icon from latest Jamf Setup Checklist.
+Identifier: com.github.franton.pkg.JamfSetupChecklist
+ParentRecipe: com.github.franton.icon.JamfSetupChecklist
+MinimumVersion: '2.9'
+
+Input:
+  NAME: JamfSetupChecklist
+  EXCLUDE: ''
+  SIZE: ''
+  CORP_ID: ''   # NOTE: Replace folder name in PkgRootCreator step!!!!
+  IMG_PATH: ""  # Set a folder name here to copy any png files you require into the pkg.
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CORP_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'IMG_PATH == nil'
+
+# Create pkg folders
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        private: "0755"
+        private/tmp: "0777"
+        usr: "0755"
+        usr/local: "0755"
+        usr/local/CORP_ID: "0755"
+# REPLACE FOLDER NAME ABOVE !!
+
+# Copy files/folders in place
+  - Processor: FileMover
+    Arguments:
+      source: "%pathname%"
+      target: "%RECIPE_CACHE_DIR%/pkgroot/private/tmp/%NAME%.pkg"
+
+# Icon files
+  - Processor: Copier
+    Arguments:
+      source_path: "%IMG_PATH%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/imgs"
+
+# Create postinstall script
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # Install Jamf Setup Manager and branding
+         # 06/17/2026
+
+         # Find and install the Jamf Setup pkg in that folder
+         /usr/sbin/installer -target / -pkg "/private/tmp/JamfSetupManager.pkg"
+
+         # macOS has a horrible habit of applying com.apple.quarantine attributes to files after placement.
+         # So use xattr to clear all extended attributes.
+         /usr/bin/xattr -cr /usr/local/%CORP_ID%
+
+         # Remove cached installed
+         /bin/rm -rf "/private/tmp/JamfSetupManager.pkg"
+
+         exit 0
+
+# Create the pkg
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        scripts: "Scripts"
+        chown:
+          - path: usr/local/%CORP_ID%
+            user: root
+            group: wheel
+            mode: '0755'
+
+# Convert the pkg
+  - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+# Clean up
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
