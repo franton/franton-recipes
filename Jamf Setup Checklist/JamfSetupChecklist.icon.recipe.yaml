@@ -7,7 +7,7 @@ Input:
   NAME: JamfSetupChecklist
   EXCLUDE: ''
   SIZE: ''
-  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: FlatPkgUnpacker
