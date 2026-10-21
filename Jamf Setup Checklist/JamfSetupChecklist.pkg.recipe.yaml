@@ -9,6 +9,7 @@ Input:
   SIZE: ''
   CORP_ID: ''   # NOTE: Replace folder name in PkgRootCreator step!!!!
   LEGALFILE_PATH: ""  # Set a folder name here to copy any legal warning files you require into the pkg.
+  SIGNINGCERTIFICATE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
 Process:
@@ -19,6 +20,10 @@ Process:
   - Processor: StopProcessingIf
     Arguments:
       predicate: 'LEGALFILE_PATH == nil'
+      
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
 
 # Create pkg folders
   - Processor: PkgRootCreator
@@ -89,16 +94,22 @@ Process:
             group: wheel
             mode: '0755'
 
-# Convert the pkg
+# Convert and sign the pkg
   - Processor: com.github.franton.SharedProcessors/DistributionPackageCreator
     Arguments:
       pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
 
 # Clean up
   - Processor: PathDeleter
     Arguments:
       path_list:
         - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
         - '%RECIPE_CACHE_DIR%/Scripts'
         - '%RECIPE_CACHE_DIR%/pkgroot'
         - '%RECIPE_CACHE_DIR%/downloads'
