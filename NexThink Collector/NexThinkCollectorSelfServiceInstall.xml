@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy>
+	<general>
+		<name>%SELF_SERVICE_INSTALL_POLICY_NAME%</name>
+		<enabled>true</enabled>
+		<frequency>Ongoing</frequency>
+		<category>
+			<name>%SELF_SERVICE_INSTALL_CATEGORY%</name>
+		</category>
+	</general>
+	<scope>
+		<computer_groups>
+			<computer_group>
+				<name>%SELF_SERVICE_INSTALL_POLICY_SCOPE%</name>
+			</computer_group>			
+		</computer_groups>
+	</scope>
+	<package_configuration>
+		<packages>
+			<size>1</size>
+			<package>
+				<name>%NAME%-Install-%version%.pkg</name>
+				<action>Install</action>
+			</package>
+		</packages>
+	</package_configuration>
+	<scripts>
+		<size>0</size>
+	</scripts>
+	<self_service>
+		<use_for_self_service>true</use_for_self_service>
+		<install_button_text>%SELF_SERVICE_INSTALL_BUTTON_TEXT%</install_button_text>
+		<reinstall_button_text>%SELF_SERVICE_REINSTALL_BUTTON_TEXT%</reinstall_button_text>
+		<self_service_display_name>%SELF_SERVICE_INSTALL_DISPLAY_NAME%</self_service_display_name>
+		<self_service_description>%SELF_SERVICE_INSTALL_DESCRIPTION%</self_service_description>
+		<self_service_categories>
+			<category>
+				<name>%SELF_SERVICE_INSTALL_CATEGORY%</name>
+				<display_in>true</display_in>
+				<feature_in>false</feature_in>
+			</category>
+		</self_service_categories>
+	</self_service>
+	<files_processes>
+		<run_command>%SELF_SERVICE_POLICY_RUN_COMMAND%</run_command>
+	</files_processes>
+</policy>
