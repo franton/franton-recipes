@@ -1,0 +1,103 @@
+Description: Uploads NexThink Collector packages
+Identifier: com.github.franton.upload.jamf.NexThinkCollector
+ParentRecipe: com.github.franton.sign.NexThinkCollector
+MinimumVersion: '2.9'
+
+Input:
+  NAME: NexThinkCollector
+  DMG: Nexthink_Collector.dmg
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  
+  # Package and signing variables
+  CORP_ID: ''
+  SIGNINGCERTIFICATE: ''
+
+  # Icon recipe settings
+  SIZE: ''
+  EXCLUDE: ''
+
+  # NexThink switches for csi.app go here. They apparently like to completely change these on a regular basis.
+  # These are the current switch names taken from their MSI table as of 15th October 2026
+  DATA_OVER_TCP: 'enable'
+  USE_ASSIGNMENT: 'enable'
+  CRD_PORT: '443'
+  DRV_IP: ''
+  EXECUTION_POLICY: 'signed_trusted_or_nexthink'
+  WINDOW_FOCUS_TIME_MONITORING: 'enable'
+  ANONYMIZE_WIFI_NETWORK: 'disable'
+  DOMAIN_NAME_REPORTING: 'True'
+
+  # NexThink registration details
+  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
+  CUSTOMER_KEY_DATA: ""
+  
+  # Jamf details
+  JSM_CATEGORY: ''
+  JSM_POLICY_NAME: ''
+  JSM_TRIGGER: ''
+  JSM_SCOPE: ''
+  
+  SELF_SERVICE_INSTALL_CATEGORY: ''
+  SELF_SERVICE_INSTALL_POLICY_NAME: ''
+  SELF_SERVICE_INSTALL_SCOPE: ''
+
+  SELF_SERVICE_UNINSTALL_CATEGORY: ''
+  SELF_SERVICE_UNINSTALL_POLICY_NAME: ''
+  SELF_SERVICE_UNINSTALL_SCOPE: ''
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  INSTALL_PKG_NAME_MATCH: '%NAME%-Install-'
+  UNINSTALL_PKG_NAME_MATCH: '%NAME%-Uninstall-'
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'True'
+
+Process:
+  # Make sure the categories for all policies are in place
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
+
+  # Upload the install and the uninstall packages
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+    Arguments:
+      pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
+      pkg_info: '%RECIPE_CACHE_DIR%/%version%/%NAME-Install-%version%.pkg'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+    Arguments:
+      pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
+      pkg_info: '%RECIPE_CACHE_DIR%/%version%/%NAME%-Uninstall-%version%.pkg'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  # Clean up older packages
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
+    Arguments:
+      pkg_name_match: '%INSTALL_PKG_NAME_MATCH%'
+      versions_to_keep: '%PKG_TO_KEEP%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
+    Arguments:
+      pkg_name_match: '%UNINSTALL_PKG_NAME_MATCH%'
+      versions_to_keep: '%PKG_TO_KEEP%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
