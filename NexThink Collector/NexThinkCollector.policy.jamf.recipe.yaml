@@ -1,0 +1,114 @@
+Description: Updates NexThink Collector policies
+Identifier: com.github.franton.policy.jamf.NexThinkCollector
+ParentRecipe: com.github.franton.upload.jamf.NexThinkCollector
+MinimumVersion: '2.9'
+
+Input:
+  NAME: NexThinkCollector
+  DMG: Nexthink_Collector.dmg
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  
+  # Package and signing variables
+  CORP_ID: ''
+  SIGNINGCERTIFICATE: ''
+
+  # Icon recipe settings
+  SIZE: '512'
+  EXCLUDE: 'a'
+
+  # NexThink switches for csi.app go here. They apparently like to completely change these on a regular basis.
+  # These are the current switch names taken from their MSI table as of 15th October 2026
+  DATA_OVER_TCP: 'enable'
+  USE_ASSIGNMENT: 'enable'
+  CRD_PORT: '443'
+  DRV_IP: ''
+  EXECUTION_POLICY: 'signed_trusted_or_nexthink'
+  WINDOW_FOCUS_TIME_MONITORING: 'enable'
+  ANONYMIZE_WIFI_NETWORK: 'disable'
+  DOMAIN_NAME_REPORTING: 'True'
+
+  # NexThink registration details
+  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
+  CUSTOMER_KEY_DATA: ""
+ 
+  # Generic Policy variables
+  POLICY_REPLACE: 'True'
+  
+  # Jamf details
+  JSM_CATEGORY: ''
+  JSM_POLICY_NAME: ''
+  JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
+  JSM_CUSTOM_TRIGGER: ''
+  JSM_POLICY_SCOPE: ''
+  
+  SELF_SERVICE_INSTALL_CATEGORY: ''
+  SELF_SERVICE_INSTALL_POLICY_NAME: ''
+  SELF_SERVICE_INSTALL_POLICY_TEMPLATE: '%NAME%SelfServiceInstallTemplate.xml'
+  SELF_SERVICE_INSTALL_SCOPE: ''
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
+  SELF_SERVICE_REINSTALL_BUTTON_TEST: 'Reinstall'
+  SELF_SERVICE_INSTALL_DISPLAY_NAME: 'NexThink Collector %version%'
+  SELF_SERVICE_INSTALL_DESCRIPTION: 'NexThink Collector is an IT tool that helps collect data to prevent device issues'
+
+  SELF_SERVICE_UNINSTALL_CATEGORY: ''
+  SELF_SERVICE_UNINSTALL_POLICY_NAME: ''
+  SELF_SERVICE_UNINSTALL_POLICY_TEMPLATE: '%NAME%SelfServiceUninstallTemplate.xml'
+  SELF_SERVICE_UNINSTALL_SCOPE: ''
+  SELF_SERVICE_UNINSTALL_BUTTON_TEXT: 'Uninstall'
+  SELF_SERVICE_UNREINSTALL_BUTTON_TEST: 'Uninstall'
+  SELF_SERVICE_UNINSTALL_DISPLAY_NAME: 'NexThink Collector Uninstall'
+  SELF_SERVICE_UNINSTALL_DESCRIPTION: 'Removes the NexThink agent from this device'
+
+  SELF_SERVICE_POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  INSTALL_PKG_NAME_MATCH: '%NAME%-Install-'
+  UNINSTALL_PKG_NAME_MATCH: '%NAME%-Uninstall-'
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'True'
+
+Process:
+  # Jamf Setup Manager policy
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%JSM_POLICY_NAME%'
+      policy_template: '%JSM_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  # Self Service install policy
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_INSTALL_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_INSTALL_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
+
+  # Self Service uninstall policy
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_UNINSTALL_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_UNINSTALL_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
