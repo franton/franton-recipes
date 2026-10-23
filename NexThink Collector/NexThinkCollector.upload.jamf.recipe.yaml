@@ -52,7 +52,7 @@ Input:
   UNINSTALL_PKG_NAME_MATCH: '%NAME%-Uninstall-'
   SLEEP: '1'
   MAX_TRIES: '5'
-  DRY_RUN: 'True'
+  DRY_RUN: 'False'
 
 Process:
   # Make sure the categories for all policies are in place
