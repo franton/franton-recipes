@@ -11,7 +11,7 @@
 	<scope>
 		<computer_groups>
 			<computer_group>
-				<name>%SELF_SERVICE_INSTALL_POLICY_SCOPE%</name>
+				<name>%SELF_SERVICE_INSTALL_SCOPE%</name>
 			</computer_group>			
 		</computer_groups>
 	</scope>
