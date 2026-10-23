@@ -26,7 +26,7 @@ Process:
     Arguments:
       deep_verification: true
       strict_verification: true
-      input_path: '%pathname%/com.mimica.recorder-osx-Setup.pkg'
+      input_path: '%pathname%'
       expected_authority_names:
         - "Developer ID Installer: MIMICA AUTOMATION LIMITED (24R79RZJPD)"
         - "Developer ID Certification Authority"
