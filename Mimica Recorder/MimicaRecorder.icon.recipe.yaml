@@ -23,7 +23,7 @@ Process:
 
   - Processor: Versioner
     Arguments:
-      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Applications/Mimica Recorder.app/Contents/Info.plist"
+      input_plist_path: "%RECIPE_CACHE_DIR%/unpack/Mimica Recorder.app/Contents/Info.plist"
 
   - Processor: PkgRootCreator
     Arguments:
