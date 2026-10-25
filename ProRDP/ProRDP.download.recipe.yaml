@@ -1,0 +1,27 @@
+Description: Download latest ProRDP - rdp server for macOS
+Identifier: com.github.franton.download.prordp
+MinimumVersion: '2.9'
+
+Input:
+  NAME: ProRDP
+  PURGE_DESTINATION: 'False'
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments: 
+      asset_regex: ".*\\.dmg$"
+      github_repo: "prordp-app/release"
+      latest_only: true
+
+  - Processor: URLDownloader
+    Arguments:
+      url: "%url%"
+      filename: "%NAME%-%version%.dmg"
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%pathname%/%NAME%.app"
+      requirement: 'identifier "com.prordp.prordp" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "45J7H6U23W"'
