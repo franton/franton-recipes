@@ -13,7 +13,7 @@ Input:
 Process:
   - Processor: AppPkgCreator
     Arguments:
-      pkg_path: '%RECIPE_CACHE_DIR%/%version%/%app_name%-%version%.pkg'
+      pkg_path: '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg'
 
   - Processor: PathDeleter
     Arguments:
