@@ -1,0 +1,20 @@
+Description: Packages current version of ProRDP.
+Identifier: com.github.franton.pkg.prordp
+ParentRecipe: com.github.franton.icon.prordp
+MinimumVersion: '2.9'
+
+NAME: ProRDP
+EXCLUDE: ''
+SIZE: ''
+DOWNLOAD_MISSING_FILE: null
+BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: AppPkgCreator
+    Arguments:
+      pkg_path: '%RECIPE_CACHE_DIR%/%version%/%app_name%-%version%.pkg'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
