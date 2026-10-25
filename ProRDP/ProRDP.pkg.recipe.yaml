@@ -3,11 +3,12 @@ Identifier: com.github.franton.pkg.prordp
 ParentRecipe: com.github.franton.icon.prordp
 MinimumVersion: '2.9'
 
-NAME: ProRDP
-EXCLUDE: ''
-SIZE: ''
-DOWNLOAD_MISSING_FILE: null
-BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+Input:
+  NAME: ProRDP
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: AppPkgCreator
