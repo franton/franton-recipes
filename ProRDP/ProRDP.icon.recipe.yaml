@@ -1,0 +1,25 @@
+Description: Generates the icon from ProRDP.
+Identifier: com.github.franton.icon.prordp
+ParentRecipe: com.github.franton.download.prordp
+MinimumVersion: '2.9'
+
+Input:
+  NAME: ProRDP
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%pathname%/%NAME%.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
