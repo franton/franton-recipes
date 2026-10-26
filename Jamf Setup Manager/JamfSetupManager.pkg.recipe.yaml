@@ -52,7 +52,7 @@ Process:
   - Processor: Copier
     Arguments:
       source_path: "%LEGALFILE_PATH%"
-      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/legal"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/imgs"
 
 # Create postinstall script
   - Processor: FileCreator
@@ -105,11 +105,11 @@ Process:
       signing_cert: "%SIGNINGCERTIFICATE%"
 
 # Clean up
-#  - Processor: PathDeleter
-#    Arguments:
-#      path_list:
-#        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-component.pkg'
-#        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
-#        - '%RECIPE_CACHE_DIR%/Scripts'
-#        - '%RECIPE_CACHE_DIR%/pkgroot'
-#        - '%RECIPE_CACHE_DIR%/downloads'
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-component.pkg'
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
