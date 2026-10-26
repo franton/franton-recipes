@@ -51,7 +51,7 @@ Process:
 # Icon files
   - Processor: Copier
     Arguments:
-      source_path: "%LEGALFILE_PATH%"
+      source_path: "%BRANDING_PATH%"
       destination_path: "%RECIPE_CACHE_DIR%/pkgroot/usr/local/%CORP_ID%/imgs"
 
 # Create postinstall script
