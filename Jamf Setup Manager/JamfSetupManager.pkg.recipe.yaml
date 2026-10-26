@@ -19,7 +19,7 @@ Process:
 
   - Processor: StopProcessingIf
     Arguments:
-      predicate: 'LEGALFILE_PATH == nil'
+      predicate: 'BRANDING_PATH == nil'
       
   - Processor: StopProcessingIf
     Arguments:
