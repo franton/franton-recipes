@@ -5,25 +5,16 @@ MinimumVersion: '2.9'
 Input:
   NAME: Tableau_Desktop
   CPU: arm64                  # arm64 or x86_64
-  DOWNLOAD_MISSING_FILE: null
+  URL: 'https://www.tableau.com/downloads/desktop/mac-%CPU%'
+  DOWNLOAD_MISSING_FILE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
-  # Shamelessly mostly copied from smithjw's recipe
-  # https://github.com/autopkg/smithjw-recipes/blob/master/Tableau/Tableau_Desktop.download.recipe.yaml
-
-  - Processor: URLTextSearcher
-    Arguments:
-      re_pattern: <a href="(\/.*?)+\/(?P<version>(?P<major>\d+)\.(?P<minor>\d+)(\.?P<patch>\d+)?)#.*class="cta">
-      url: https://www.tableau.com/support/releases
-      request_headers:
-        user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.366'
-
   - Processor: URLDownloader
     Arguments:
       DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
-      filename: '%NAME%-%CPU%.dmg'
-      url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%match%-%CPU%.dmg
+      prefetch_filename: True
+      url: '%URL%'
 
   - Processor: EndOfCheckPhase
 
@@ -39,4 +30,4 @@ Process:
         - 'Developer ID Installer: Tableau Software, LLC (QJ4XPRK37C)'
         - 'Developer ID Certification Authority'
         - 'Apple Root CA'
-      input_path: '%RECIPE_CACHE_DIR%/downloads/%NAME%-%CPU%.dmg/Tableau Desktop.pkg'
+      input_path: '%pathname%/Tableau Desktop.pkg'
