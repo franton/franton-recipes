@@ -14,7 +14,7 @@ Process:
 
   - Processor: URLTextSearcher
     Arguments:
-      re_pattern: <a href="(\/.*?)+\/(?P<version>(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+))#.*class="cta">
+      re_pattern: <a href="(\/.*?)+\/(?P<version>(?P<major>\d+)\.(?P<minor>\d+)(\.?P<patch>\d+)?)#.*class="cta">
       url: https://www.tableau.com/support/releases
       request_headers:
         user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.366'
@@ -23,7 +23,7 @@ Process:
     Arguments:
       DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
       filename: '%NAME%-%CPU%.dmg'
-      url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%major%-%minor%-%patch%-%CPU%.dmg
+      url: https://downloads.tableau.com/esdalt/%version%/TableauDesktop-%match%-%CPU%.dmg
 
   - Processor: EndOfCheckPhase
 
