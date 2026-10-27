@@ -3,7 +3,7 @@ Identifier: com.github.franton.download.TableauDesktop
 MinimumVersion: '2.9'
 
 Input:
-  NAME: Tableau_Desktop
+  NAME: TableauDesktop
   CPU: arm64                  # arm64 or x86_64
   URL: 'https://www.tableau.com/downloads/desktop/mac-%CPU%'
   DOWNLOAD_MISSING_FILE: ''
