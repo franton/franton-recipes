@@ -4,7 +4,7 @@ ParentRecipe: com.github.franton.icon.TableauDesktop
 MinimumVersion: '2.9'
 
 Input:
-  NAME: Tableau_Desktop
+  NAME: TableauDesktop
   EXCLUDE: ''
   SIZE: ''
   DOWNLOAD_MISSING_FILE: null
