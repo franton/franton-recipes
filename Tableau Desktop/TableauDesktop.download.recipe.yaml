@@ -16,6 +16,8 @@ Process:
     Arguments:
       re_pattern: <a href="(\/.*?)+\/(?P<version>(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+))#.*class="cta">
       url: https://www.tableau.com/support/releases
+      request_headers:
+        user-agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.366'
 
   - Processor: URLDownloader
     Arguments:
