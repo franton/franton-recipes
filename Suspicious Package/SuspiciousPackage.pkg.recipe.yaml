@@ -1,0 +1,23 @@
+Description: Generates a pkg for Suspicious Package.
+Identifier: com.github.franton.pkg.SuspiciousPackage
+ParentRecipe: com.github.franton.icon.SuspiciousPackage
+MinimumVersion: '2.9'
+
+Input:
+  NAME: SuspiciousPackage
+  EXCLUDE: ''
+  SIZE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: AppPkgCreator 
+    Arguments:
+      app_path: "%pathname%/Suspicious Package.app"
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      force_pkg_build: True
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
