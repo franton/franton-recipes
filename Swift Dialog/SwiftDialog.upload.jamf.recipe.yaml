@@ -31,7 +31,7 @@ Process:
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
     Arguments:
       pkg_category: '%JSM_CATEGORY%'
-      pkg_info: '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg'
+      pkg_path: '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg'
       sleep: '%SLEEP%'
       max_tries: '%MAX_TRIES%'
       dry_run: '%DRY_RUN%'
