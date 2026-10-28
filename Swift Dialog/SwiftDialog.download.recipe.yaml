@@ -28,6 +28,6 @@ Process:
     Arguments: 
       input_path: "%pathname%"
       expected_authority_names: 
-        - "Developer ID Application: Commonwealth Scientific and Industrial Research Organisation (PWA5E9TQ59)"
+        - "Developer ID Installer: Commonwealth Scientific and Industrial Research Organisation (PWA5E9TQ59)"
         - "Developer ID Certification Authority"
         - "Apple Root CA"
