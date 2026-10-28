@@ -26,11 +26,11 @@ Input:
 Process:
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
     Arguments:
-      category_name: "%SELF_SERVICE_CATEGORY%"
+      category_name: "%JSM_CATEGORY%"
 
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
     Arguments:
-      pkg_category: '%SELF_SERVICE_CATEGORY%'
+      pkg_category: '%JSM_CATEGORY%'
       pkg_info: '%pkg_path%'
       sleep: '%SLEEP%'
       max_tries: '%MAX_TRIES%'
