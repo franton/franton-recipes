@@ -1,0 +1,28 @@
+Description: Signs the pkg for Apparency.
+Identifier: com.github.franton.sign.Apparency
+ParentRecipe: com.github.franton.pkg.Apparency
+MinimumVersion: '2.9'
+
+Input:
+  NAME: Apparency
+  EXCLUDE: ''
+  SIZE: ''
+  CORP_ID: ''
+  SIGNINGCERTIFICATE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
