@@ -1,0 +1,27 @@
+Description: Downloads latest Suspicious Package disk image file.
+Identifier: com.github.franton.download.SuspiciousPackage
+MinimumVersion: '2.9'
+
+Input:
+  NAME: SuspiciousPackage
+  URL: 'https://www.mothersruin.com/software/downloads/SuspiciousPackage.dmg'
+  DOWNLOAD_MISSING_FILE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: URLDownloader
+    Arguments:
+      DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
+      prefetch_filename: True
+      url: '%URL%'
+
+  - Processor: EndOfCheckPhase
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+  - Processor: CodeSignatureVerifier
+    Arguments: 
+      input_path: "%RECIPE_CACHE_DIR%/downloads/%NAME%.dmg/Suspicious Package.app"
+      requirement: 'anchor apple generic and identifier "com.mothersruin.SuspiciousPackageApp" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "936EB786NH")'
