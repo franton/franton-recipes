@@ -10,10 +10,9 @@ Input:
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
-  # Self Service Policy
-  SELF_SERVICE_CATEGORY: ''
-  SELF_SERVICE_ICON: '%NAME%_install.png'
-
+  # Jamf Setup Manager Policy
+  JSM_CATEGORY: ''
+  
   # Processor variables
   REMOVE_OLD_PACKAGES: 'True'
   PKG_TO_KEEP: '2'
