@@ -1,0 +1,43 @@
+Description: Creates/Updates Swift Dialog JSM policy in Jamf.
+Identifier: com.github.franton.policy.jamf.SwiftDialog
+ParentRecipe: com.github.franton.upload.jamf.SwiftDialog
+MinimumVersion: '2.9'
+
+Input:
+  NAME: swiftDialog
+  EXCLUDE: 'ua'
+  SIZE: '512'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+  # Generic Policy variables
+  POLICY_REPLACE: 'True'
+
+  # Jamf Setup Manager Policy
+  JSM_CATEGORY: ''
+  JSM_CUSTOM_TRIGGER: ''
+  JSM_POLICY_NAME: ''
+  JSM_POLICY_TEMPLATE: '%NAME%JSMTemplate.xml'
+  JSM_POLICY_SCOPE: ''
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+    Arguments:
+      category_name: "%JSM_CATEGORY%"
+
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%JSM_POLICY_NAME%'
+      policy_template: '%JSM_POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
