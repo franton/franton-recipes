@@ -1,0 +1,21 @@
+Description: Installer pkg versioner recipe for SwiftDialog
+Identifier: com.github.franton.pkg.SwiftDialog
+ParentRecipe: com.github.franton.icon.SwiftDialog
+MinimumVersion: '2.9'
+
+Input:
+  NAME: swiftDialog
+  SIZE: ''
+  EXCLUDE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+  - Processor: FileMover 
+    Arguments:
+      source: "%pathname%"
+      target: "%RECIPE_CACHE_DIR%/%version%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/downloads'
