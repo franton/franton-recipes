@@ -13,7 +13,7 @@ Process:
   - Processor: FileMover 
     Arguments:
       source: "%pathname%"
-      target: "%RECIPE_CACHE_DIR%/%version%"
+      target: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
 
   - Processor: PathDeleter
     Arguments:
