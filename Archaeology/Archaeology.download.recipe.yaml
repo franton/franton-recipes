@@ -3,7 +3,7 @@ Identifier: com.github.franton.download.Archaeology
 MinimumVersion: '2.9'
 
 Input:
-  NAME: Apparency
+  NAME: Archaeology
   URL: 'https://www.mothersruin.com/software/downloads/Archaeology.dmg'
   DOWNLOAD_MISSING_FILE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
