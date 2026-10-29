@@ -86,29 +86,29 @@ Process:
       dry_run: '%DRY_RUN%'
 
   # Self Service install policy
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
-    Arguments:
-      category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+  #  Arguments:
+  #    category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
-    Arguments:
-      policy_name: '%SELF_SERVICE_INSTALL_POLICY_NAME%'
-      policy_template: '%SELF_SERVICE_INSTALL_POLICY_TEMPLATE%'
-      replace_policy: '%POLICY_REPLACE%'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+  #  Arguments:
+  #    policy_name: '%SELF_SERVICE_INSTALL_POLICY_NAME%'
+  #    policy_template: '%SELF_SERVICE_INSTALL_POLICY_TEMPLATE%'
+  #    replace_policy: '%POLICY_REPLACE%'
+  #    sleep: '%SLEEP%'
+  #    max_tries: '%MAX_TRIES%'
+  #    dry_run: '%DRY_RUN%'
 
   # Self Service uninstall policy
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
-    Arguments:
-      category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+  #  Arguments:
+  #    category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
-    Arguments:
-      policy_name: '%SELF_SERVICE_UNINSTALL_POLICY_NAME%'
-      policy_template: '%SELF_SERVICE_UNINSTALL_POLICY_TEMPLATE%'
-      replace_policy: '%POLICY_REPLACE%'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+  #  Arguments:
+  #    policy_name: '%SELF_SERVICE_UNINSTALL_POLICY_NAME%'
+  #    policy_template: '%SELF_SERVICE_UNINSTALL_POLICY_TEMPLATE%'
+  #    replace_policy: '%POLICY_REPLACE%'
+  #    sleep: '%SLEEP%'
+  #    max_tries: '%MAX_TRIES%'
+  #    dry_run: '%DRY_RUN%'
