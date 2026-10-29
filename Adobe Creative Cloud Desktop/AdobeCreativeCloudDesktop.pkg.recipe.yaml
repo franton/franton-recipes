@@ -7,9 +7,9 @@ Input:
   NAME: AdobeCCDesktop
   SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
   SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
-  SIZE: '512'
-  EXCLUDE: 'ua'
-  CORP_ID: 'intuitive'
+  SIZE: ''
+  EXCLUDE: ''
+  CORP_ID: ''
   DOWNLOAD_MISSING_FILE: null
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
