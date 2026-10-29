@@ -46,7 +46,7 @@ Input:
   DRY_RUN: 'False'
 
 Process:
-  # Make sure the categories for all policies are in place
+  # Installer pkg- create categories and upload.
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
     Arguments:
       category_name: "%JSM_CATEGORY%"
@@ -55,11 +55,6 @@ Process:
     Arguments:
       category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
-    Arguments:
-      category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
-
-  # Upload the install and the uninstall packages
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
     Arguments:
       pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
@@ -69,16 +64,6 @@ Process:
       max_tries: '%MAX_TRIES%'
       dry_run: '%DRY_RUN%'
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
-    Arguments:
-      pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
-      pkg_info: ''
-      pkg_path: '%RECIPE_CACHE_DIR%/%version%/%NAME%-Uninstall-%version%.pkg'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
-
-  # Clean up older packages
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
     Arguments:
       pkg_name_match: '%INSTALL_PKG_NAME_MATCH%'
@@ -87,10 +72,24 @@ Process:
       max_tries: '%MAX_TRIES%'
       dry_run: '%DRY_RUN%'
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
-    Arguments:
-      pkg_name_match: '%UNINSTALL_PKG_NAME_MATCH%'
-      versions_to_keep: '%PKG_TO_KEEP%'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
+  # Uninstaller pkg- create categories, upload and clean up.
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+  #  Arguments:
+  #    category_name: "%SELF_SERVICE_UNINSTALL_CATEGORY%"
+
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+  #  Arguments:
+  #    pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
+  #    pkg_info: ''
+  #    pkg_path: '%RECIPE_CACHE_DIR%/%version%/%NAME%-Uninstall-%version%.pkg'
+  #    sleep: '%SLEEP%'
+  #    max_tries: '%MAX_TRIES%'
+  #    dry_run: '%DRY_RUN%'
+
+  #- Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
+  #  Arguments:
+  #    pkg_name_match: '%UNINSTALL_PKG_NAME_MATCH%'
+  #    versions_to_keep: '%PKG_TO_KEEP%'
+  #    sleep: '%SLEEP%'
+  #    max_tries: '%MAX_TRIES%'
+  #    dry_run: '%DRY_RUN%'
