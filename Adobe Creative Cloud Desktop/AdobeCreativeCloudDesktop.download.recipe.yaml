@@ -3,7 +3,7 @@ Identifier: com.github.franton.download.AdobeCCDesktop
 MinimumVersion: "2.9"
 
 Input:
-  NAME: CreativeCloudInstaller
+  NAME: AdobeCCDesktop
   SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
   SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
   DOWNLOAD_MISSING_FILE: null
