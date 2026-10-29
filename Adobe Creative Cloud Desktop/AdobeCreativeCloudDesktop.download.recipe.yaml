@@ -42,8 +42,3 @@ Process:
       elements:
         - xpath: version
           text: version
-
-  - Processor: PathDeleter
-    Arguments:
-      path_list:
-        - '%RECIPE_CACHE_DIR%/ApplicationInfo.xml'
