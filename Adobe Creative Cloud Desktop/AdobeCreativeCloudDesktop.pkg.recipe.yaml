@@ -1,0 +1,91 @@
+Description: Creates icon for Adobe Creative Cloud Desktop.
+Identifier: com.github.franton.pkg.AdobeCCDesktop
+ParentRecipe: com.github.franton.icon.AdobeCCDesktop
+MinimumVersion: "2.9"
+
+Input:
+  NAME: AdobeCCDesktop
+  SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
+  SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
+  SIZE: '512'
+  EXCLUDE: 'ua'
+  CORP_ID: 'intuitive'
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+# Prereqs checks before proceeding
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CORP_ID == nil'
+
+# Create pkg for the installer
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+# Create pkg for the installer
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/ACCCx%version%.dmg"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+      
+         # Verbose logging
+         set -x
+         logfile=/private/tmp/adobecc.log
+         exec > $logfile 2>&1
+
+         # Find our file
+         dmgfile=(/tmp/*\.dmg)
+
+         # Create a temporary mount point, then silently mount the dmg on it
+         tmpmount=$( /usr/bin/mktemp -d /private/tmp/adobecc.XXXX )
+         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$tmpmount" "$dmgfile"
+
+         # Install the software
+         "${tmpmount}/Install.app/Contents/MacOS/Install" --mode=silent
+
+         # Get the exit code so we can fail properly
+         exitcode=$?
+
+         # Unmount the disk image
+         /usr/sbin/diskutil eject force "$tmpmount"
+         /bin/rm -rf "$tmpmount"
+         /bin/rm -rf "$dmgfile"
+
+         # Exit according to whether the install succeeded or not
+         exit "${exitcode}"
+
+# Finally generate the installer pkg
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        scripts: "Scripts"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - "%RECIPE_CACHE_DIR%/ApplicationInfo.xml"
+        - "%RECIPE_CACHE_DIR%/Scripts"
+        - "%RECIPE_CACHE_DIR%/pkgroot"
+        - "%RECIPE_CACHE_DIR%/downloads"
