@@ -1,0 +1,32 @@
+Description: Signs the Adobe Creative Cloud Desktop pkg.
+Identifier: com.github.franton.sign.AdobeCCDesktop
+ParentRecipe: com.github.franton.pkg.AdobeCCDesktop
+MinimumVersion: "2.9"
+
+Input:
+  NAME: AdobeCCDesktop
+  SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
+  SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
+  SIZE: ''
+  EXCLUDE: ''
+  CORP_ID: ''
+  SIGNINGCERTIFICATE: ''
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+Process:
+# Prereqs checks before proceeding
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
+# Sign pkg for the installer
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
