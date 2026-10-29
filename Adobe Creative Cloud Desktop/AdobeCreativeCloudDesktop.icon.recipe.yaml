@@ -4,8 +4,7 @@ ParentRecipe: com.github.franton.download.AdobeCCDesktop
 MinimumVersion: "2.9"
 
 Input:
-  NAME: Creative Cloud Installer
-  SHORT_NAME: CreativeCloudInstaller
+  NAME: CreativeCloudInstaller
   SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
   SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
   SIZE: ''
