@@ -33,3 +33,8 @@ Think of this as the "artifactory" model. I've had too many commits elsewhere br
 * Author: Anthony Reimer
 * Description: Looks for regex patterns in autopkg variable outputs
 * Link: https://maclabs.jazzace.ca/2022/08/17/text-searching-in-autopkg.html
+
+## XMLReader.py
+* Author: Rich Trouton
+* Description: Allows xpath searching through XML files
+* Link: https://github.com/autopkg/rtrouton-recipes/blob/master/AdobeCreativeCloud/XMLReader.py
