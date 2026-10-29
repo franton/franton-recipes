@@ -1,0 +1,26 @@
+Description: Creates icon for Adobe Creative Cloud Desktop.
+Identifier: com.github.franton.icon.AdobeCCDesktop
+ParentRecipe: com.github.franton.download.AdobeCCDesktop
+MinimumVersion: "2.9"
+
+Input:
+  NAME: Creative Cloud Installer
+  SHORT_NAME: CreativeCloudInstaller
+  SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
+  SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
+  SIZE: ''
+  EXCLUDE: ''
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/%version%"
+      pkgdirs: {}
+
+  - Processor: com.github.franton.SharedProcessors/IconGenerator
+    Arguments:
+      file_path: "%pathname%/Install.app"
+      exclude: '%EXCLUDE%'
+      name_prefix: '%NAME%'
+      output_path: "%RECIPE_CACHE_DIR%/%version%"
+      size: "%SIZE%"
