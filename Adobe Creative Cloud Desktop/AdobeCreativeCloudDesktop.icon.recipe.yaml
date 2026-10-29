@@ -9,6 +9,7 @@ Input:
   SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
   SIZE: ''
   EXCLUDE: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
   - Processor: PkgRootCreator
