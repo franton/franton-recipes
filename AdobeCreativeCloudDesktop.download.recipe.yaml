@@ -1,0 +1,48 @@
+Description: Downloads current release version of Adobe Creative Cloud Desktop.
+Identifier: com.github.franton.download.AdobeCCDesktop
+MinimumVersion: "2.9"
+
+Input:
+  NAME: CreativeCloudInstaller
+  SEARCH_URL: 'https://helpx.adobe.com/download-install/apps/download-install-apps/creative-cloud-apps/download-creative-cloud-desktop-app-using-direct-links.html'
+  SEARCH_PATTERN: 'http.*?://ccmdls?.adobe.com/AdobeProducts/StandaloneBuilds/ACCC/ESD/.*?/.*?/macarm64/ACCC.*?.dmg'
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: '%SEARCH_URL%'
+      re_pattern: '%SEARCH_PATTERN%'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'match == False'
+
+  - Processor: URLDownloader
+    Arguments:
+      prefetch_filename: true
+      url: "%match%"
+
+  - Processor: CodeSignatureVerifier
+    Arguments:
+      requirement: 'anchor apple generic and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = JQ525L2MZD)'
+      input_path: "%pathname%/Install.app"
+  
+  - Processor: EndOfCheckPhase
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%pathname%/packages/ApplicationInfo.xml'
+      destination_path: '%RECIPE_CACHE_DIR%/ApplicationInfo.xml'
+      overwrite: true
+
+  - Processor: com.github.franton.SharedProcessors/XMLReader
+    Arguments:
+      xml_path: '%RECIPE_CACHE_DIR%/ApplicationInfo.xml'
+      elements:
+        - xpath: version
+          text: version
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/ApplicationInfo.xml'
