@@ -50,13 +50,9 @@ Process:
     Arguments:
       category_name: "%JSM_CATEGORY%"
 
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
-    Arguments:
-      category_name: "%SELF_SERVICE_INSTALL_CATEGORY%"
-
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
     Arguments:
-      pkg_category: '%SELF_SERVICE_INSTALL_CATEGORY%'
+      pkg_category: '%JSM_CATEGORY%'
       pkg_info: ''
       pkg_path: '%RECIPE_CACHE_DIR%/%version%/%NAME%-Install-%version%.pkg'
       sleep: '%SLEEP%'
