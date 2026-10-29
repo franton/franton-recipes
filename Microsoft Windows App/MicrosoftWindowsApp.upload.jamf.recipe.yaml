@@ -18,7 +18,6 @@ Input:
   PKG_NAME_MATCH: '%NAME%-'
 
   CATEGORY: 'Remote Access'
-  SELF_SERVICE_ICON: '%NAME%_install.png'
   
   SLEEP: '1'
   MAX_TRIES: '5'
@@ -38,11 +37,7 @@ Process:
       sleep: '%SLEEP%'
       max_tries: '%MAX_TRIES%'
       dry_run: '%DRY_RUN%'
-
-  - Processor: FileFinder
-    Arguments:
-      pattern: '%RECIPE_CACHE_DIR%/%version%/%SELF_SERVICE_ICON%'
-      
+     
   - Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageCleaner
     Arguments:
       pkg_name_match: '%PKG_NAME_MATCH%'
