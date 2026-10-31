@@ -19,7 +19,7 @@ Input:
 
   # Policy variables 
   CATEGORY: ''
-  POLICY_NAME: 'Tableau Desktop'
+  POLICY_NAME: 'Tableau Desktop %version%'
   POLICY_GROUP: ''
   POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
   POLICY_TEMPLATE: '%NAME%Template.xml'
