@@ -14,9 +14,9 @@ Input:
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
   # Processor variables
-  REMOVE_OLD_PACKAGES: 'True'
-  PKG_TO_KEEP: '2'
-  PKG_NAME_MATCH: '%NAME%-'
+  REMOVE_OLD_PACKAGES: 'False'
+  #PKG_TO_KEEP: '2'
+  #PKG_NAME_MATCH: '%NAME%-'
 
   CATEGORY: ''
   
