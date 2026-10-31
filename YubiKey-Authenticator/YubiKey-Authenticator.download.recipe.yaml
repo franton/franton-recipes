@@ -6,15 +6,15 @@ Input:
   NAME: YubiKeyAuthenticator
 
 Process:
-  - Processor: URLTextSearcher
-    Arguments:
-      url: https://developers.yubico.com/yubioath-flutter/Releases/
-      re_pattern: href="yubico-authenticator-([\d\.]+)-mac.dmg"
-      result_output_var_name: version
+  - Processor: GitHubReleasesInfoProvider
+    Arguments: 
+      asset_regex: ".*\\.dmg$"
+      github_repo: "Yubico/yubioath-flutter"
+      latest_only: true
 
   - Processor: URLDownloader
     Arguments: 
-      url: "https://developers.yubico.com/yubioath-flutter/Releases/yubico-authenticator-%version%-mac.dmg"
+      url: "%url%"
       filename: "%NAME%-%version%.dmg"
 
   - Processor: EndOfCheckPhase
