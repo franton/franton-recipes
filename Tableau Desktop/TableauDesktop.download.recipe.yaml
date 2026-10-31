@@ -5,7 +5,7 @@ Comment: 'Tableau Desktop is usually tied to a specific server version, so this 
 
 Input:
   NAME: TableauDesktop
-  CPU: 'arm64'             # arm64 or x86_64
+  CPU: ''                  # arm64 or x86_64
   DOT_VERSION: ''          # e.g. 2025.3.11
   DASH_VERSION: ''         # e.g. 2025-3-11
   URL: 'https://downloads.tableau.com/esdalt/%DOT_VERSION%/%NAME%-%DASH_VERSION%-%CPU%.dmg'
