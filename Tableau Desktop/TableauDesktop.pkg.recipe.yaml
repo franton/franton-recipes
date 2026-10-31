@@ -5,6 +5,9 @@ MinimumVersion: '2.9'
 
 Input:
   NAME: TableauDesktop
+  CPU: ''             # arm64 or x86_64
+  DOT_VERSION: ''          # e.g. 2025.3.11
+  DASH_VERSION: ''         # e.g. 2025-3-11
   EXCLUDE: ''
   SIZE: ''
   DOWNLOAD_MISSING_FILE: null
