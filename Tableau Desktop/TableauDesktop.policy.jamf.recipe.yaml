@@ -1,0 +1,52 @@
+Description: Creates/Updates Tableau Desktop Self Service policy in Jamf
+Identifier: com.github.franton.policy.jamf.TableauDesktop
+ParentRecipe: com.github.franton.upload.jamf.TableauDesktop
+MinimumVersion: '2.9'
+
+Input:
+  NAME: TableauDesktop
+  DOWNLOAD_MISSING_FILE: null
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+
+  # Download variables
+  CPU: ''                  # arm64 or x86_64
+  DOT_VERSION: ''          # e.g. 2025.3.11
+  DASH_VERSION: ''         # e.g. 2025-3-11
+
+  # Icon variables
+  EXCLUDE: ''
+  SIZE: ''
+
+  # Policy variables 
+  CATEGORY: ''
+  POLICY_NAME: 'Tableau Desktop'
+  POLICY_GROUP: ''
+  POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
+  POLICY_TEMPLATE: '%NAME%Template.xml'
+  POLICY_REPLACE: 'True'
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Install'
+  SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Reinstall'
+  SELF_SERVICE_ICON: '%NAME%_install.png'
+  SELF_SERVICE_DISPLAY_NAME: '%POLICY_NAME% %version%'
+  SELF_SERVICE_DESCRIPTION: 'Tableau Desktop is data visualization software that lets you see and understand data in minutes, on or offline using your Mac. Requires an account to use.'
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'
+  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+  # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%POLICY_NAME%'
+      policy_template: '%POLICY_TEMPLATE%'
+      replace_policy: '%POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
