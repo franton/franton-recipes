@@ -1,15 +1,30 @@
-Description: Downloads latest Tableau Desktop disk images for specified cpu arch.
+Description: Downloads latest Tableau Desktop disk images for specified version / cpu arch.
 Identifier: com.github.franton.download.TableauDesktop
 MinimumVersion: '2.9'
+Comment: 'Tableau Desktop is usually tied to a specific server version, so this recipe insists that you specify a version for it to work.'
 
 Input:
   NAME: TableauDesktop
-  CPU: arm64                  # arm64 or x86_64
-  URL: 'https://www.tableau.com/downloads/desktop/mac-%CPU%'
+  CPU: 'arm64'             # arm64 or x86_64
+  DOT_VERSION: ''          # e.g. 2025.3.11
+  DASH_VERSION: ''         # e.g. 2025-3-11
+  URL: 'https://downloads.tableau.com/esdalt/%DOT_VERSION%/%NAME%-%DASH_VERSION%-%CPU%.dmg'
   DOWNLOAD_MISSING_FILE: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
 
 Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CPU == False'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'DOT_VERSION == False'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'DASH_VERSION == False'
+
   - Processor: URLDownloader
     Arguments:
       DOWNLOAD_MISSING_FILE: '%DOWNLOAD_MISSING_FILE%'
