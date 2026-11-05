@@ -1,6 +1,6 @@
 Description: Signing recipe for NexThink Collector installer
-Identifier: com.github.franton.installer.sign.NexThinkCollector
-ParentRecipe: com.github.franton.installer.pkg.NexThinkCollector
+Identifier: com.github.franton.sign.NexThinkCollector-Installer
+ParentRecipe: com.github.franton.pkg.NexThinkCollector-Installer
 MinimumVersion: '2.9'
 
 Input:
