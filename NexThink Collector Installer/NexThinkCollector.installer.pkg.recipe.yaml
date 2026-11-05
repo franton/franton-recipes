@@ -1,0 +1,145 @@
+Description: Packages current release installer of NexThink Collector.
+Identifier: com.github.franton.installer.pkg.NexThinkCollector
+ParentRecipe: com.github.franton.installer.icon.NexThinkCollector
+MinimumVersion: '2.9'
+Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
+
+Input:
+  NAME: NexThinkCollector-Installer
+  DMG: Nexthink_Collector.dmg
+  CORP_ID: ''
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
+
+  # Icon recipe settings
+  EXCLUDE: 'ua'
+  SIZE: '512'
+
+  # NexThink switches for csi.app go here. They apparently like to completely change these on a regular basis.
+  # These are the current switch names taken from their MSI table as of 15th October 2026
+  DATA_OVER_TCP: ''
+  USE_ASSIGNMENT: ''
+  CRD_PORT: ''
+  DRV_IP: ''
+  EXECUTION_POLICY: ''
+  WINDOW_FOCUS_TIME_MONITORING: ''
+  ANONYMIZE_WIFI_NETWORK: ''
+  DOMAIN_NAME_REPORTING: ''
+
+  # NexThink registration details
+  CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
+  CUSTOMER_KEY_DATA: ""
+
+Process:
+# Prereqs checks before proceeding
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CORP_ID == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'DRV_IP == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'CUSTOMER_KEY_DATA == nil'
+
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'download_changed == False AND %BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED% == False'
+
+# Create pkg for the installer
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/Scripts"
+      pkgdirs: {}
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+      pkgdirs:
+        tmp: "0777"
+
+  - Processor: Copier
+    Arguments:
+      source_path: "%pathname%"
+      destination_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%DMG%"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/pkgroot/tmp/%CUSTOMER_KEY_FILE%"
+      file_mode: "0440"
+      file_content: "%CUSTOMER_KEY_DATA%"
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall"
+      file_mode: "0777"
+      file_content: |
+         #!/bin/zsh --no-rcs
+
+         # NexThink Collector installer wrapper
+         # Original script by Rich Trouton. com.github.rtrouton.pkg.NexThinkCollector
+
+         # Verbose logging
+         set -x
+         logfile=/private/tmp/nexthink.log
+         exec > $logfile 2>&1
+
+         # Setup variables
+         KEYFILE="/tmp/%CUSTOMER_KEY_FILE%"
+         dmgfile="/tmp/Nexthink_Collector.dmg"
+         
+         option1="%DATA_OVER_TCP%"
+         option2="%USE_ASSIGNMENT%"
+         option3="%CRD_PORT%"
+         option4="%DRV_IP%"
+         option5="%EXECUTION_POLICY%"
+         option6="%WINDOW_FOCUS_TIME_MONITORING%"
+         option7="%ANONYMIZE_WIFI_NETWORK%"
+         option8="%DOMAIN_NAME_REPORTING%"
+
+         args=(--data_over_tcp ${option1} --use_assignment ${option2} --key ${KEYFILE} --tcp_port ${option3} --address ${option4} --ra_execution_policy ${option5} --windows_focus_time_monitoring ${option6} --anonymize_wifi_network ${option7} --domain_name_reporting ${option8})
+
+         # Create a temporary mount point, then silently mount the dmg on it
+         # Using BASE_PATH as per NT docs as of Thursday October 15th 2026
+         BASE_PATH=$( /usr/bin/mktemp -d /private/tmp/nexthink.XXXX )
+         /usr/sbin/diskutil image attach --nobrowse -mountPoint "$BASE_PATH" "$dmgfile"
+         
+         # Find and install the csi in that folder
+         ${BASE_PATH}/csi.app/Contents/MacOS/csi "${args[@]}"
+
+         # Dismount the dmg now we're installed and clean up the temp mount folder
+         /usr/sbin/diskutil eject force "$BASE_PATH"
+         /bin/rm -rf "$BASE_PATH"
+         
+         # Clean up
+         /bin/rm -f "$dmgfile"
+         /bin/rm -f "$KEYFILE"
+         
+         # Disable / Enable the services
+         /bin/launchctl bootout system /Library/LaunchDaemons/com.nexthink.collector.nxtcoordinator.plist
+         /bin/launchctl bootstrap system /Library/LaunchDaemons/com.nexthink.collector.nxtcoordinator.plist
+
+         exit 0
+
+# Finally generate the installer pkg
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-Install-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        scripts: "Scripts"
+
+# Finally clean up everything left over. We should have a versioned folder with two packages and icon files
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
