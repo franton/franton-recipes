@@ -13,7 +13,7 @@
 	<scope>
 		<computer_groups>
 			<computer_group>
-				<name>%POLICY_GROUP%</name>
+				<name>%JSM_POLICY_GROUP%</name>
 			</computer_group>
 		</computer_groups>
 	</scope>
