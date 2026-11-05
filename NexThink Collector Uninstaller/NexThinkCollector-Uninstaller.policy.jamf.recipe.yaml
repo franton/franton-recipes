@@ -1,0 +1,51 @@
+Description: Jamf policy recipe for NexThink Collector uninstaller
+Identifier: com.github.franton.policy.jamf.NexThinkCollector-Uninstaller
+ParentRecipe: com.github.franton.upload.jamf.NexThinkCollector-Uninstaller
+MinimumVersion: '2.9'
+
+Input:
+  NAME: NexThinkCollector-Uninstaller
+  DMG: Nexthink_Collector.dmg
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  
+  # Package and signing variables
+  CORP_ID: ""
+  SIGNINGCERTIFICATE: ""
+
+  # Icon recipe settings
+  SIZE: ''
+  EXCLUDE: ''
+
+  # Processor variables
+  REMOVE_OLD_PACKAGES: 'True'
+  PKG_TO_KEEP: '2'
+  PKG_NAME_MATCH: '%NAME%-'
+  
+  SLEEP: '1'
+  MAX_TRIES: '5'
+  DRY_RUN: 'False'
+
+  # Policy settings
+  SELF_SERVICE_POLICY_NAME: 'NexThink Collector Uninstall'
+  SELF_SERVICE_POLICY_TEMPLATE: '%NAME%-SelfServiceTemplate.xml'
+  SELF_SERVICE_CATEGORY: 'IT Tools'
+  SELF_SERVICE_POLICY_GROUP: 'All Managed Clients'
+  SELF_SERVICE_POLICY_REPLACE: 'True'
+
+  SELF_SERVICE_INSTALL_BUTTON_TEXT: 'Uninstall'
+  SELF_SERVICE_REINSTALL_BUTTON_TEXT: 'Uninstall'
+  SELF_SERVICE_DISPLAY_NAME: 'NexThink Collector Uninstall'
+  SELF_SERVICE_DESCRIPTION: 'This will remove the NexThink agent from this device'
+  SELF_SERVICE_RUN_COMMAND: '/usr/local/bin/jamf recon'
+
+  # NOTE: Use https://github.com/grahampugh/jamf-upload/wiki/Credentials for Jamf Credential storage.
+
+Process:
+  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+    Arguments:
+      policy_name: '%SELF_SERVICE_POLICY_NAME%'
+      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
+      replace_policy: '%SELF_SERVICE_POLICY_REPLACE%'
+      sleep: '%SLEEP%'
+      max_tries: '%MAX_TRIES%'
+      dry_run: '%DRY_RUN%'
