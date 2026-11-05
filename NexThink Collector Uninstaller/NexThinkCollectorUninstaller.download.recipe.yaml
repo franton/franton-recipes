@@ -4,7 +4,7 @@ MinimumVersion: "2.9"
 Comment: 'Downloads latest NexThink Collector client and provides versioning to downstream recipes.'
 
 Input:
-  NAME: NexThinkCollector-Installer
+  NAME: NexThinkCollector-Uninstaller
   DOWNLOAD_URL: https://download.nexthink.com/releases/latest/OSX_Collector/Nexthink_Collector.dmg
 
 Process:
