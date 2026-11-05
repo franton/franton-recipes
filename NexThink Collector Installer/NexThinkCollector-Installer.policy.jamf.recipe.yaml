@@ -57,11 +57,11 @@ Process:
       dry_run: '%DRY_RUN%'
 
   # Upload the Self Service policy
-  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
-    Arguments:
-      policy_name: '%SELF_SERVICE_POLICY_NAME%'
-      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
-      replace_policy: '%SELF_SERVICE_POLICY_REPLACE%'
-      sleep: '%SLEEP%'
-      max_tries: '%MAX_TRIES%'
-      dry_run: '%DRY_RUN%'
+#  - Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+#    Arguments:
+#      policy_name: '%SELF_SERVICE_POLICY_NAME%'
+#      policy_template: '%SELF_SERVICE_POLICY_TEMPLATE%'
+#      replace_policy: '%SELF_SERVICE_POLICY_REPLACE%'
+#      sleep: '%SLEEP%'
+#      max_tries: '%MAX_TRIES%'
+#      dry_run: '%DRY_RUN%'
