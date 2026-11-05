@@ -2,7 +2,7 @@
 <policy>
 	<general>
 		<name>%SELF_SERVICE_POLICY_NAME%</name>
-		<enabled>true</enabled>
+		<enabled>false</enabled>
 		<frequency>Ongoing</frequency>
 		<category>
 			<name>%SELF_SERVICE_CATEGORY%</name>
