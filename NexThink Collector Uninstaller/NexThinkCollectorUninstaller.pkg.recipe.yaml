@@ -46,23 +46,23 @@ Process:
       file_mode: '0777'
 
 # Finally generate the installer pkg
-#  - Processor: PkgCreator
-#    Arguments:
-#      pkg_request: 
-#        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
-#        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
-#        pkgname: "%NAME%-%version%"
-#        pkgtype: flat
-#        id: "com.%CORP_ID%.%NAME%"
-#        version: "%version%"
-#        scripts: "Scripts"
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request: 
+        pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
+        pkgdir: "%RECIPE_CACHE_DIR%/%version%"
+        pkgname: "%NAME%-%version%"
+        pkgtype: flat
+        id: "com.%CORP_ID%.%NAME%"
+        version: "%version%"
+        scripts: "Scripts"
 
 # Finally clean up everything left over. We should have a versioned folder with two packages and icon files
-#  - Processor: PathDeleter
-#    Arguments:
-#      path_list:
-#        - '%RECIPE_CACHE_DIR%/unpack'
-#        - '%RECIPE_CACHE_DIR%/outerunpack'
-#        - '%RECIPE_CACHE_DIR%/Scripts'
-#        - '%RECIPE_CACHE_DIR%/pkgroot'
-#        - '%RECIPE_CACHE_DIR%/downloads'
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
