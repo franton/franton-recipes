@@ -128,7 +128,7 @@ Process:
       pkg_request: 
         pkgroot: "%RECIPE_CACHE_DIR%/pkgroot"
         pkgdir: "%RECIPE_CACHE_DIR%/%version%"
-        pkgname: "%NAME%-Install-%version%"
+        pkgname: "%NAME%-%version%"
         pkgtype: flat
         id: "com.%CORP_ID%.%NAME%"
         version: "%version%"
