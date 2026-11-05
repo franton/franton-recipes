@@ -1,0 +1,32 @@
+Description: Signing recipe for NexThink Collector uninstaller
+Identifier: com.github.franton.sign.NexThinkCollector-Uninstaller
+ParentRecipe: com.github.franton.pkg.NexThinkCollector-Uninstaller
+MinimumVersion: '2.9'
+
+Input:
+  NAME: NexThinkCollector-Uninstaller
+  DMG: Nexthink_Collector.dmg
+  BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'False'
+  
+  # Package and signing variables
+  CORP_ID: ""
+  SIGNINGCERTIFICATE: ""
+
+  # Icon recipe settings
+  SIZE: '512'
+  EXCLUDE: 'ia'
+
+Process:
+  - Processor: StopProcessingIf
+    Arguments:
+      predicate: 'SIGNINGCERTIFICATE == nil'
+
+  - Processor: com.github.franton.SharedProcessors/PkgSigner
+    Arguments:
+      pkg_path: "%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%.pkg"
+      signing_cert: "%SIGNINGCERTIFICATE%"
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%version%/%NAME%-%version%-unsigned.pkg'
