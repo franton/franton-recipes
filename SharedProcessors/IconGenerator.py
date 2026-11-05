@@ -295,21 +295,21 @@ class IconGenerator(Processor):
 
             # Attempt to generate the correct switches with defaults
             # If size specified, use that or default to 512.
-            size = os.getenv("size", "512")
-            icons_cli.extend(["-s", size])
+            iconsize = os.getenv("size", "512")
+            icons_cli.extend(["-s", iconsize])
 
             # Set any name prefix here. Default to name input if unset.
-            name_prefix = self.env.get("name_prefix")
+            naming_prefix = self.env.get("name_prefix")
             try:
-                print(name_prefix)
+                print(naming_prefix)
             except NameError:
                 print("No Name Prefix set")
             else:
-                icons_cli.extend(["-n", name_prefix])
+                icons_cli.extend(["-n", naming_prefix])
 
             # Add any exclusions if specified
-            exclude = os.getenv("exclude", "ua")
-            icons_cli.extend(["-x", exclude])
+            excludeicons = os.getenv("exclude", "ua")
+            icons_cli.extend(["-x", excludeicons])
 
             # Input path which we've already validated
             icons_cli.extend(["-i", file_path])
