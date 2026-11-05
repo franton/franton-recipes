@@ -19,7 +19,7 @@
 		<packages>
 			<size>1</size>
 			<package>
-				<name>%NAME%-Uninstall-%version%.pkg</name>
+				<name>%PKG_NAME_MATCH%%version%.pkg</name>
 				<action>Install</action>
 			</package>
 		</packages>
