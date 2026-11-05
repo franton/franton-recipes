@@ -10,7 +10,7 @@ Input:
 Process:
   - Processor: URLDownloader
     Arguments:
-      prefetch_filename: true
+      prefetch_filename: false
       url: "%DOWNLOAD_URL%"
   
   - Processor: EndOfCheckPhase
