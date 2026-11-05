@@ -7,7 +7,7 @@ Comment: Create an override and set the variables in an override. DO NOT USE thi
 Input:
   NAME: NexThinkCollector-Installer
   DMG: Nexthink_Collector.dmg
-  CORP_ID: ''
+  CORP_ID: 'test'
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
   # Icon recipe settings
@@ -16,18 +16,18 @@ Input:
 
   # NexThink switches for csi.app go here. They apparently like to completely change these on a regular basis.
   # These are the current switch names taken from their MSI table as of 15th October 2026
-  DATA_OVER_TCP: ''
-  USE_ASSIGNMENT: ''
-  CRD_PORT: ''
-  DRV_IP: ''
-  EXECUTION_POLICY: ''
-  WINDOW_FOCUS_TIME_MONITORING: ''
-  ANONYMIZE_WIFI_NETWORK: ''
-  DOMAIN_NAME_REPORTING: ''
+  DATA_OVER_TCP: 'test'
+  USE_ASSIGNMENT: 'test'
+  CRD_PORT: 'test'
+  DRV_IP: 'test'
+  EXECUTION_POLICY: 'test'
+  WINDOW_FOCUS_TIME_MONITORING: 'test'
+  ANONYMIZE_WIFI_NETWORK: 'test'
+  DOMAIN_NAME_REPORTING: 'test'
 
   # NexThink registration details
   CUSTOMER_KEY_FILE: "nexthink-customer-key.txt"
-  CUSTOMER_KEY_DATA: ""
+  CUSTOMER_KEY_DATA: "test"
 
 Process:
 # Prereqs checks before proceeding
