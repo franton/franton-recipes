@@ -28,7 +28,7 @@ Input:
   # Policy settings
   SELF_SERVICE_POLICY_NAME: 'NexThink Collector Uninstall'
   SELF_SERVICE_POLICY_TEMPLATE: '%NAME%-SelfServiceTemplate.xml'
-  SELF_SERVICE_CATEGORY: 'IT Tools'
+  SELF_SERVICE_CATEGORY: ''
   SELF_SERVICE_POLICY_GROUP: 'All Managed Clients'
   SELF_SERVICE_POLICY_REPLACE: 'True'
 
