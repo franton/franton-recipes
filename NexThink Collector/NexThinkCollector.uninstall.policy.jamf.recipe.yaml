@@ -34,7 +34,7 @@ Input:
   # Processor variables
   REMOVE_OLD_PACKAGES: 'True'
   PKG_TO_KEEP: '2'
-  PKG_NAME_MATCH: '%NAME%-Install-'
+  PKG_NAME_MATCH: '%NAME%-Uninstall-'
   SLEEP: '1'
   MAX_TRIES: '5'
   DRY_RUN: 'False'
