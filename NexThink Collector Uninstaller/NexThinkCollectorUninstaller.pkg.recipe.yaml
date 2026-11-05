@@ -58,11 +58,11 @@ Process:
         scripts: "Scripts"
 
 # Finally clean up everything left over. We should have a versioned folder with two packages and icon files
-  - Processor: PathDeleter
-    Arguments:
-      path_list:
-        - '%RECIPE_CACHE_DIR%/unpack'
-        - '%RECIPE_CACHE_DIR%/outerunpack'
-        - '%RECIPE_CACHE_DIR%/Scripts'
-        - '%RECIPE_CACHE_DIR%/pkgroot'
-        - '%RECIPE_CACHE_DIR%/downloads'
+#  - Processor: PathDeleter
+#    Arguments:
+#      path_list:
+#        - '%RECIPE_CACHE_DIR%/unpack'
+#        - '%RECIPE_CACHE_DIR%/outerunpack'
+#        - '%RECIPE_CACHE_DIR%/Scripts'
+#        - '%RECIPE_CACHE_DIR%/pkgroot'
+#        - '%RECIPE_CACHE_DIR%/downloads'
