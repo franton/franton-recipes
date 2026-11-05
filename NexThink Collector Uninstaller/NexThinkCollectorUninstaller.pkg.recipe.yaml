@@ -7,7 +7,7 @@ Comment: Create an override and set the variables in an override. DO NOT USE thi
 Input:
   NAME: NexThinkCollector-Uninstaller
   DMG: Nexthink_Collector.dmg
-  CORP_ID: 'test'
+  CORP_ID: ''
   BYPASS_STOP_PROCESSING_IF_DOWNLOAD_UNCHANGED: 'True'
 
   # Icon recipe settings
@@ -58,11 +58,11 @@ Process:
         scripts: "Scripts"
 
 # Finally clean up everything left over. We should have a versioned folder with two packages and icon files
-#  - Processor: PathDeleter
-#    Arguments:
-#      path_list:
-#        - '%RECIPE_CACHE_DIR%/unpack'
-#        - '%RECIPE_CACHE_DIR%/outerunpack'
-#        - '%RECIPE_CACHE_DIR%/Scripts'
-#        - '%RECIPE_CACHE_DIR%/pkgroot'
-#        - '%RECIPE_CACHE_DIR%/downloads'
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/unpack'
+        - '%RECIPE_CACHE_DIR%/outerunpack'
+        - '%RECIPE_CACHE_DIR%/Scripts'
+        - '%RECIPE_CACHE_DIR%/pkgroot'
+        - '%RECIPE_CACHE_DIR%/downloads'
