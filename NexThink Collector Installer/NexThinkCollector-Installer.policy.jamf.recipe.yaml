@@ -1,6 +1,6 @@
 Description: Jamf policy recipe for NexThink Collector installer
-Identifier: com.github.franton.upload.jamf.NexThinkCollector-Installer
-ParentRecipe: com.github.franton.sign.NexThinkCollector-Installer
+Identifier: com.github.franton.policy.jamf.NexThinkCollector-Installer
+ParentRecipe: com.github.franton.upload.jamf.NexThinkCollector-Installer
 MinimumVersion: '2.9'
 
 Input:
