@@ -40,10 +40,10 @@ Process:
       source_path: "%pathname%/uninstaller"
       destination_path: "%RECIPE_CACHE_DIR%/Scripts/postinstall.sh"
 
-  - Processor: FileMode
-    Arguments: com.github.franton.SharedProcessors/FileMode
-      file_path: '%RECIPE_CACHE_DIR%/Scripts/postinstall.sh'
-      file_mode: '0777'
+#  - Processor: FileMode
+#    Arguments: com.github.franton.SharedProcessors/FileMode
+#      file_path: '%RECIPE_CACHE_DIR%/Scripts/postinstall.sh'
+#      file_mode: '0777'
 
 # Finally generate the installer pkg
 #  - Processor: PkgCreator
