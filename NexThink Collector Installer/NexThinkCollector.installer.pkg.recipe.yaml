@@ -1,6 +1,6 @@
 Description: Packages current release installer of NexThink Collector.
-Identifier: com.github.franton.installer.pkg.NexThinkCollector
-ParentRecipe: com.github.franton.installer.icon.NexThinkCollector
+Identifier: com.github.franton.pkg.NexThinkCollector-Installer
+ParentRecipe: com.github.franton.icon.NexThinkCollector-Installer
 MinimumVersion: '2.9'
 Comment: Create an override and set the variables in an override. DO NOT USE this recipe directly.
 
