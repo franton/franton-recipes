@@ -14,6 +14,7 @@ Input:
   CATEGORY: 'Productivity'
   POLICY_NAME: 'Claude Desktop'
   POLICY_GROUP: ''
+  POLICY_GROUP_B: ''
   POLICY_RUN_COMMAND: '/usr/local/bin/jamf recon'
   POLICY_TEMPLATE: '%NAME%Template.xml'
   POLICY_REPLACE: 'True'
